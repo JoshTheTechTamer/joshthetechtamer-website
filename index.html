@@ -1,0 +1,715 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>The Tech Tamer - Professional Tech Support Services</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://cdn.jsdelivr.net/npm/remixicon@4.5.0/fonts/remixicon.css"
+      rel="stylesheet"
+    />
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              primary: "#3B4B82",
+              secondary: "#00A3FF",
+            },
+            borderRadius: {
+              none: "0px",
+              sm: "4px",
+              DEFAULT: "8px",
+              md: "12px",
+              lg: "16px",
+              xl: "20px",
+              "2xl": "24px",
+              "3xl": "32px",
+              full: "9999px",
+              button: "8px",
+            },
+          },
+        },
+      };
+    </script>
+    <style>
+      :where([class^="ri-"])::before { content: "\f3c2"; }
+      .calendar-grid {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      }
+      .time-slot {
+      transition: all 0.3s;
+      }
+      .time-slot:hover:not(.unavailable) {
+      background-color: rgba(14, 165, 233, 0.1);
+      }
+      .time-slot.selected {
+      background-color: #0EA5E9;
+      color: white;
+      }
+      .time-slot.unavailable {
+      background-color: #f3f4f6;
+      cursor: not-allowed;
+      opacity: 0.5;
+      }
+    </style>
+  </head>
+  <body class="bg-white">
+    <header class="fixed w-full bg-white shadow-sm z-50">
+      <nav class="container mx-auto px-6 py-4">
+        <div class="flex items-center justify-between">
+          <div class="flex items-center space-x-3">
+            <img
+              src="https://static.readdy.ai/image/2b86c33b7e31113c8376c50d779cc539/dac21e49d1e73b6862a7aefb991bcfca.png"
+              alt="The Tech Tamer Logo"
+              class="h-20"
+            />
+            <span class="text-3xl font-['Pacifico'] text-primary"
+              >The Tech Tamer</span
+            >
+          </div>
+          <div class="flex items-center space-x-8">
+            <a href="#services" class="text-gray-600 hover:text-primary"
+              >Services</a
+            >
+            <a href="#booking" class="text-gray-600 hover:text-primary"
+              >Book Now</a
+            >
+            <a href="#about" class="text-gray-600 hover:text-primary">About</a>
+            <a href="#contact" class="text-gray-600 hover:text-primary"
+              >Contact</a
+            >
+          </div>
+        </div>
+      </nav>
+    </header>
+    <main class="pt-20">
+      <section class="relative bg-gradient-to-r from-white to-transparent">
+        <div class="absolute inset-0 z-0">
+          <img
+            src="https://public.readdy.ai/ai/img_res/64f2544e47fbdb74a233bda4589df8f7.jpg"
+            class="w-full h-full object-cover object-top opacity-30"
+          />
+        </div>
+        <div class="container mx-auto px-6 py-24 relative z-10">
+          <div class="grid grid-cols-2 gap-12 items-center">
+            <div>
+              <div class="flex items-center gap-6 mb-6">
+                <div>
+                  <h1 class="text-5xl font-bold">
+                    Josh Sargent<br />Technology Setup Expert
+                  </h1>
+                  <div class="text-7xl font-bold text-secondary mt-2">
+                    $50/hour
+                  </div>
+                </div>
+              </div>
+              <div class="space-y-3 mb-8">
+                <p class="text-xl text-gray-800 font-medium">
+                  Professional technology setup and support services across
+                  Eastern Iowa. Making technology work for you, not against you.
+                </p>
+              </div>
+              <button
+                onclick="showBookingModal()"
+                class="bg-primary text-white px-12 py-4 text-lg font-semibold !rounded-button hover:bg-primary/90 transition-colors cursor-pointer inline-flex items-center"
+              >
+                <i class="ri-calendar-line mr-2 text-xl"></i>
+                Book Your Session Now
+              </button>
+            </div>
+            <div class="flex flex-col items-center">
+              <img
+                src="https://static.readdy.ai/image/2b86c33b7e31113c8376c50d779cc539/dac21e49d1e73b6862a7aefb991bcfca.png"
+                alt="The Tech Tamer Logo"
+                class="h-96"
+              />
+            </div>
+          </div>
+        </div>
+      </section>
+      <section class="py-8 bg-white border-b">
+        <div class="container mx-auto px-6">
+          <div class="flex items-center justify-center space-x-12">
+            <a
+              href="https://joshthetechtamer.com"
+              class="text-lg text-gray-800 font-semibold hover:text-primary flex items-center"
+            >
+              <i class="ri-global-line mr-2"></i>joshthetechtamer.com
+            </a>
+            <a
+              href="tel:563-261-0200"
+              class="text-lg text-gray-800 font-semibold hover:text-primary flex items-center"
+            >
+              <i class="ri-phone-line mr-2"></i>563-261-0200
+            </a>
+            <a
+              href="mailto:joshthetechtamer@gmail.com"
+              class="text-lg text-gray-800 font-semibold hover:text-primary flex items-center"
+            >
+              <i class="ri-mail-line mr-2"></i>joshthetechtamer@gmail.com
+            </a>
+            <a
+              href="https://www.google.com/maps?q=Muscatine,+IA"
+              target="_blank"
+              class="text-lg text-gray-800 font-semibold hover:text-primary flex items-center"
+            >
+              <i class="ri-map-pin-line mr-2"></i>Muscatine, IA - Servicing
+              Eastern Iowa
+            </a>
+          </div>
+        </div>
+      </section>
+      <section id="services" class="py-20 bg-gray-50">
+        <div class="container mx-auto px-6">
+          <h2 class="text-3xl font-bold text-center mb-16">
+            Tech Support Services
+          </h2>
+          <div class="grid grid-cols-3 gap-8">
+            <div class="bg-white p-8 rounded-lg shadow-sm">
+              <div class="h-48 mb-6 rounded-lg overflow-hidden">
+                <img
+                  src="https://public.readdy.ai/ai/img_res/f9185af81dfe75159ea1f5bcbcbbd59a.jpg"
+                  alt="Entertainment & Devices"
+                  class="w-full h-full object-cover"
+                />
+              </div>
+              <div
+                class="w-12 h-12 flex items-center justify-center bg-primary/10 rounded-full mb-6"
+              >
+                <i class="ri-tv-line text-primary text-2xl"></i>
+              </div>
+              <h3 class="text-xl font-semibold mb-4">
+                Entertainment & Devices
+              </h3>
+              <p class="text-gray-700">
+                Complete setup and support for all your entertainment and smart
+                devices, ensuring they work perfectly together.
+              </p>
+              <ul class="mt-4 space-y-2 text-gray-600">
+                <li class="flex items-center">
+                  <i class="ri-checkbox-circle-line text-primary mr-2"></i>TVs &
+                  Home Theater Systems
+                </li>
+                <li class="flex items-center">
+                  <i class="ri-checkbox-circle-line text-primary mr-2"></i>PCs &
+                  Laptops
+                </li>
+                <li class="flex items-center">
+                  <i class="ri-checkbox-circle-line text-primary mr-2"></i
+                  >Smartphones & Tablets
+                </li>
+                <li class="flex items-center">
+                  <i class="ri-checkbox-circle-line text-primary mr-2"></i>Smart
+                  Device Integration
+                </li>
+              </ul>
+            </div>
+            <div class="bg-white p-8 rounded-lg shadow-sm">
+              <div class="h-48 mb-6 rounded-lg overflow-hidden">
+                <img
+                  src="https://public.readdy.ai/ai/img_res/bf22eeedfe5b8c78f84984b4d792600e.jpg"
+                  alt="Security Solutions"
+                  class="w-full h-full object-cover"
+                />
+              </div>
+              <div
+                class="w-12 h-12 flex items-center justify-center bg-primary/10 rounded-full mb-6"
+              >
+                <i class="ri-shield-keyhole-line text-primary text-2xl"></i>
+              </div>
+              <h3 class="text-xl font-semibold mb-4">Security Solutions</h3>
+              <p class="text-gray-700">
+                Professional installation and setup of home security systems and
+                smart monitoring devices.
+              </p>
+              <ul class="mt-4 space-y-2 text-gray-600">
+                <li class="flex items-center">
+                  <i class="ri-checkbox-circle-line text-primary mr-2"></i
+                  >Security Cameras
+                </li>
+                <li class="flex items-center">
+                  <i class="ri-checkbox-circle-line text-primary mr-2"></i>Smart
+                  Security Devices
+                </li>
+                <li class="flex items-center">
+                  <i class="ri-checkbox-circle-line text-primary mr-2"></i>Home
+                  Monitoring Setup
+                </li>
+                <li class="flex items-center">
+                  <i class="ri-checkbox-circle-line text-primary mr-2"></i
+                  >Remote Access Configuration
+                </li>
+              </ul>
+            </div>
+            <div class="bg-white p-8 rounded-lg shadow-sm">
+              <div class="h-48 mb-6 rounded-lg overflow-hidden">
+                <img
+                  src="https://public.readdy.ai/ai/img_res/940b7191a582b3c402029750d6c7d978.jpg"
+                  alt="Account Security"
+                  class="w-full h-full object-cover"
+                />
+              </div>
+              <div
+                class="w-12 h-12 flex items-center justify-center bg-primary/10 rounded-full mb-6"
+              >
+                <i class="ri-lock-password-line text-primary text-2xl"></i>
+              </div>
+              <h3 class="text-xl font-semibold mb-4">Account Security</h3>
+              <p class="text-gray-700">
+                Expert assistance with account security, password recovery, and
+                scam prevention training.
+              </p>
+              <ul class="mt-4 space-y-2 text-gray-600">
+                <li class="flex items-center">
+                  <i class="ri-checkbox-circle-line text-primary mr-2"></i
+                  >Login/Password Recovery
+                </li>
+                <li class="flex items-center">
+                  <i class="ri-checkbox-circle-line text-primary mr-2"></i>Scam
+                  Avoidance Training
+                </li>
+                <li class="flex items-center">
+                  <i class="ri-checkbox-circle-line text-primary mr-2"></i
+                  >Account Protection Setup
+                </li>
+                <li class="flex items-center">
+                  <i class="ri-checkbox-circle-line text-primary mr-2"></i
+                  >Security Best Practices
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </section>
+      <section id="booking" class="py-20">
+        <div class="container mx-auto px-6">
+          <h2 class="text-3xl font-bold text-center mb-16">
+            Simple Booking Process
+          </h2>
+          <div class="grid grid-cols-4 gap-8">
+            <div class="text-center">
+              <div
+                class="w-16 h-16 flex items-center justify-center bg-primary/10 rounded-full mx-auto mb-6"
+              >
+                <i class="ri-calendar-line text-primary text-2xl"></i>
+              </div>
+              <h3 class="text-lg font-semibold mb-2">Choose Date & Time</h3>
+              <p class="text-gray-700 font-medium">
+                Select from available slots that work best for you
+              </p>
+            </div>
+            <div class="text-center">
+              <div
+                class="w-16 h-16 flex items-center justify-center bg-primary/10 rounded-full mx-auto mb-6"
+              >
+                <i class="ri-user-follow-line text-primary text-2xl"></i>
+              </div>
+              <h3 class="text-lg font-semibold mb-2">Fill Details</h3>
+              <p class="text-gray-700 font-medium">
+                Provide your information and session requirements
+              </p>
+            </div>
+            <div class="text-center">
+              <div
+                class="w-16 h-16 flex items-center justify-center bg-primary/10 rounded-full mx-auto mb-6"
+              >
+                <i class="ri-check-line text-primary text-2xl"></i>
+              </div>
+              <h3 class="text-lg font-semibold mb-2">Confirm Booking</h3>
+              <p class="text-gray-700 font-medium">
+                Review and confirm your appointment details
+              </p>
+            </div>
+            <div class="text-center">
+              <div
+                class="w-16 h-16 flex items-center justify-center bg-primary/10 rounded-full mx-auto mb-6"
+              >
+                <i class="ri-mail-send-line text-primary text-2xl"></i>
+              </div>
+              <h3 class="text-lg font-semibold mb-2">Get Confirmation</h3>
+              <p class="text-gray-700 font-medium">
+                Receive email confirmation with meeting details
+              </p>
+            </div>
+          </div>
+          <div class="text-center mt-16">
+            <button
+              onclick="showBookingModal()"
+              class="bg-primary text-white px-12 py-4 text-lg font-semibold !rounded-button hover:bg-primary/90 transition-colors cursor-pointer inline-flex items-center"
+            >
+              <i class="ri-calendar-line mr-2 text-xl"></i>
+              Book Your Session Now
+            </button>
+          </div>
+        </div>
+      </section>
+      <section id="about" class="py-20 bg-white">
+        <div class="container mx-auto px-6">
+          <div class="grid grid-cols-2 gap-12 items-center">
+            <div class="h-[600px] rounded-lg overflow-hidden">
+              <img
+                src="https://static.readdy.ai/image/2b86c33b7e31113c8376c50d779cc539/3b47916d2296a891ceeb776867f02939.jpeg"
+                alt="Josh Sargent Portrait"
+                class="w-full h-full object-cover"
+              />
+            </div>
+            <div>
+              <h2 class="text-3xl font-bold mb-8">About Josh Sargent</h2>
+              <div class="prose prose-lg">
+                <p class="mb-6">
+                  For over 20 years, I've been dedicated to helping people
+                  overcome their technology challenges with patience,
+                  understanding, and expertise. As a disabled Army veteran who
+                  served as a food service specialist from 2008 to 2009, I've
+                  developed a unique approach to making technology accessible
+                  and less intimidating for everyone.
+                </p>
+                <p class="mb-6">
+                  My educational foundation includes a Bachelor's degree in
+                  Electronics Engineering Technology from Hamilton Tech in
+                  Davenport, Iowa, complemented by a diploma in Network
+                  Engineering with Cisco Systems from MCC Eastern Iowa Community
+                  College. This technical background allows me to tackle complex
+                  issues while explaining solutions in simple, understandable
+                  terms.
+                </p>
+                <p class="mb-6">
+                  I specialize in assisting seniors and individuals who find
+                  technology challenging but necessary in today's digital world.
+                  Whether you've been affected by scams, struggle with device
+                  setup, or simply want to make technology work better for you,
+                  I provide patient, respectful, and thorough support. My
+                  approach focuses on making the entire process effortless while
+                  ensuring you feel comfortable and confident with your
+                  technology.
+                </p>
+                <p class="mb-6">
+                  My diverse experience includes working at Office Max in
+                  Davenport as a Control Center Associate, specializing in
+                  computer sales and repairs. I've also owned and operated a
+                  pawnshop in downtown Muscatine, giving me extensive experience
+                  in helping people with various tech issues. Currently, I work
+                  with a local corporate carrier selling mobile devices, keeping
+                  me up-to-date with the latest technology trends.
+                </p>
+                <p class="mb-6">
+                  What truly sets me apart is my hands-on experience with smart
+                  home technology. I live in a fully functional smart home that
+                  I personally installed and configured, allowing me to provide
+                  practical, real-world solutions for home automation and
+                  integration. I understand the frustrations that come with
+                  technology and make it my mission to transform those
+                  frustrations into positive, empowering experiences.
+                </p>
+                <div class="grid grid-cols-2 gap-6 mt-12">
+                  <div class="bg-gray-50 p-6 rounded-lg">
+                    <div class="text-4xl font-bold text-primary mb-2">15+</div>
+                    <div class="text-gray-600">Years of Tech Experience</div>
+                  </div>
+                  <div class="bg-gray-50 p-6 rounded-lg">
+                    <div class="text-4xl font-bold text-primary mb-2">
+                      1000+
+                    </div>
+                    <div class="text-gray-600">Satisfied Clients</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+      <footer class="bg-gray-900 text-white py-12">
+        <div class="container mx-auto px-6">
+          <div class="grid grid-cols-4 gap-8">
+            <div>
+              <h4 class="text-lg font-semibold mb-4">Contact</h4>
+              <p class="text-gray-300 font-medium mb-2">
+                Phone: (563) 261-0200
+              </p>
+              <p class="text-gray-300 font-medium mb-2">
+                Email: joshthetechtamer@gmail.com
+              </p>
+              <p class="text-gray-300 font-medium mb-2">
+                Website: joshthetechtamer.com
+              </p>
+              <p class="text-gray-300 font-medium">
+                Location:
+                <a
+                  href="https://www.google.com/maps?q=Muscatine,+IA"
+                  target="_blank"
+                  class="hover:text-white"
+                  >Muscatine, IA - Servicing Eastern Iowa</a
+                >
+              </p>
+            </div>
+            <div>
+              <h4 class="text-lg font-semibold mb-4">Business Hours</h4>
+              <p class="text-gray-400 mb-2">Monday - Friday: 9AM - 8PM</p>
+              <p class="text-gray-400">Saturday - Sunday: 10AM - 4PM</p>
+            </div>
+            <div>
+              <h4 class="text-lg font-semibold mb-4">Follow Us</h4>
+              <div class="flex space-x-4">
+                <a href="#" class="text-gray-400 hover:text-white">
+                  <i class="ri-linkedin-fill text-xl"></i>
+                </a>
+                <a href="#" class="text-gray-400 hover:text-white">
+                  <i class="ri-twitter-fill text-xl"></i>
+                </a>
+                <a href="#" class="text-gray-400 hover:text-white">
+                  <i class="ri-instagram-fill text-xl"></i>
+                </a>
+              </div>
+            </div>
+            <div>
+              <h4 class="text-lg font-semibold mb-4">Legal</h4>
+              <p class="text-gray-400 mb-2">Terms of Service</p>
+              <p class="text-gray-400">Privacy Policy</p>
+            </div>
+          </div>
+          <div
+            class="border-t border-gray-800 mt-12 pt-8 text-center text-gray-400"
+          >
+            <p>&copy; 2025 The Tech Tamer. All rights reserved.</p>
+          </div>
+        </div>
+      </footer>
+    </main>
+    <div
+      id="bookingModal"
+      class="fixed inset-0 bg-black bg-opacity-50 z-50 hidden"
+    >
+      <div
+        class="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-white rounded-lg w-[800px] max-h-[90vh] overflow-y-auto"
+      >
+        <div class="p-8">
+          <div class="flex justify-between items-center mb-6">
+            <h3 class="text-2xl font-bold">Schedule Your Appointment</h3>
+            <button
+              onclick="hideBookingModal()"
+              class="text-gray-500 hover:text-gray-700"
+            >
+              <i class="ri-close-line text-2xl"></i>
+            </button>
+          </div>
+          <div class="mb-8">
+            <div class="flex justify-between items-center mb-4">
+              <button
+                onclick="previousMonth()"
+                class="p-2 hover:bg-gray-100 rounded-full"
+              >
+                <i class="ri-arrow-left-s-line text-xl"></i>
+              </button>
+              <h4 id="currentMonth" class="text-lg font-semibold">
+                March 2025
+              </h4>
+              <button
+                onclick="nextMonth()"
+                class="p-2 hover:bg-gray-100 rounded-full"
+              >
+                <i class="ri-arrow-right-s-line text-xl"></i>
+              </button>
+            </div>
+            <div class="calendar-grid mb-4">
+              <div class="text-center py-2 text-gray-800 font-medium">Sun</div>
+              <div class="text-center py-2 text-gray-800 font-medium">Mon</div>
+              <div class="text-center py-2 text-gray-800 font-medium">Tue</div>
+              <div class="text-center py-2 text-gray-800 font-medium">Wed</div>
+              <div class="text-center py-2 text-gray-800 font-medium">Thu</div>
+              <div class="text-center py-2 text-gray-800 font-medium">Fri</div>
+              <div class="text-center py-2 text-gray-800 font-medium">Sat</div>
+            </div>
+            <div id="calendarDays" class="calendar-grid"></div>
+          </div>
+          <div id="timeSlots" class="mb-8 hidden">
+            <h4 class="text-lg font-semibold mb-4">Available Time Slots</h4>
+            <div class="grid grid-cols-4 gap-4"></div>
+          </div>
+          <div id="bookingForm" class="hidden">
+            <h4 class="text-lg font-semibold mb-4">Your Information</h4>
+            <form id="appointmentForm" class="space-y-4">
+              <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1"
+                  >Full Name</label
+                >
+                <input
+                  type="text"
+                  required
+                  class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-primary focus:border-primary"
+                />
+              </div>
+              <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1"
+                  >Email</label
+                >
+                <input
+                  type="email"
+                  required
+                  class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-primary focus:border-primary"
+                />
+              </div>
+              <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1"
+                  >Phone</label
+                >
+                <input
+                  type="tel"
+                  required
+                  class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-primary focus:border-primary"
+                />
+              </div>
+              <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1"
+                  >Consultation Topic</label
+                >
+                <textarea
+                  required
+                  class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-primary focus:border-primary"
+                  rows="3"
+                ></textarea>
+              </div>
+              <button
+                type="submit"
+                class="w-full bg-primary text-white py-3 !rounded-button font-semibold hover:bg-primary/90 transition-colors"
+              >
+                Confirm Booking
+              </button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+    <script>
+      const mockAvailableSlots = {
+        "2025-03-09": ["10:00", "11:00", "14:00", "15:00"],
+        "2025-03-10": ["09:00", "10:00", "11:00", "13:00", "14:00"],
+        "2025-03-11": ["09:00", "10:00", "11:00", "13:00", "14:00", "15:00"],
+        "2025-03-12": ["10:00", "11:00", "13:00", "14:00"],
+        "2025-03-13": ["09:00", "10:00", "11:00", "13:00", "14:00"],
+        "2025-03-14": ["09:00", "10:00", "11:00", "14:00", "15:00"],
+        "2025-03-15": ["10:00", "11:00", "14:00"],
+      };
+      let currentDate = new Date(2025, 2, 9);
+      let selectedDate = null;
+      let selectedTime = null;
+      function showBookingModal() {
+        document.getElementById("bookingModal").classList.remove("hidden");
+        renderCalendar();
+      }
+      function hideBookingModal() {
+        document.getElementById("bookingModal").classList.add("hidden");
+      }
+      function renderCalendar() {
+        const firstDay = new Date(
+          currentDate.getFullYear(),
+          currentDate.getMonth(),
+          1,
+        );
+        const lastDay = new Date(
+          currentDate.getFullYear(),
+          currentDate.getMonth() + 1,
+          0,
+        );
+        document.getElementById("currentMonth").textContent =
+          currentDate.toLocaleString("default", { month: "long", year: "numeric" });
+        const calendarDays = document.getElementById("calendarDays");
+        calendarDays.innerHTML = "";
+        for (let i = 0; i < firstDay.getDay(); i++) {
+          calendarDays.appendChild(createDayElement(""));
+        }
+        for (let day = 1; day <= lastDay.getDate(); day++) {
+          const date = new Date(
+            currentDate.getFullYear(),
+            currentDate.getMonth(),
+            day,
+          );
+          const dateString = date.toISOString().split("T")[0];
+          const isAvailable = mockAvailableSlots[dateString];
+          const dayElement = createDayElement(day, isAvailable, dateString);
+          calendarDays.appendChild(dayElement);
+        }
+      }
+      function createDayElement(day, isAvailable, dateString) {
+        const div = document.createElement("div");
+        div.className = "text-center py-3 cursor-pointer";
+        if (day) {
+          div.textContent = day;
+          if (isAvailable) {
+            div.classList.add("hover:bg-primary/10");
+            div.onclick = () => selectDate(dateString);
+          } else {
+            div.classList.add("text-gray-400");
+          }
+        }
+        return div;
+      }
+      function selectDate(date) {
+        selectedDate = date;
+        renderTimeSlots();
+      }
+      function renderTimeSlots() {
+        const timeSlotsContainer = document.getElementById("timeSlots");
+        const slotsGrid = timeSlotsContainer.querySelector("div");
+        timeSlotsContainer.classList.remove("hidden");
+        slotsGrid.innerHTML = "";
+        mockAvailableSlots[selectedDate].forEach((time) => {
+          const slot = document.createElement("div");
+          slot.className =
+            "time-slot text-center py-3 border rounded-lg cursor-pointer";
+          slot.textContent = time;
+          slot.onclick = () => selectTime(time);
+          slotsGrid.appendChild(slot);
+        });
+      }
+      function selectTime(time) {
+        selectedTime = time;
+        document.getElementById("bookingForm").classList.remove("hidden");
+        const timeSlots = document.querySelectorAll(".time-slot");
+        timeSlots.forEach((slot) => {
+          if (slot.textContent === time) {
+            slot.classList.add("selected");
+          } else {
+            slot.classList.remove("selected");
+          }
+        });
+      }
+      function previousMonth() {
+        currentDate.setMonth(currentDate.getMonth() - 1);
+        renderCalendar();
+      }
+      function nextMonth() {
+        currentDate.setMonth(currentDate.getMonth() + 1);
+        renderCalendar();
+      }
+      document.getElementById("appointmentForm").onsubmit = (e) => {
+        e.preventDefault();
+        const successModal = document.createElement("div");
+        successModal.className =
+          "fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center";
+        successModal.innerHTML = `
+      <div class="bg-white p-8 rounded-lg text-center">
+      <div class="w-16 h-16 mx-auto mb-4 flex items-center justify-center bg-green-100 rounded-full">
+      <i class="ri-check-line text-green-500 text-3xl"></i>
+      </div>
+      <h3 class="text-xl font-semibold mb-2">Booking Confirmed!</h3>
+      <p class="text-gray-600 mb-6">Your appointment has been scheduled for ${selectedDate} at ${selectedTime}.</p>
+      <button onclick="this.closest('.fixed').remove()" class="bg-primary text-white px-6 py-2 !rounded-button">Close</button>
+      </div>
+      `;
+        document.body.appendChild(successModal);
+        hideBookingModal();
+      };
+    </script>
+  </body>
+</html>
+
+<?php get_footer(): ?>
