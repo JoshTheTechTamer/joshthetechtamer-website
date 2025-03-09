@@ -690,26 +690,45 @@
         currentDate.setMonth(currentDate.getMonth() + 1);
         renderCalendar();
       }
-      document.getElementById("appointmentForm").onsubmit = (e) => {
-        e.preventDefault();
-        const successModal = document.createElement("div");
-        successModal.className =
-          "fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center";
-        successModal.innerHTML = `
-      <div class="bg-white p-8 rounded-lg text-center">
-      <div class="w-16 h-16 mx-auto mb-4 flex items-center justify-center bg-green-100 rounded-full">
-      <i class="ri-check-line text-green-500 text-3xl"></i>
-      </div>
-      <h3 class="text-xl font-semibold mb-2">Booking Confirmed!</h3>
-      <p class="text-gray-600 mb-6">Your appointment has been scheduled for ${selectedDate} at ${selectedTime}.</p>
-      <button onclick="this.closest('.fixed').remove()" class="bg-primary text-white px-6 py-2 !rounded-button">Close</button>
-      </div>
-      `;
-        document.body.appendChild(successModal);
-        hideBookingModal();
-      };
+      document.getElementById("appointmentForm").onsubmit = async (e) => {
+    e.preventDefault();
+    
+    const name = e.target[0].value;
+    const email = e.target[1].value;
+    const phone = e.target[2].value;
+    const topic = e.target[3].value;
+
+    if (!selectedDate || !selectedTime) {
+        alert("Please select a date and time.");
+        return;
+    }
+
+    const formData = new FormData();
+    formData.append("name", name);
+    formData.append("email", email);
+    formData.append("phone", phone);
+    formData.append("topic", topic);
+    formData.append("date", selectedDate);
+    formData.append("time", selectedTime);
+
+    try {
+        const response = await fetch("booking-handler.php", {
+            method: "POST",
+            body: formData
+        });
+        const result = await response.json();
+
+        if (result.status === "success") {
+            alert("Booking confirmed! You will receive an email confirmation shortly.");
+            hideBookingModal();
+        } else {
+            alert("Error: " + result.message);
+        }
+    } catch (error) {
+        alert("Failed to send booking request. Please try again.");
+    }
+};
+
     </script>
   </body>
 </html>
-
-<?php get_footer(): ?>
