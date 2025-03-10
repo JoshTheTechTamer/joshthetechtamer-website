@@ -52,6 +52,11 @@
       display: grid;
       grid-template-columns: repeat(7, 1fr);
       }
+      .parallax-bg {
+      will-change: transform;
+      transform: translateY(0);
+      transition: transform 0.1s linear;
+      }
       .time-slot {
       transition: all 0.3s;
       }
@@ -66,6 +71,20 @@
       background-color: #f3f4f6;
       cursor: not-allowed;
       opacity: 0.5;
+      }
+      @keyframes pulse {
+      0% {
+      opacity: 0.5;
+      }
+      50% {
+      opacity: 0.75;
+      }
+      100% {
+      opacity: 0.5;
+      }
+      }
+      .animate-pulse {
+      animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
       }
     </style>
   </head>
@@ -116,11 +135,13 @@
       </nav>
     </header>
     <main class="pt-20">
-      <section class="relative bg-gradient-to-r from-white to-transparent">
-        <div class="absolute inset-0 z-0">
+      <section
+        class="relative bg-gradient-to-r from-white to-transparent overflow-hidden"
+      >
+        <div class="absolute inset-0 z-0 parallax-bg">
           <img
             src="https://public.readdy.ai/ai/img_res/64f2544e47fbdb74a233bda4589df8f7.jpg"
-            class="w-full h-full object-cover object-top opacity-30"
+            class="w-full h-[120%] object-cover object-top opacity-30"
           />
         </div>
         <div class="container mx-auto px-6 py-24 relative z-10">
@@ -161,8 +182,11 @@
             </div>
           </div>
         </div>
+        <div
+          class="absolute inset-0 bg-[url('https://public.readdy.ai/ai/img_res/6dea96da25171d88ef752350297e433b.jpg')] opacity-5 mix-blend-overlay rounded-[60px] mx-8"
+        ></div>
       </section>
-      <section class="py-8 bg-white border-b">
+      <section class="py-8 bg-gradient-to-r from-primary/10 to-secondary/10">
         <div class="container mx-auto px-6">
           <div
             class="flex flex-col md:flex-row items-center justify-center md:space-x-12 space-y-4 md:space-y-0"
@@ -195,6 +219,9 @@
             </a>
           </div>
         </div>
+        <div
+          class="absolute inset-0 bg-[url('https://readdy.ai/api/search-image?query=abstract tech pattern with flowing digital lines, subtle geometric shapes, clean minimalist design, soft blue gradient overlay, professional tech aesthetic with modern elements&width=1920&height=1080&seq=6&orientation=landscape')] opacity-5 mix-blend-overlay rounded-[60px] mx-8"
+        ></div>
       </section>
       <section id="services" class="py-20 bg-gray-50">
         <div class="container mx-auto px-6">
@@ -317,9 +344,24 @@
             </div>
           </div>
         </div>
+        <div
+          class="absolute inset-0 bg-[url('https://readdy.ai/api/search-image?query=abstract tech pattern with flowing digital lines, subtle geometric shapes, clean minimalist design, soft blue gradient overlay, professional tech aesthetic with modern elements&width=1920&height=1080&seq=6&orientation=landscape')] opacity-5 mix-blend-overlay rounded-[60px] mx-8"
+        ></div>
       </section>
-      <section id="booking" class="py-20">
-        <div class="container mx-auto px-6">
+      <section
+        id="booking"
+        class="py-20 relative overflow-hidden bg-gradient-to-br from-primary/5 to-secondary/5"
+      >
+        <div class="absolute inset-0 z-0">
+          <img
+            src="https://public.readdy.ai/ai/img_res/702465651e4d25aca8dc09a2cbe9f932.jpg"
+            class="w-full h-full object-cover opacity-10"
+          />
+        </div>
+        <div
+          class="absolute inset-0 bg-gradient-to-b from-transparent via-white/50 to-white/80"
+        ></div>
+        <div class="container mx-auto px-6 relative z-10">
           <h2 class="text-3xl font-bold text-center mb-8">
             Need Urgent Tech Help?
           </h2>
@@ -328,26 +370,42 @@
             if needed.
           </p>
           <div class="flex flex-col items-center justify-center space-y-6">
-            <a
-              href="sms:563-261-0200"
-              class="bg-primary text-white px-12 py-4 text-lg font-semibold !rounded-button hover:bg-primary/90 transition-colors cursor-pointer inline-flex items-center"
-            >
-              <i class="ri-message-3-line mr-2 text-xl"></i>
-              Text (563) 261-0200
-            </a>
+            <div class="relative">
+              <div
+                class="absolute -inset-1 bg-gradient-to-r from-primary to-secondary rounded-button opacity-75 blur animate-pulse"
+              ></div>
+              <a
+                href="sms:563-261-0200"
+                class="relative bg-primary text-white px-12 py-4 text-lg font-semibold !rounded-button hover:bg-primary/90 transition-colors cursor-pointer inline-flex items-center"
+              >
+                <i class="ri-message-3-line mr-2 text-xl"></i>
+                Text (563) 261-0200
+              </a>
+            </div>
             <p class="text-gray-600">or</p>
-            <a
-              href="tel:563-261-0200"
-              class="bg-white border-2 border-primary text-primary px-12 py-4 text-lg font-semibold !rounded-button hover:bg-primary/10 transition-colors cursor-pointer inline-flex items-center"
-            >
-              <i class="ri-phone-line mr-2 text-xl"></i>
-              Call Now
-            </a>
+            <div class="relative">
+              <div
+                class="absolute -inset-1 bg-gradient-to-r from-primary/50 to-secondary/50 rounded-button opacity-75 blur"
+              ></div>
+              <a
+                href="tel:563-261-0200"
+                class="relative bg-white border-2 border-primary text-primary px-12 py-4 text-lg font-semibold !rounded-button hover:bg-primary/10 transition-colors cursor-pointer inline-flex items-center"
+              >
+                <i class="ri-phone-line mr-2 text-xl"></i>
+                Call Now
+              </a>
+            </div>
           </div>
         </div>
+        <div
+          class="absolute inset-0 bg-[url('https://readdy.ai/api/search-image?query=abstract tech pattern with flowing digital lines, subtle geometric shapes, clean minimalist design, soft blue gradient overlay, professional tech aesthetic with modern elements&width=1920&height=1080&seq=6&orientation=landscape')] opacity-5 mix-blend-overlay rounded-[60px] mx-8"
+        ></div>
       </section>
-      <section id="about" class="py-20 bg-white">
-        <div class="container mx-auto px-6">
+      <section id="about" class="py-20 bg-white relative overflow-hidden">
+        <div
+          class="absolute inset-0 bg-gradient-to-br from-primary/5 via-secondary/5 to-transparent rounded-[60px] mx-8"
+        ></div>
+        <div class="container mx-auto px-6 relative">
           <div class="grid md:grid-cols-2 grid-cols-1 gap-12 items-center">
             <div class="h-[600px] rounded-lg overflow-hidden">
               <img
@@ -363,7 +421,7 @@
                   For over 20 years, I've been dedicated to helping people
                   overcome their technology challenges with patience,
                   understanding, and expertise. As a disabled Army veteran who
-                  served as a food service specialist from 2008 to 2009, I've
+                  served as a food service specialist from 2009 to 2012, I've
                   developed a unique approach to making technology accessible
                   and less intimidating for everyone.
                 </p>
@@ -391,7 +449,9 @@
                   Davenport as a Control Center Associate, specializing in
                   computer sales and repairs. I've also owned and operated a
                   pawnshop in downtown Muscatine, giving me extensive experience
-                  in helping people with various tech issues. Currently, I work
+                  in helping people with various tech issues. My expertise
+                  extends to web design, marketing, and advertising sales,
+                  providing comprehensive digital solutions. Currently, I work
                   with a local corporate carrier selling mobile devices, keeping
                   me up-to-date with the latest technology trends.
                 </p>
@@ -406,7 +466,7 @@
                 </p>
                 <div class="grid grid-cols-2 gap-6 mt-12">
                   <div class="bg-gray-50 p-6 rounded-lg">
-                    <div class="text-4xl font-bold text-primary mb-2">15+</div>
+                    <div class="text-4xl font-bold text-primary mb-2">20+</div>
                     <div class="text-gray-600">Years of Tech Experience</div>
                   </div>
                   <div class="bg-gray-50 p-6 rounded-lg">
@@ -420,6 +480,9 @@
             </div>
           </div>
         </div>
+        <div
+          class="absolute inset-0 bg-[url('https://readdy.ai/api/search-image?query=abstract tech pattern with flowing digital lines, subtle geometric shapes, clean minimalist design, soft blue gradient overlay, professional tech aesthetic with modern elements&width=1920&height=1080&seq=6&orientation=landscape')] opacity-5 mix-blend-overlay rounded-[60px] mx-8"
+        ></div>
       </section>
       <footer class="bg-gray-900 text-white py-12">
         <div class="container mx-auto px-6">
@@ -483,6 +546,11 @@
         const mobileMenu = document.getElementById("mobileMenu");
         mobileMenu.classList.toggle("hidden");
       }
+      window.addEventListener("scroll", () => {
+        const scrolled = window.pageYOffset;
+        const parallaxBg = document.querySelector(".parallax-bg");
+        parallaxBg.style.transform = `translateY(${scrolled * 0.4}px)`;
+      });
     </script>
   </body>
 </html>
