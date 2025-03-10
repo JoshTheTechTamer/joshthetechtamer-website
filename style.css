@@ -7,7 +7,7 @@ Author: Josh Sargent
 Author URI: joshthetechtamer.com
 */
 
-	<style>
+<style>
       :where([class^="ri-"])::before { content: "\f3c2"; }
       .calendar-grid {
       display: grid;
