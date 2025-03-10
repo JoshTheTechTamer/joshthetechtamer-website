@@ -722,57 +722,23 @@
         currentDate.setMonth(currentDate.getMonth() + 1);
         renderCalendar();
       }
-      document.getElementById("appointmentForm").onsubmit = async (e) => {
+      document.getElementById("appointmentForm").onsubmit = (e) => {
         e.preventDefault();
-
-        const formData = new FormData(e.target);
-        formData.append("date", selectedDate);
-        formData.append("time", selectedTime);
-        try {
-          const response = await fetch(
-            "https://joshthetechtamer.com/booking-processor/",
-            {
-              method: "POST",
-              body: formData,
-            },
-          );
-          if (!response.ok) {
-            throw new Error("Booking failed");
-          }
-          const result = await response.json();
-          const successModal = document.createElement("div");
-          successModal.className =
-            "fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center";
-          successModal.innerHTML = `
-            <div class="bg-white p-8 rounded-lg text-center">
-              <div class="w-16 h-16 mx-auto mb-4 flex items-center justify-center bg-green-100 rounded-full">
-                <i class="ri-check-line text-green-500 text-3xl"></i>
-              </div>
-              <h3 class="text-xl font-semibold mb-2">Booking Confirmed!</h3>
-              <p class="text-gray-600 mb-6">Your appointment has been scheduled for ${selectedDate} at ${selectedTime}.</p>
-              <p class="text-gray-600 mb-6">You will receive a confirmation email shortly.</p>
-              <button onclick="this.closest('.fixed').remove()" class="bg-primary text-white px-6 py-2 !rounded-button">Close</button>
-            </div>
-          `;
-          document.body.appendChild(successModal);
-          hideBookingModal();
-          e.target.reset();
-        } catch (error) {
-          const errorModal = document.createElement("div");
-          errorModal.className =
-            "fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center";
-          errorModal.innerHTML = `
-            <div class="bg-white p-8 rounded-lg text-center">
-              <div class="w-16 h-16 mx-auto mb-4 flex items-center justify-center bg-red-100 rounded-full">
-                <i class="ri-close-line text-red-500 text-3xl"></i>
-              </div>
-              <h3 class="text-xl font-semibold mb-2">Booking Failed</h3>
-              <p class="text-gray-600 mb-6">Sorry, there was an error processing your booking. Please try again later.</p>
-              <button onclick="this.closest('.fixed').remove()" class="bg-primary text-white px-6 py-2 !rounded-button">Close</button>
-            </div>
-          `;
-          document.body.appendChild(errorModal);
-        }
+        const successModal = document.createElement("div");
+        successModal.className =
+          "fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center";
+        successModal.innerHTML = `
+      <div class="bg-white p-8 rounded-lg text-center">
+      <div class="w-16 h-16 mx-auto mb-4 flex items-center justify-center bg-green-100 rounded-full">
+      <i class="ri-check-line text-green-500 text-3xl"></i>
+      </div>
+      <h3 class="text-xl font-semibold mb-2">Booking Confirmed!</h3>
+      <p class="text-gray-600 mb-6">Your appointment has been scheduled for ${selectedDate} at ${selectedTime}.</p>
+      <button onclick="this.closest('.fixed').remove()" class="bg-primary text-white px-6 py-2 !rounded-button">Close</button>
+      </div>
+      `;
+        document.body.appendChild(successModal);
+        hideBookingModal();
       };
     </script>
   </body>
