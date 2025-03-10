@@ -144,13 +144,13 @@
                   Eastern Iowa. Making technology work for you, not against you.
                 </p>
               </div>
-              <button
-                onclick="showBookingModal()"
+              <a
+                href="https://joshthetechtamer.com/tell-me-how-i-can-help/"
                 class="bg-primary text-white px-12 py-4 text-lg font-semibold !rounded-button hover:bg-primary/90 transition-colors cursor-pointer inline-flex items-center"
               >
                 <i class="ri-calendar-line mr-2 text-xl"></i>
                 Book Your Session Now
-              </button>
+              </a>
             </div>
             <div class="flex flex-col items-center">
               <img
@@ -370,13 +370,13 @@
             </div>
           </div>
           <div class="text-center mt-16">
-            <button
-              onclick="showBookingModal()"
+            <a
+              href="https://joshthetechtamer.com/tell-me-how-i-can-help/"
               class="bg-primary text-white px-12 py-4 text-lg font-semibold !rounded-button hover:bg-primary/90 transition-colors cursor-pointer inline-flex items-center"
             >
               <i class="ri-calendar-line mr-2 text-xl"></i>
               Book Your Session Now
-            </button>
+            </a>
           </div>
         </div>
       </section>
@@ -512,234 +512,11 @@
         </div>
       </footer>
     </main>
-    <div
-      id="bookingModal"
-      class="fixed inset-0 bg-black bg-opacity-50 z-50 hidden"
-    >
-      <div
-        class="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-white rounded-lg w-[90%] md:w-[800px] max-h-[90vh] overflow-y-auto"
-      >
-        <div class="p-8">
-          <div class="flex justify-between items-center mb-6">
-            <h3 class="text-2xl font-bold">Schedule Your Appointment</h3>
-            <button
-              onclick="hideBookingModal()"
-              class="text-gray-500 hover:text-gray-700"
-            >
-              <i class="ri-close-line text-2xl"></i>
-            </button>
-          </div>
-          <div class="mb-8">
-            <div class="flex justify-between items-center mb-4">
-              <button
-                onclick="previousMonth()"
-                class="p-2 hover:bg-gray-100 rounded-full"
-              >
-                <i class="ri-arrow-left-s-line text-xl"></i>
-              </button>
-              <h4 id="currentMonth" class="text-lg font-semibold">
-                March 2025
-              </h4>
-              <button
-                onclick="nextMonth()"
-                class="p-2 hover:bg-gray-100 rounded-full"
-              >
-                <i class="ri-arrow-right-s-line text-xl"></i>
-              </button>
-            </div>
-            <div class="calendar-grid mb-4">
-              <div class="text-center py-2 text-gray-800 font-medium">Sun</div>
-              <div class="text-center py-2 text-gray-800 font-medium">Mon</div>
-              <div class="text-center py-2 text-gray-800 font-medium">Tue</div>
-              <div class="text-center py-2 text-gray-800 font-medium">Wed</div>
-              <div class="text-center py-2 text-gray-800 font-medium">Thu</div>
-              <div class="text-center py-2 text-gray-800 font-medium">Fri</div>
-              <div class="text-center py-2 text-gray-800 font-medium">Sat</div>
-            </div>
-            <div id="calendarDays" class="calendar-grid"></div>
-          </div>
-          <div id="timeSlots" class="mb-8 hidden">
-            <h4 class="text-lg font-semibold mb-4">Available Time Slots</h4>
-            <div class="grid md:grid-cols-4 grid-cols-2 gap-4"></div>
-          </div>
-          <div id="bookingForm" class="hidden">
-            <h4 class="text-lg font-semibold mb-4">Your Information</h4>
-            <form id="appointmentForm" class="space-y-4">
-              <div>
-                <label class="block text-sm font-medium text-gray-700 mb-1"
-                  >Full Name</label
-                >
-                <input
-                  type="text"
-                  required
-                  class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-primary focus:border-primary"
-                />
-              </div>
-              <div>
-                <label class="block text-sm font-medium text-gray-700 mb-1"
-                  >Email</label
-                >
-                <input
-                  type="email"
-                  required
-                  class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-primary focus:border-primary"
-                />
-              </div>
-              <div>
-                <label class="block text-sm font-medium text-gray-700 mb-1"
-                  >Phone</label
-                >
-                <input
-                  type="tel"
-                  required
-                  class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-primary focus:border-primary"
-                />
-              </div>
-              <div>
-                <label class="block text-sm font-medium text-gray-700 mb-1"
-                  >Consultation Topic</label
-                >
-                <textarea
-                  required
-                  class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-primary focus:border-primary"
-                  rows="3"
-                ></textarea>
-              </div>
-              <button
-                type="submit"
-                class="w-full bg-primary text-white py-3 !rounded-button font-semibold hover:bg-primary/90 transition-colors"
-              >
-                Confirm Booking
-              </button>
-            </form>
-          </div>
-        </div>
-      </div>
-    </div>
     <script>
       function toggleMobileMenu() {
         const mobileMenu = document.getElementById("mobileMenu");
         mobileMenu.classList.toggle("hidden");
       }
-      const mockAvailableSlots = {
-        "2025-03-09": ["10:00", "11:00", "14:00", "15:00"],
-        "2025-03-10": ["09:00", "10:00", "11:00", "13:00", "14:00"],
-        "2025-03-11": ["09:00", "10:00", "11:00", "13:00", "14:00", "15:00"],
-        "2025-03-12": ["10:00", "11:00", "13:00", "14:00"],
-        "2025-03-13": ["09:00", "10:00", "11:00", "13:00", "14:00"],
-        "2025-03-14": ["09:00", "10:00", "11:00", "14:00", "15:00"],
-        "2025-03-15": ["10:00", "11:00", "14:00"],
-      };
-      let currentDate = new Date(2025, 2, 9);
-      let selectedDate = null;
-      let selectedTime = null;
-      function showBookingModal() {
-        document.getElementById("bookingModal").classList.remove("hidden");
-        renderCalendar();
-      }
-      function hideBookingModal() {
-        document.getElementById("bookingModal").classList.add("hidden");
-      }
-      function renderCalendar() {
-        const firstDay = new Date(
-          currentDate.getFullYear(),
-          currentDate.getMonth(),
-          1,
-        );
-        const lastDay = new Date(
-          currentDate.getFullYear(),
-          currentDate.getMonth() + 1,
-          0,
-        );
-        document.getElementById("currentMonth").textContent =
-          currentDate.toLocaleString("default", { month: "long", year: "numeric" });
-        const calendarDays = document.getElementById("calendarDays");
-        calendarDays.innerHTML = "";
-        for (let i = 0; i < firstDay.getDay(); i++) {
-          calendarDays.appendChild(createDayElement(""));
-        }
-        for (let day = 1; day <= lastDay.getDate(); day++) {
-          const date = new Date(
-            currentDate.getFullYear(),
-            currentDate.getMonth(),
-            day,
-          );
-          const dateString = date.toISOString().split("T")[0];
-          const isAvailable = mockAvailableSlots[dateString];
-          const dayElement = createDayElement(day, isAvailable, dateString);
-          calendarDays.appendChild(dayElement);
-        }
-      }
-      function createDayElement(day, isAvailable, dateString) {
-        const div = document.createElement("div");
-        div.className = "text-center py-3 cursor-pointer";
-        if (day) {
-          div.textContent = day;
-          if (isAvailable) {
-            div.classList.add("hover:bg-primary/10");
-            div.onclick = () => selectDate(dateString);
-          } else {
-            div.classList.add("text-gray-400");
-          }
-        }
-        return div;
-      }
-      function selectDate(date) {
-        selectedDate = date;
-        renderTimeSlots();
-      }
-      function renderTimeSlots() {
-        const timeSlotsContainer = document.getElementById("timeSlots");
-        const slotsGrid = timeSlotsContainer.querySelector("div");
-        timeSlotsContainer.classList.remove("hidden");
-        slotsGrid.innerHTML = "";
-        mockAvailableSlots[selectedDate].forEach((time) => {
-          const slot = document.createElement("div");
-          slot.className =
-            "time-slot text-center py-3 border rounded-lg cursor-pointer";
-          slot.textContent = time;
-          slot.onclick = () => selectTime(time);
-          slotsGrid.appendChild(slot);
-        });
-      }
-      function selectTime(time) {
-        selectedTime = time;
-        document.getElementById("bookingForm").classList.remove("hidden");
-        const timeSlots = document.querySelectorAll(".time-slot");
-        timeSlots.forEach((slot) => {
-          if (slot.textContent === time) {
-            slot.classList.add("selected");
-          } else {
-            slot.classList.remove("selected");
-          }
-        });
-      }
-      function previousMonth() {
-        currentDate.setMonth(currentDate.getMonth() - 1);
-        renderCalendar();
-      }
-      function nextMonth() {
-        currentDate.setMonth(currentDate.getMonth() + 1);
-        renderCalendar();
-      }
-      document.getElementById("appointmentForm").onsubmit = (e) => {
-        e.preventDefault();
-        const successModal = document.createElement("div");
-        successModal.className =
-          "fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center";
-        successModal.innerHTML = `
-      <div class="bg-white p-8 rounded-lg text-center">
-      <div class="w-16 h-16 mx-auto mb-4 flex items-center justify-center bg-green-100 rounded-full">
-      <i class="ri-check-line text-green-500 text-3xl"></i>
-      </div>
-      <h3 class="text-xl font-semibold mb-2">Booking Confirmed!</h3>
-      <p class="text-gray-600 mb-6">Your appointment has been scheduled for ${selectedDate} at ${selectedTime}.</p>
-      <button onclick="this.closest('.fixed').remove()" class="bg-primary text-white px-6 py-2 !rounded-button">Close</button>
-      </div>
-      `;
-        document.body.appendChild(successModal);
-        hideBookingModal();
-      };
     </script>
   </body>
 </html>
