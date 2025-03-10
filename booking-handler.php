@@ -2,37 +2,21 @@
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
 
-require 'vendor/autoload.php'; // Load PHPMailer via Composer
+require 'vendor/autoload.php';
 
-// Enable error reporting for debugging
-error_reporting(E_ALL);
-ini_set('display_errors', 1);
+// Load SMTP credentials securely
+$config = require 'config.php'; // Load credentials
 
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $name = $_POST['name'] ?? '';
-    $email = $_POST['email'] ?? '';
-    $phone = $_POST['phone'] ?? '';
-    $topic = $_POST['topic'] ?? '';
-    $date = $_POST['date'] ?? '';
-    $time = $_POST['time'] ?? '';
+$mail = new PHPMailer(true);
 
-    // Validate required fields
-    if (empty($name) || empty($email) || empty($phone) || empty($topic) || empty($date) || empty($time)) {
-        echo json_encode(["status" => "error", "message" => "All fields are required."]);
-        exit();
-    }
-
-    $mail = new PHPMailer(true);
-
-    try {
-        // SMTP Settings
-        $mail->isSMTP();
-        $mail->Host = 'smtp.gmail.com'; // Gmail SMTP server
-        $mail->SMTPAuth = true;
-        $mail->Username = 'joshthetechtamer@gmail.com'; // 🔹 REPLACE with your Gmail
-        $mail->Password = 'yrou wypv bbcw hfdz';  // 🔹 REPLACE with your App Password
-        $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS; 
-        $mail->Port = 587;
+try {
+    $mail->isSMTP();
+    $mail->Host = 'smtp.gmail.com';
+    $mail->SMTPAuth = true;
+    $mail->Username = $config['SMTP_USER']; // Securely loaded
+    $mail->Password = $config['SMTP_PASS']; // Securely loaded
+    $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
+    $mail->Port = 587;
 
         // Email Details
         $mail->setFrom('joshthetechtamer@gmail.com', 'The Tech Tamer'); // Sender
@@ -54,10 +38,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
         $mail->send();
         echo json_encode(["status" => "success", "message" => "Booking request sent successfully."]);
-    } catch (Exception $e) {
-        echo json_encode(["status" => "error", "message" => "Mailer Error: {$mail->ErrorInfo}"]);
-    }
-} else {
-    echo json_encode(["status" => "error", "message" => "Invalid request."]);
+} catch (Exception $e) {
+    echo json_encode(["status" => "error", "message" => "Mailer Error: {$mail->ErrorInfo}"]);
 }
 ?>
