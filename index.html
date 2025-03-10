@@ -2,7 +2,10 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+    />
     <title>The Tech Tamer - Professional Tech Support Services</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -16,6 +19,10 @@
       rel="stylesheet"
     />
     <script>
+      function toggleMobileMenu() {
+        const mobileMenu = document.getElementById("mobileMenu");
+        mobileMenu.classList.toggle("hidden");
+      }
       tailwind.config = {
         theme: {
           extend: {
@@ -70,13 +77,30 @@
             <img
               src="https://static.readdy.ai/image/2b86c33b7e31113c8376c50d779cc539/dac21e49d1e73b6862a7aefb991bcfca.png"
               alt="The Tech Tamer Logo"
-              class="h-20"
+              class="h-20 md:h-20 h-16"
             />
-            <span class="text-3xl font-['Pacifico'] text-primary"
+            <span class="text-2xl md:text-3xl font-['Pacifico'] text-primary"
               >The Tech Tamer</span
             >
           </div>
-          <div class="flex items-center space-x-8">
+          <div class="hidden md:flex items-center space-x-8">
+            <a href="#services" class="text-gray-600 hover:text-primary"
+              >Services</a
+            >
+            <a href="#booking" class="text-gray-600 hover:text-primary"
+              >Book Now</a
+            >
+            <a href="#about" class="text-gray-600 hover:text-primary">About</a>
+            <a href="#contact" class="text-gray-600 hover:text-primary"
+              >Contact</a
+            >
+          </div>
+          <button class="md:hidden text-gray-600" onclick="toggleMobileMenu()">
+            <i class="ri-menu-line text-2xl"></i>
+          </button>
+        </div>
+        <div id="mobileMenu" class="hidden md:hidden mt-4">
+          <div class="flex flex-col space-y-4">
             <a href="#services" class="text-gray-600 hover:text-primary"
               >Services</a
             >
@@ -100,14 +124,16 @@
           />
         </div>
         <div class="container mx-auto px-6 py-24 relative z-10">
-          <div class="grid grid-cols-2 gap-12 items-center">
+          <div class="grid md:grid-cols-2 grid-cols-1 gap-12 items-center">
             <div>
               <div class="flex items-center gap-6 mb-6">
                 <div>
                   <h1 class="text-5xl font-bold">
                     Josh Sargent<br />Technology Setup Expert
                   </h1>
-                  <div class="text-7xl font-bold text-secondary mt-2">
+                  <div
+                    class="text-5xl md:text-7xl font-bold text-secondary mt-2"
+                  >
                     $50/hour
                   </div>
                 </div>
@@ -138,7 +164,9 @@
       </section>
       <section class="py-8 bg-white border-b">
         <div class="container mx-auto px-6">
-          <div class="flex items-center justify-center space-x-12">
+          <div
+            class="flex flex-col md:flex-row items-center justify-center md:space-x-12 space-y-4 md:space-y-0"
+          >
             <a
               href="https://joshthetechtamer.com"
               class="text-lg text-gray-800 font-semibold hover:text-primary flex items-center"
@@ -173,7 +201,7 @@
           <h2 class="text-3xl font-bold text-center mb-16">
             Tech Support Services
           </h2>
-          <div class="grid grid-cols-3 gap-8">
+          <div class="grid md:grid-cols-3 grid-cols-1 gap-8">
             <div class="bg-white p-8 rounded-lg shadow-sm">
               <div class="h-48 mb-6 rounded-lg overflow-hidden">
                 <img
@@ -295,7 +323,7 @@
           <h2 class="text-3xl font-bold text-center mb-16">
             Simple Booking Process
           </h2>
-          <div class="grid grid-cols-4 gap-8">
+          <div class="grid md:grid-cols-4 grid-cols-2 gap-8">
             <div class="text-center">
               <div
                 class="w-16 h-16 flex items-center justify-center bg-primary/10 rounded-full mx-auto mb-6"
@@ -354,7 +382,7 @@
       </section>
       <section id="about" class="py-20 bg-white">
         <div class="container mx-auto px-6">
-          <div class="grid grid-cols-2 gap-12 items-center">
+          <div class="grid md:grid-cols-2 grid-cols-1 gap-12 items-center">
             <div class="h-[600px] rounded-lg overflow-hidden">
               <img
                 src="https://static.readdy.ai/image/2b86c33b7e31113c8376c50d779cc539/3b47916d2296a891ceeb776867f02939.jpeg"
@@ -429,7 +457,7 @@
       </section>
       <footer class="bg-gray-900 text-white py-12">
         <div class="container mx-auto px-6">
-          <div class="grid grid-cols-4 gap-8">
+          <div class="grid md:grid-cols-4 grid-cols-2 gap-8">
             <div>
               <h4 class="text-lg font-semibold mb-4">Contact</h4>
               <p class="text-gray-300 font-medium mb-2">
@@ -489,7 +517,7 @@
       class="fixed inset-0 bg-black bg-opacity-50 z-50 hidden"
     >
       <div
-        class="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-white rounded-lg w-[800px] max-h-[90vh] overflow-y-auto"
+        class="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-white rounded-lg w-[90%] md:w-[800px] max-h-[90vh] overflow-y-auto"
       >
         <div class="p-8">
           <div class="flex justify-between items-center mb-6">
@@ -532,7 +560,7 @@
           </div>
           <div id="timeSlots" class="mb-8 hidden">
             <h4 class="text-lg font-semibold mb-4">Available Time Slots</h4>
-            <div class="grid grid-cols-4 gap-4"></div>
+            <div class="grid md:grid-cols-4 grid-cols-2 gap-4"></div>
           </div>
           <div id="bookingForm" class="hidden">
             <h4 class="text-lg font-semibold mb-4">Your Information</h4>
@@ -589,6 +617,10 @@
       </div>
     </div>
     <script>
+      function toggleMobileMenu() {
+        const mobileMenu = document.getElementById("mobileMenu");
+        mobileMenu.classList.toggle("hidden");
+      }
       const mockAvailableSlots = {
         "2025-03-09": ["10:00", "11:00", "14:00", "15:00"],
         "2025-03-10": ["09:00", "10:00", "11:00", "13:00", "14:00"],
@@ -690,45 +722,24 @@
         currentDate.setMonth(currentDate.getMonth() + 1);
         renderCalendar();
       }
-      document.getElementById("appointmentForm").onsubmit = async (e) => {
-    e.preventDefault();
-    
-    const name = e.target[0].value;
-    const email = e.target[1].value;
-    const phone = e.target[2].value;
-    const topic = e.target[3].value;
-
-    if (!selectedDate || !selectedTime) {
-        alert("Please select a date and time.");
-        return;
-    }
-
-    const formData = new FormData();
-    formData.append("name", name);
-    formData.append("email", email);
-    formData.append("phone", phone);
-    formData.append("topic", topic);
-    formData.append("date", selectedDate);
-    formData.append("time", selectedTime);
-
-    try {
-        const response = await fetch("booking-handler.php", {
-            method: "POST",
-            body: formData
-        });
-        const result = await response.json();
-
-        if (result.status === "success") {
-            alert("Booking confirmed! You will receive an email confirmation shortly.");
-            hideBookingModal();
-        } else {
-            alert("Error: " + result.message);
-        }
-    } catch (error) {
-        alert("Failed to send booking request. Please try again.");
-    }
-};
-
+      document.getElementById("appointmentForm").onsubmit = (e) => {
+        e.preventDefault();
+        const successModal = document.createElement("div");
+        successModal.className =
+          "fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center";
+        successModal.innerHTML = `
+      <div class="bg-white p-8 rounded-lg text-center">
+      <div class="w-16 h-16 mx-auto mb-4 flex items-center justify-center bg-green-100 rounded-full">
+      <i class="ri-check-line text-green-500 text-3xl"></i>
+      </div>
+      <h3 class="text-xl font-semibold mb-2">Booking Confirmed!</h3>
+      <p class="text-gray-600 mb-6">Your appointment has been scheduled for ${selectedDate} at ${selectedTime}.</p>
+      <button onclick="this.closest('.fixed').remove()" class="bg-primary text-white px-6 py-2 !rounded-button">Close</button>
+      </div>
+      `;
+        document.body.appendChild(successModal);
+        hideBookingModal();
+      };
     </script>
   </body>
 </html>
