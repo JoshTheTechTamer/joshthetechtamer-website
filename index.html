@@ -2,10 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <meta
-      name="viewport"
-      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
-    />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>The Tech Tamer - Professional Tech Support Services</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -48,6 +45,18 @@
     </script>
     <style>
       :where([class^="ri-"])::before { content: "\f3c2"; }
+      @media (max-width: 640px) {
+        .container {
+          padding-left: 1rem;
+          padding-right: 1rem;
+        }
+        h1, h2, h3 {
+          word-break: break-word;
+        }
+        .prose {
+          font-size: 1rem;
+        }
+      }
       .calendar-grid {
       display: grid;
       grid-template-columns: repeat(7, 1fr);
@@ -145,11 +154,11 @@
             <div>
               <div class="flex items-center gap-6 mb-6">
                 <div>
-                  <h1 class="text-5xl font-bold">
+                  <h1 class="text-3xl sm:text-4xl md:text-5xl font-bold">
                     Josh Sargent<br />Technology Setup Expert
                   </h1>
                   <div
-                    class="text-5xl md:text-7xl font-bold text-secondary mt-2"
+                    class="text-3xl sm:text-5xl md:text-7xl font-bold text-secondary mt-2"
                   >
                     $50/hour
                   </div>
@@ -163,7 +172,7 @@
               </div>
               <button
                 onclick="showContactPopup()"
-                class="bg-primary text-white px-12 py-4 text-lg font-semibold !rounded-button hover:bg-primary/90 transition-colors cursor-pointer inline-flex items-center"
+                class="bg-primary text-white px-6 sm:px-12 py-4 text-base sm:text-lg font-semibold !rounded-button hover:bg-primary/90 transition-colors cursor-pointer inline-flex items-center"
               >
                 <i class="ri-message-3-line mr-2 text-xl"></i>
                 Text for Free Consultation
@@ -213,7 +222,7 @@
         ></div>
       </section>
       <section class="py-8 bg-gradient-to-r from-primary/10 to-secondary/10">
-        <div class="container mx-auto px-6">
+        <div class="container mx-auto px-4 sm:px-6">
           <div
             class="flex flex-col md:flex-row items-center justify-center md:space-x-12 space-y-4 md:space-y-0"
           >
@@ -253,11 +262,11 @@
         id="services"
         class="py-20 bg-gradient-to-br from-gray-50 to-white"
       >
-        <div class="container mx-auto px-6">
+        <div class="container mx-auto px-4 sm:px-6">
           <h2 class="text-3xl font-bold text-center mb-16">
             Tech Support Services
           </h2>
-          <div class="grid md:grid-cols-3 grid-cols-1 gap-8">
+          <div class="grid sm:grid-cols-2 md:grid-cols-3 grid-cols-1 gap-8">
             <div
               class="bg-gradient-to-br from-primary/5 via-white to-secondary/5 p-8 rounded-lg shadow-md hover:shadow-lg transition-shadow"
             >
@@ -438,7 +447,9 @@
               <p class="text-lg text-gray-600">
                 Most issues resolved within 24 hours
               </p>
-              <div class="flex items-center justify-center gap-8 mt-4">
+              <div
+                class="flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-8 mt-4"
+              >
                 <div class="flex items-center text-green-600">
                   <i class="ri-checkbox-circle-fill mr-2"></i>
                   <span>No Fix, No Fee</span>
@@ -465,7 +476,7 @@
           <p class="text-xl text-gray-600 text-center mb-16">
             Transparent pricing with no hidden fees
           </p>
-          <div class="grid md:grid-cols-2 gap-8 mb-16">
+          <div class="grid sm:grid-cols-2 gap-8 mb-16">
             <div class="relative group">
               <div
                 class="absolute -inset-1 bg-gradient-to-r from-primary to-secondary rounded-xl opacity-70 blur transition duration-300 group-hover:opacity-100"
@@ -678,8 +689,8 @@
         ></div>
       </section>
       <footer class="bg-gray-900 text-white py-12">
-        <div class="container mx-auto px-6">
-          <div class="grid md:grid-cols-4 grid-cols-2 gap-8">
+        <div class="container mx-auto px-4 sm:px-6">
+          <div class="grid sm:grid-cols-3 md:grid-cols-4 grid-cols-2 gap-8">
             <div>
               <h4 class="text-lg font-semibold mb-4">Contact</h4>
               <p class="text-gray-300 font-medium mb-2">
