@@ -170,43 +170,13 @@
                   Eastern Iowa. Making technology work for you, not against you.
                 </p>
               </div>
-              <button
-                onclick="showContactPopup()"
+              <a
+                href="sms:563-261-0200"
                 class="bg-primary text-white px-6 sm:px-12 py-4 text-base sm:text-lg font-semibold !rounded-button hover:bg-primary/90 transition-colors cursor-pointer inline-flex items-center"
               >
                 <i class="ri-message-3-line mr-2 text-xl"></i>
                 Text for Free Consultation
-              </button>
-              <div
-                id="contactPopup"
-                class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-[9999]"
-              >
-                <div
-                  class="bg-white p-8 rounded-lg shadow-xl max-w-md w-full mx-4"
-                >
-                  <div class="flex justify-between items-center mb-6">
-                    <h3 class="text-xl font-semibold text-gray-900">
-                      Contact Information
-                    </h3>
-                    <button
-                      onclick="hideContactPopup()"
-                      class="text-gray-400 hover:text-gray-500"
-                    >
-                      <i class="ri-close-line text-2xl"></i>
-                    </button>
-                  </div>
-                  <p class="text-gray-600 mb-6">
-                    If you're viewing this on desktop, please text or call
-                    manually:
-                  </p>
-                  <div class="space-y-4">
-                    <div class="flex items-center text-lg">
-                      <i class="ri-phone-line text-primary mr-3"></i>
-                      <span class="font-medium">(563) 261-0200</span>
-                    </div>
-                  </div>
-                </div>
-              </div>
+              </a>
             </div>
             <div class="flex flex-col items-center">
               <img
@@ -422,13 +392,13 @@
               <div
                 class="absolute -inset-1 bg-gradient-to-r from-red-500 to-orange-500 rounded-button opacity-75 blur animate-pulse"
               ></div>
-              <button
-                onclick="showContactPopup()"
+              <a
+                href="sms:563-261-0200"
                 class="relative bg-red-600 text-white px-16 py-6 text-xl font-semibold !rounded-button hover:bg-red-700 transition-colors cursor-pointer inline-flex items-center shadow-xl"
               >
                 <i class="ri-message-3-line mr-3 text-2xl"></i>
                 Text (563) 261-0200 Now
-              </button>
+              </a>
             </div>
             <p class="text-gray-600 text-lg">or</p>
             <div class="relative">
@@ -519,12 +489,11 @@
                     <span>20% discount for military veterans</span>
                   </li>
                 </ul>
-                <button
-                  onclick="showContactPopup()"
-                  class="w-full bg-primary text-white py-4 text-lg font-semibold !rounded-button hover:bg-primary/90 transition-colors"
+                <a
+                  href="sms:563-261-0200"
+                  class="block w-full bg-primary text-white py-4 text-lg font-semibold !rounded-button hover:bg-primary/90 transition-colors text-center"
+                  >Get Started</a
                 >
-                  Get Started
-                </button>
               </div>
             </div>
             <div class="relative group">
@@ -578,12 +547,11 @@
                     <span>20% discount for military veterans</span>
                   </li>
                 </ul>
-                <button
-                  onclick="showContactPopup()"
-                  class="w-full bg-primary text-white py-4 text-lg font-semibold !rounded-button hover:bg-primary/90 transition-colors"
+                <a
+                  href="sms:563-261-0200"
+                  class="block w-full bg-primary text-white py-4 text-lg font-semibold !rounded-button hover:bg-primary/90 transition-colors text-center"
+                  >Get Started</a
                 >
-                  Get Started
-                </button>
               </div>
             </div>
           </div>
@@ -591,13 +559,13 @@
             <p class="text-xl text-gray-600 mb-8">
               Not sure which plan is right for you?
             </p>
-            <button
-              onclick="showContactPopup()"
+            <a
+              href="sms:563-261-0200"
               class="inline-flex items-center bg-white border-2 border-primary text-primary px-8 py-4 text-lg font-semibold !rounded-button hover:bg-primary/10 transition-colors"
             >
               <i class="ri-message-3-line mr-2 text-xl"></i>
               Text Now for a Free Consultation & Quote
-            </button>
+            </a>
           </div>
         </div>
       </section>
@@ -749,16 +717,6 @@
       function toggleMobileMenu() {
         const mobileMenu = document.getElementById("mobileMenu");
         mobileMenu.classList.toggle("hidden");
-      }
-      function showContactPopup() {
-        const popup = document.getElementById("contactPopup");
-        popup.classList.remove("hidden");
-        popup.classList.add("flex");
-      }
-      function hideContactPopup() {
-        const popup = document.getElementById("contactPopup");
-        popup.classList.add("hidden");
-        popup.classList.remove("flex");
       }
       window.addEventListener("scroll", () => {
         const scrolled = window.pageYOffset;
