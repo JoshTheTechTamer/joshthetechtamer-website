@@ -125,8 +125,62 @@
     "https://www.linkedin.com/company/the-tech-tamer",
     "https://twitter.com/thetechtamer", "https://www.instagram.com/thetechtamer"
     ] }
+
+    <style>
+      :where([class^="ri-"])::before { content: "\f3c2"; }
+      @media (max-width: 640px) {
+      .container {
+      padding-left: 1rem;
+      padding-right: 1rem;
+      }
+      h1, h2, h3 {
+      word-break: break-word;
+      }
+      .prose {
+      font-size: 1rem;
+      }
+      }
+      .calendar-grid {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      }
+      .parallax-bg {
+      will-change: transform;
+      transform: translateY(0);
+      transition: transform 0.1s linear;
+      }
+      .time-slot {
+      transition: all 0.3s;
+      }
+      .time-slot:hover:not(.unavailable) {
+      background-color: rgba(14, 165, 233, 0.1);
+      }
+      .time-slot.selected {
+      background-color: #0EA5E9;
+      color: white;
+      }
+      .time-slot.unavailable {
+      background-color: #f3f4f6;
+      cursor: not-allowed;
+      opacity: 0.5;
+      }
+      @keyframes pulse {
+      0% {
+      opacity: 0.5;
+      }
+      50% {
+      opacity: 0.75;
+      }
+      100% {
+      opacity: 0.5;
+      }
+      }
+      .animate-pulse {
+      animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+      }
+    </style>
   </head>
-  <body class="bg-white">
+  <body class="bg-white mt-0">
     <header class="fixed w-full bg-white shadow-sm z-50">
       <nav class="container mx-auto px-6 py-4">
         <div class="flex items-center justify-between">
