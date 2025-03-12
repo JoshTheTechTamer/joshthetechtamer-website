@@ -100,6 +100,49 @@
       .animate-pulse {
       animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
       }
+      .fade-up {
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+      }
+      .fade-up.visible {
+      opacity: 1;
+      transform: translateY(0);
+      }
+      .fade-in {
+      opacity: 0;
+      transition: opacity 0.6s ease-out;
+      }
+      .fade-in.visible {
+      opacity: 1;
+      }
+      .slide-in-left {
+      opacity: 0;
+      transform: translateX(-20px);
+      transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+      }
+      .slide-in-left.visible {
+      opacity: 1;
+      transform: translateX(0);
+      }
+      .slide-in-right {
+      opacity: 0;
+      transform: translateX(20px);
+      transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+      }
+      .slide-in-right.visible {
+      opacity: 1;
+      transform: translateX(0);
+      }
+      .scale-up {
+      opacity: 0;
+      transform: scale(0.95);
+      transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+      }
+      .scale-up.visible {
+      opacity: 1;
+      transform: scale(1);
+      }
     </style>
   </head>
   <body class="bg-white">
@@ -155,7 +198,9 @@
           />
         </div>
         <div class="container mx-auto px-6 py-24 relative z-10">
-          <div class="grid md:grid-cols-2 grid-cols-1 gap-12 items-center">
+          <div
+            class="grid md:grid-cols-2 grid-cols-1 gap-12 items-center fade-up"
+          >
             <div>
               <div class="flex items-center gap-6 mb-6">
                 <div>
@@ -242,7 +287,9 @@
           <h2 class="text-3xl font-bold text-center mb-16">
             Tech Support Services
           </h2>
-          <div class="grid sm:grid-cols-2 md:grid-cols-3 grid-cols-1 gap-8">
+          <div
+            class="grid sm:grid-cols-2 md:grid-cols-3 grid-cols-1 gap-8 fade-up"
+          >
             <div
               class="bg-gradient-to-br from-primary/5 via-white to-secondary/5 p-8 rounded-lg shadow-md hover:shadow-lg transition-shadow"
             >
@@ -372,10 +419,10 @@
         id="booking"
         class="py-20 relative overflow-hidden bg-gradient-to-br from-red-50 to-orange-50"
       >
-        <div class="absolute inset-0 z-0">
+        <div class="absolute inset-0 z-0 parallax-bg">
           <img
             src="https://public.readdy.ai/ai/img_res/f2e5387c91b50843216b25f093ecf13c.jpg"
-            class="w-full h-full object-cover opacity-20"
+            class="w-full h-[120%] object-cover opacity-20"
           />
         </div>
         <div
@@ -393,7 +440,9 @@
               now.
             </p>
           </div>
-          <div class="flex flex-col items-center justify-center space-y-8">
+          <div
+            class="flex flex-col items-center justify-center space-y-8 fade-up"
+          >
             <div class="relative">
               <div
                 class="absolute -inset-1 bg-gradient-to-r from-red-500 to-orange-500 rounded-button opacity-75 blur animate-pulse"
@@ -452,7 +501,7 @@
           <p class="text-xl text-gray-600 text-center mb-16">
             Transparent pricing with no hidden fees
           </p>
-          <div class="grid sm:grid-cols-2 gap-8 sm:gap-8 gap-16 mb-16">
+          <div class="grid sm:grid-cols-2 gap-8 sm:gap-8 gap-16 mb-16 fade-up">
             <div class="relative group">
               <div
                 class="absolute -inset-1 bg-gradient-to-r from-primary to-secondary rounded-xl opacity-70 blur transition duration-300 group-hover:opacity-100"
@@ -580,7 +629,9 @@
           class="absolute inset-0 bg-gradient-to-br from-primary/5 via-secondary/5 to-transparent rounded-[60px] mx-8"
         ></div>
         <div class="container mx-auto px-6 relative">
-          <div class="grid md:grid-cols-2 grid-cols-1 gap-12 items-center">
+          <div
+            class="grid md:grid-cols-2 grid-cols-1 gap-12 items-center fade-up"
+          >
             <div class="h-[600px] rounded-lg overflow-hidden">
               <img
                 src="https://static.readdy.ai/image/2b86c33b7e31113c8376c50d779cc539/3b47916d2296a891ceeb776867f02939.jpeg"
@@ -626,7 +677,7 @@
                   I'll get your devices working again and set up the way you
                   want them!
                 </p>
-                <div class="grid grid-cols-2 gap-6 mt-12">
+                <div class="grid grid-cols-2 gap-6 mt-12 scale-up">
                   <div class="relative">
                     <div
                       class="absolute -inset-1 bg-gradient-to-r from-primary/50 to-secondary/50 rounded-button opacity-75 blur"
@@ -664,7 +715,9 @@
       </section>
       <footer class="bg-gray-900 text-white py-12">
         <div class="container mx-auto px-4 sm:px-6">
-          <div class="grid sm:grid-cols-3 md:grid-cols-4 grid-cols-2 gap-8">
+          <div
+            class="grid sm:grid-cols-3 md:grid-cols-4 grid-cols-2 gap-8 fade-up"
+          >
             <div>
               <h4 class="text-lg font-semibold mb-4">Contact</h4>
               <p class="text-gray-300 font-medium mb-2">
@@ -725,18 +778,33 @@
         const mobileMenu = document.getElementById("mobileMenu");
         mobileMenu.classList.toggle("hidden");
       }
+      function handleScrollAnimations() {
+        const elements = document.querySelectorAll(
+          ".fade-up, .fade-in, .slide-in-left, .slide-in-right, .scale-up",
+        );
+        elements.forEach((element) => {
+          const elementTop = element.getBoundingClientRect().top;
+          const elementBottom = element.getBoundingClientRect().bottom;
+          const windowHeight = window.innerHeight;
+          if (elementTop < windowHeight * 0.85 && elementBottom > 0) {
+            element.classList.add("visible");
+          }
+        });
+      }
       window.addEventListener("scroll", () => {
         const scrolled = window.pageYOffset;
-        const parallaxBg = document.querySelector(".parallax-bg");
-        parallaxBg.style.transform = `translateY(${scrolled * 0.4}px)`;
+        const parallaxBgs = document.querySelectorAll(".parallax-bg");
+        parallaxBgs.forEach((parallaxBg) => {
+          const rect = parallaxBg.getBoundingClientRect();
+          const sectionTop = rect.top + window.pageYOffset;
+          const relativeScroll = window.pageYOffset - sectionTop;
+          if (relativeScroll > -window.innerHeight && relativeScroll < rect.height) {
+            parallaxBg.style.transform = `translateY(${relativeScroll * 0.4}px)`;
+          }
+        });
+        handleScrollAnimations();
       });
-    </script>
-    <script>
-      window.addEventListener("scroll", () => {
-        const scrolled = window.pageYOffset;
-        const parallaxBg = document.querySelector(".parallax-bg");
-        parallaxBg.style.transform = `translateY(${scrolled * 0.4}px)`;
-      });
+      window.addEventListener("load", handleScrollAnimations);
     </script>
 
     <script type="application/ld+json">
