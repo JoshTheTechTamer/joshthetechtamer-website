@@ -165,152 +165,9 @@
       opacity: 1;
       transform: scale(1);
       }
-
-      /* Contact strip chips */
-      .contact-chip {
-        display: flex;
-        align-items: center;
-        gap: 0.75rem;
-        padding: 0.875rem 1rem;
-        background: rgba(255, 255, 255, 0.92);
-        border: 1px solid rgba(59, 75, 130, 0.12);
-        border-radius: 14px;
-        box-shadow: 0 2px 10px rgba(59, 75, 130, 0.06);
-        text-decoration: none;
-        transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease, background-color 0.2s ease;
-        min-width: 0;
-      }
-      .contact-chip:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 8px 22px rgba(59, 75, 130, 0.12);
-        border-color: rgba(0, 163, 255, 0.35);
-        background: #fff;
-      }
-      .contact-chip:focus-visible {
-        outline: 2px solid #00A3FF;
-        outline-offset: 2px;
-      }
-      .contact-chip-icon {
-        flex-shrink: 0;
-        width: 2.5rem;
-        height: 2.5rem;
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        border-radius: 9999px;
-        background: linear-gradient(135deg, rgba(59, 75, 130, 0.18), rgba(0, 163, 255, 0.22));
-        box-shadow: inset 0 1px 2px rgba(255, 255, 255, 0.55);
-        color: #3B4B82;
-        font-size: 1.15rem;
-        transition: background 0.2s ease, color 0.2s ease;
-      }
-      .contact-chip:hover .contact-chip-icon {
-        background: linear-gradient(135deg, #3B4B82, #00A3FF);
-        color: #fff;
-      }
-      .contact-chip-label {
-        display: block;
-        font-size: 0.7rem;
-        font-weight: 600;
-        letter-spacing: 0.06em;
-        text-transform: uppercase;
-        color: #6b7280;
-        line-height: 1.2;
-        margin-bottom: 0.15rem;
-      }
-      .contact-chip-value {
-        display: block;
-        font-size: 0.9rem;
-        font-weight: 700;
-        color: #1f2937;
-        line-height: 1.25;
-        overflow-wrap: anywhere;
-      }
-      .contact-chip:hover .contact-chip-value {
-        color: #3B4B82;
-      }
-
-      .contact-chip-value.email {
-        font-size: 0.72rem;
-        font-weight: 700;
-        line-height: 1.2;
-        overflow-wrap: anywhere;
-        word-break: break-word;
-        hyphens: none;
-      }
-      @media (min-width: 1280px) {
-        .contact-chip-value.email {
-          font-size: 0.68rem;
-        }
-      }
-
-      @media (max-width: 767px) {
-        .contact-chip {
-          padding: 0.8rem 0.7rem;
-          gap: 0.6rem;
-          align-items: flex-start;
-        }
-        .contact-chip-icon {
-          width: 2.15rem;
-          height: 2.15rem;
-          font-size: 1.05rem;
-          margin-top: 0.1rem;
-        }
-        .contact-chip-value {
-          font-size: 0.78rem;
-        }
-      }
-      @media (min-width: 1024px) {
-        .contact-chip {
-          flex-direction: column;
-          align-items: flex-start;
-          text-align: left;
-          padding: 1.1rem 1rem;
-          gap: 0.65rem;
-        }
-        .contact-chip-value {
-          font-size: 0.88rem;
-          overflow-wrap: break-word;
-        }
-      }
-
-      /* Sticky mobile CTA bar */
-      .sticky-cta-bar {
-        display: none;
-      }
-      @media (max-width: 767px) {
-        .sticky-cta-bar {
-          display: flex;
-          position: fixed;
-          bottom: 0;
-          left: 0;
-          right: 0;
-          z-index: 40;
-          gap: 0.5rem;
-          padding: 0.75rem 1rem;
-          padding-bottom: calc(0.75rem + env(safe-area-inset-bottom, 0px));
-          background: rgba(255, 255, 255, 0.97);
-          border-top: 1px solid rgba(59, 75, 130, 0.15);
-          box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.08);
-        }
-        .sticky-cta-bar a {
-          flex: 1;
-          display: inline-flex;
-          align-items: center;
-          justify-content: center;
-          padding: 0.75rem 0.5rem;
-          font-weight: 600;
-          font-size: 0.95rem;
-          border-radius: 8px;
-          text-decoration: none;
-        }
-        body.has-sticky-cta {
-          padding-bottom: calc(5.5rem + env(safe-area-inset-bottom, 0px));
-        }
-      }
     </style>
   </head>
-  <body class="bg-white has-sticky-cta">
+  <body class="bg-white">
     <header class="fixed w-full bg-white shadow-sm z-50">
       <nav class="container mx-auto px-6 py-4">
         <div class="flex items-center justify-between">
@@ -332,8 +189,8 @@
               >Kits</a
             >
             <a href="#rates" class="text-gray-600 hover:text-primary">Rates</a>
-            <a href="sms:563-261-0200" class="text-gray-600 hover:text-primary nav-sms-cta"
-              >Text Josh</a
+            <a href="#booking" class="text-gray-600 hover:text-primary"
+              >Contact Now</a
             >
             <a href="#about" class="text-gray-600 hover:text-primary">About</a>
           </div>
@@ -350,8 +207,8 @@
               >Kits</a
             >
             <a href="#rates" class="text-gray-600 hover:text-primary">Rates</a>
-            <a href="sms:563-261-0200" class="text-gray-600 hover:text-primary nav-sms-cta"
-              >Text Josh</a
+            <a href="#booking" class="text-gray-600 hover:text-primary"
+              >Contact Now</a
             >
             <a href="#about" class="text-gray-600 hover:text-primary">About</a>
           </div>
@@ -391,15 +248,11 @@
                   Muscatine, Iowa City, and the Quad Cities area. Making
                   technology work for you, not against you.
                 </p>
-                <p class="text-base text-gray-600">
-                  Usually reply within a few hours · Serving Muscatine, Iowa City &amp; Quad Cities.
-                </p>
               </div>
               <div class="flex flex-col sm:flex-row flex-wrap gap-4">
                 <a
                   href="sms:563-261-0200"
-                  class="bg-primary text-white px-6 sm:px-12 py-4 text-base sm:text-lg font-semibold !rounded-button hover:bg-primary/90 transition-colors cursor-pointer inline-flex items-center justify-center sms-cta"
-                  data-cta="hero_sms"
+                  class="bg-primary text-white px-6 sm:px-12 py-4 text-base sm:text-lg font-semibold !rounded-button hover:bg-primary/90 transition-colors cursor-pointer inline-flex items-center justify-center"
                 >
                   <i class="ri-message-3-line mr-2 text-xl"></i>
                   Text for Free Consultation
@@ -426,105 +279,42 @@
           class="absolute inset-0 bg-[url('https://readdy.ai/api/search-image?query=abstract tech pattern with flowing digital lines, subtle geometric shapes, clean minimalist design, soft blue gradient overlay, professional tech aesthetic with modern elements&width=1920&height=1080&seq=6&orientation=landscape')] opacity-5 mix-blend-overlay rounded-[60px] mx-8"
         ></div>
       </section>
-      <section
-        class="relative py-8 sm:py-10 bg-gradient-to-r from-primary/5 via-white to-secondary/5 border-y border-primary/10"
-        aria-label="Contact and social links"
-      >
+      <section class="py-8 bg-gradient-to-r from-primary/10 to-secondary/10">
         <div class="container mx-auto px-4 sm:px-6">
           <div
-            class="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-6 gap-3 sm:gap-4"
+            class="flex flex-col md:flex-row items-center justify-center md:space-x-12 space-y-4 md:space-y-0"
           >
             <a
               href="https://joshthetechtamer.com"
-              class="contact-chip min-w-0 overflow-hidden"
-              aria-label="Website joshthetechtamer.com"
-              title="joshthetechtamer.com"
+              class="text-lg text-gray-800 font-semibold hover:text-primary flex items-center"
             >
-              <span class="contact-chip-icon" aria-hidden="true"
-                ><i class="ri-global-line"></i
-              ></span>
-              <span class="min-w-0">
-                <span class="contact-chip-label">Website</span>
-                <span class="contact-chip-value">joshthetechtamer.com</span>
-              </span>
+              <i class="ri-global-line mr-2"></i>joshthetechtamer.com
             </a>
             <a
               href="tel:563-261-0200"
-              class="contact-chip min-w-0 overflow-hidden"
-              aria-label="Call 563-261-0200"
+              class="text-lg text-gray-800 font-semibold hover:text-primary flex items-center"
             >
-              <span class="contact-chip-icon" aria-hidden="true"
-                ><i class="ri-phone-line"></i
-              ></span>
-              <span class="min-w-0">
-                <span class="contact-chip-label">Phone</span>
-                <span class="contact-chip-value">563-261-0200</span>
-              </span>
+              <i class="ri-phone-line mr-2"></i>563-261-0200
             </a>
             <a
               href="mailto:joshthetechtamer@gmail.com"
-              class="contact-chip min-w-0 overflow-hidden"
-              aria-label="Email joshthetechtamer@gmail.com"
-              title="joshthetechtamer@gmail.com"
+              class="text-lg text-gray-800 font-semibold hover:text-primary flex items-center"
             >
-              <span class="contact-chip-icon" aria-hidden="true"
-                ><i class="ri-mail-line"></i
-              ></span>
-              <span class="min-w-0">
-                <span class="contact-chip-label">Email</span>
-                <span class="contact-chip-value email">joshthetechtamer<br />@gmail.com</span>
-              </span>
+              <i class="ri-mail-line mr-2"></i>joshthetechtamer@gmail.com
             </a>
             <a
               href="https://www.google.com/maps?q=Muscatine,+IA+52761"
               target="_blank"
-              rel="noopener noreferrer"
-              class="contact-chip min-w-0 overflow-hidden"
-              aria-label="Location Muscatine, IA — servicing Iowa City and Quad Cities"
+              class="text-lg text-gray-800 font-semibold hover:text-primary flex items-center"
             >
-              <span class="contact-chip-icon" aria-hidden="true"
-                ><i class="ri-map-pin-line"></i
-              ></span>
-              <span class="min-w-0">
-                <span class="contact-chip-label">Location</span>
-                <span class="contact-chip-value">Muscatine, IA</span>
-                <span class="block text-[0.72rem] sm:text-xs font-medium text-gray-500 mt-0.5 leading-snug"
-                  >Iowa City &amp; Quad Cities</span
-                >
-              </span>
-            </a>
-            <a
-              href="https://www.facebook.com/profile.php?id=61575951953109"
-              target="_blank"
-              rel="noopener noreferrer"
-              class="contact-chip min-w-0 overflow-hidden"
-              aria-label="Facebook"
-            >
-              <span class="contact-chip-icon" aria-hidden="true"
-                ><i class="ri-facebook-fill"></i
-              ></span>
-              <span class="min-w-0">
-                <span class="contact-chip-label">Social</span>
-                <span class="contact-chip-value">Facebook</span>
-              </span>
-            </a>
-            <a
-              href="https://www.linkedin.com/in/josh-sargent-adsales"
-              target="_blank"
-              rel="noopener noreferrer"
-              class="contact-chip min-w-0 overflow-hidden"
-              aria-label="LinkedIn"
-            >
-              <span class="contact-chip-icon" aria-hidden="true"
-                ><i class="ri-linkedin-fill"></i
-              ></span>
-              <span class="min-w-0">
-                <span class="contact-chip-label">Social</span>
-                <span class="contact-chip-value">LinkedIn</span>
-              </span>
+              <i class="ri-map-pin-line mr-2"></i>Muscatine, IA 52761 -
+              Servicing Iowa City<br />& Quad Cities
             </a>
           </div>
         </div>
+        <div
+          class="absolute inset-0 bg-[url('https://readdy.ai/api/search-image?query=abstract tech pattern with flowing digital lines, subtle geometric shapes, clean minimalist design, soft blue gradient overlay, professional tech aesthetic with modern elements&width=1920&height=1080&seq=6&orientation=landscape')] opacity-5 mix-blend-overlay rounded-[60px] mx-8"
+        ></div>
       </section>
       <section
         id="services"
@@ -577,13 +367,6 @@
                   >Smart Device Integration
                 </li>
               </ul>
-              <a
-                href="sms:563-261-0200"
-                class="mt-6 inline-flex items-center text-primary font-semibold hover:text-secondary transition-colors sms-cta"
-                data-cta="services_text_to_book"
-              >
-                <i class="ri-message-3-line mr-2"></i>Text to book →
-              </a>
             </div>
             <div
               class="bg-gradient-to-br from-primary/5 via-white to-secondary/5 p-8 rounded-lg shadow-md hover:shadow-lg transition-shadow"
@@ -623,13 +406,6 @@
                   >Remote Access Configuration
                 </li>
               </ul>
-              <a
-                href="sms:563-261-0200"
-                class="mt-6 inline-flex items-center text-primary font-semibold hover:text-secondary transition-colors sms-cta"
-                data-cta="services_text_to_book"
-              >
-                <i class="ri-message-3-line mr-2"></i>Text to book →
-              </a>
             </div>
             <div
               class="bg-gradient-to-br from-primary/5 via-white to-secondary/5 p-8 rounded-lg shadow-md hover:shadow-lg transition-shadow"
@@ -669,13 +445,6 @@
                   >Security Best Practices
                 </li>
               </ul>
-              <a
-                href="sms:563-261-0200"
-                class="mt-6 inline-flex items-center text-primary font-semibold hover:text-secondary transition-colors sms-cta"
-                data-cta="services_text_to_book"
-              >
-                <i class="ri-message-3-line mr-2"></i>Text to book →
-              </a>
             </div>
           </div>
         </div>
@@ -692,25 +461,9 @@
           <h2 class="text-3xl font-bold text-center mb-4">
             Digital Kits
           </h2>
-          <p class="text-center text-secondary font-semibold text-lg mb-3">
-            Instant download · No appointment needed
-          </p>
-          <p class="text-center text-gray-700 text-lg max-w-2xl mx-auto mb-8">
+          <p class="text-center text-gray-700 text-lg max-w-2xl mx-auto mb-16">
             Instant-download guides and checklists you can use at home or in your shop—plain English, no jargon maze. Built by Josh the Tech Tamer for Muscatine, Iowa City, the Quad Cities, and anyone who wants fewer tech headaches.
           </p>
-          <div class="text-center mb-10">
-            <a
-              href="https://joshthetechtamer.gumroad.com/l/home-network-lockdown-kit"
-              target="_blank"
-              rel="noopener noreferrer"
-              class="kit-cta inline-flex items-center bg-secondary text-white px-8 py-4 text-lg font-semibold !rounded-button hover:bg-secondary/90 transition-colors shadow-md"
-              data-kit="lockdown"
-              data-cta="kits_start_lockdown"
-            >
-              <i class="ri-flashlight-line mr-2 text-xl"></i>
-              Start with the $9 Lockdown Kit
-            </a>
-          </div>
           <div
             class="grid sm:grid-cols-2 grid-cols-1 gap-8 max-w-5xl mx-auto fade-up"
           >
@@ -754,8 +507,7 @@
                 href="https://joshthetechtamer.gumroad.com/l/home-network-lockdown-kit"
                 target="_blank"
                 rel="noopener noreferrer"
-                class="kit-cta bg-primary text-white px-6 py-3 text-base font-semibold !rounded-button hover:bg-primary/90 transition-colors cursor-pointer inline-flex items-center justify-center"
-                data-kit="lockdown"
+                class="bg-primary text-white px-6 py-3 text-base font-semibold !rounded-button hover:bg-primary/90 transition-colors cursor-pointer inline-flex items-center justify-center"
               >
                 <i class="ri-download-2-line mr-2"></i>
                 Get the Lockdown Kit
@@ -801,8 +553,7 @@
                 href="https://joshthetechtamer.gumroad.com/l/smb-cyber-hygiene-kit"
                 target="_blank"
                 rel="noopener noreferrer"
-                class="kit-cta bg-primary text-white px-6 py-3 text-base font-semibold !rounded-button hover:bg-primary/90 transition-colors cursor-pointer inline-flex items-center justify-center"
-                data-kit="smb"
+                class="bg-primary text-white px-6 py-3 text-base font-semibold !rounded-button hover:bg-primary/90 transition-colors cursor-pointer inline-flex items-center justify-center"
               >
                 <i class="ri-download-2-line mr-2"></i>
                 Get the Cyber Hygiene Kit
@@ -815,135 +566,80 @@
         </div>
       </section>
 
-      <!-- Trust strip above booking -->
-      <section class="py-10 bg-white border-y border-primary/10" aria-label="Why people text Josh">
-        <div class="container mx-auto px-4 sm:px-6">
-          <div class="max-w-4xl mx-auto grid sm:grid-cols-3 gap-6 text-center fade-up">
-            <div class="p-4">
-              <i class="ri-map-pin-line text-secondary text-2xl mb-2"></i>
-              <p class="text-gray-800 font-medium">
-                Local tech help for Muscatine, Iowa City &amp; the Quad Cities
-              </p>
-            </div>
-            <div class="p-4">
-              <i class="ri-time-line text-secondary text-2xl mb-2"></i>
-              <p class="text-gray-800 font-medium">
-                Usually replies within a few hours
-              </p>
-            </div>
-            <div class="p-4">
-              <i class="ri-share-line text-secondary text-2xl mb-2"></i>
-              <p class="text-gray-800 font-medium">
-                See
-                <a href="https://www.facebook.com/profile.php?id=61575951953109" target="_blank" rel="noopener noreferrer" class="text-primary hover:underline">Facebook</a>
-                &amp;
-                <a href="https://www.linkedin.com/in/josh-sargent-adsales" target="_blank" rel="noopener noreferrer" class="text-primary hover:underline">LinkedIn</a>
-                for recent posts
-              </p>
-            </div>
-          </div>
-        </div>
-      </section>
-
       <section
         id="booking"
-        class="py-20 relative overflow-hidden bg-gradient-to-br from-primary/5 via-white to-secondary/5"
+        class="py-20 relative overflow-hidden bg-gradient-to-br from-red-50 to-orange-50"
       >
+        <div class="absolute inset-0 z-0 parallax-bg">
+          <img
+            src="https://public.readdy.ai/ai/img_res/f2e5387c91b50843216b25f093ecf13c.jpg"
+            class="w-full h-[120%] object-cover opacity-20"
+          />
+        </div>
+        <div
+          class="absolute inset-0 bg-gradient-to-b from-transparent via-white/50 to-white/80"
+        ></div>
         <div class="container mx-auto px-6 relative z-10">
-          <div class="text-center mb-10">
+          <div class="text-center mb-12">
             <span
-              class="inline-block px-4 py-1 bg-primary/10 text-primary rounded-full text-sm font-semibold mb-4"
-              >CONTACT / BOOKING</span
+              class="inline-block px-4 py-1 bg-red-100 text-red-600 rounded-full text-sm font-semibold mb-4"
+              >24/7 EMERGENCY TECH SUPPORT</span
             >
-            <h2 class="text-4xl font-bold mb-4">Ready to get help?</h2>
-            <p class="text-xl text-gray-700 max-w-2xl mx-auto">
-              Fastest way: text Josh. Or send a quick request and it opens in your email app—no account required.
+            <h2 class="text-4xl font-bold mb-4">Need Urgent Tech Help?</h2>
+            <p class="text-xl text-gray-700">
+              Don't let tech problems ruin your day! Get immediate assistance
+              now.
             </p>
           </div>
-
-          <div class="flex flex-col items-center justify-center space-y-6 fade-up mb-12">
+          <div
+            class="flex flex-col items-center justify-center space-y-8 fade-up"
+          >
             <div class="relative">
               <div
-                class="absolute -inset-1 bg-gradient-to-r from-primary to-secondary rounded-button opacity-60 blur"
+                class="absolute -inset-1 bg-gradient-to-r from-red-500 to-orange-500 rounded-button opacity-75 blur animate-pulse"
               ></div>
               <a
                 href="sms:563-261-0200"
-                class="relative bg-primary text-white px-10 sm:px-16 py-5 sm:py-6 text-xl font-semibold !rounded-button hover:bg-primary/90 transition-colors cursor-pointer inline-flex items-center shadow-xl sms-cta"
-                data-cta="booking_sms"
+                class="relative bg-red-600 text-white px-16 py-6 text-xl font-semibold !rounded-button hover:bg-red-700 transition-colors cursor-pointer inline-flex items-center shadow-xl"
               >
                 <i class="ri-message-3-line mr-3 text-2xl"></i>
-                Text Josh — (563) 261-0200
+                Text (563) 261-0200 Now
               </a>
             </div>
-            <div
-              class="flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-8"
-            >
-              <div class="flex items-center text-green-600">
-                <i class="ri-checkbox-circle-fill mr-2"></i>
-                <span>Free initial consult</span>
-              </div>
-              <div class="flex items-center text-green-600">
-                <i class="ri-checkbox-circle-fill mr-2"></i>
-                <span>In-person local support</span>
-              </div>
-              <div class="flex items-center text-green-600">
-                <i class="ri-checkbox-circle-fill mr-2"></i>
-                <span>Usually replies in a few hours</span>
+            <p class="text-gray-600 text-lg">or</p>
+            <div class="relative">
+              <div
+                class="absolute -inset-1 bg-gradient-to-r from-primary/50 to-secondary/50 rounded-button opacity-75 blur"
+              ></div>
+              <a
+                href="tel:563-261-0200"
+                class="relative bg-white border-2 border-primary text-primary px-16 py-6 text-xl font-semibold !rounded-button hover:bg-primary/10 transition-colors cursor-pointer inline-flex items-center shadow-lg"
+              >
+                <i class="ri-phone-line mr-3 text-2xl"></i>
+                Call for Immediate Help
+              </a>
+            </div>
+            <div class="mt-8 text-center">
+              <p class="text-lg text-gray-600">
+                Most issues resolved within 24 hours
+              </p>
+              <div
+                class="flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-8 mt-4"
+              >
+                <div class="flex items-center text-green-600">
+                  <i class="ri-checkbox-circle-fill mr-2"></i>
+                  <span>No Fix, No Fee</span>
+                </div>
+                <div class="flex items-center text-green-600">
+                  <i class="ri-checkbox-circle-fill mr-2"></i>
+                  <span>Free Initial Consultation</span>
+                </div>
+                <div class="flex items-center text-green-600">
+                  <i class="ri-checkbox-circle-fill mr-2"></i>
+                  <span>Expert Support</span>
+                </div>
               </div>
             </div>
-          </div>
-
-          <div class="max-w-xl mx-auto bg-white rounded-lg shadow-lg p-6 sm:p-8 border border-primary/10 fade-up">
-            <h3 class="text-xl font-semibold text-center mb-2">Or email a quick request</h3>
-            <p class="text-sm text-gray-500 text-center mb-6">
-              Opens your email app with a pre-filled message to joshthetechtamer@gmail.com
-            </p>
-            <form id="bookingMailtoForm" class="space-y-4" novalidate>
-              <div>
-                <label for="booking-name" class="block text-sm font-medium text-gray-700 mb-1">Your name</label>
-                <input
-                  type="text"
-                  id="booking-name"
-                  name="name"
-                  required
-                  autocomplete="name"
-                  class="w-full px-4 py-3 border border-gray-300 rounded-button focus:outline-none focus:ring-2 focus:ring-secondary/50 focus:border-secondary"
-                  placeholder="First and last"
-                />
-              </div>
-              <div>
-                <label for="booking-issue" class="block text-sm font-medium text-gray-700 mb-1">What do you need help with?</label>
-                <textarea
-                  id="booking-issue"
-                  name="issue"
-                  required
-                  rows="3"
-                  class="w-full px-4 py-3 border border-gray-300 rounded-button focus:outline-none focus:ring-2 focus:ring-secondary/50 focus:border-secondary"
-                  placeholder="Brief description of the tech issue"
-                ></textarea>
-              </div>
-              <div>
-                <label for="booking-time" class="block text-sm font-medium text-gray-700 mb-1">Preferred time</label>
-                <input
-                  type="text"
-                  id="booking-time"
-                  name="preferred_time"
-                  class="w-full px-4 py-3 border border-gray-300 rounded-button focus:outline-none focus:ring-2 focus:ring-secondary/50 focus:border-secondary"
-                  placeholder="e.g. weekday evenings, Saturday morning"
-                />
-              </div>
-              <button
-                type="submit"
-                class="w-full bg-secondary text-white py-4 text-lg font-semibold !rounded-button hover:bg-secondary/90 transition-colors inline-flex items-center justify-center"
-              >
-                <i class="ri-mail-send-line mr-2 text-xl"></i>
-                Open email to Josh
-              </button>
-            </form>
-            <p class="text-center text-sm text-gray-500 mt-4">
-              Prefer to call?
-              <a href="tel:563-261-0200" class="text-primary hover:underline font-medium">563-261-0200</a>
-            </p>
           </div>
         </div>
       </section>
@@ -1015,8 +711,7 @@
                   </ul>
                   <a
                     href="sms:563-261-0200"
-                    class="block w-full bg-primary text-white py-4 text-lg font-semibold !rounded-button hover:bg-primary/90 transition-colors text-center sms-cta"
-                    data-cta="rates_get_started"
+                    class="block w-full bg-primary text-white py-4 text-lg font-semibold !rounded-button hover:bg-primary/90 transition-colors text-center"
                     >Get Started</a
                   >
                 </div>
@@ -1076,8 +771,7 @@
                   </ul>
                   <a
                     href="sms:563-261-0200"
-                    class="block w-full bg-primary text-white py-4 text-lg font-semibold !rounded-button hover:bg-primary/90 transition-colors text-center sms-cta"
-                    data-cta="rates_get_started"
+                    class="block w-full bg-primary text-white py-4 text-lg font-semibold !rounded-button hover:bg-primary/90 transition-colors text-center"
                     >Get Started</a
                   >
                 </div>
@@ -1090,11 +784,10 @@
             </p>
             <a
               href="sms:563-261-0200"
-              class="inline-flex items-center bg-white border-2 border-primary text-primary px-8 py-4 text-lg font-semibold !rounded-button hover:bg-primary/10 transition-colors sms-cta"
-              data-cta="rates_free_consult"
+              class="inline-flex items-center bg-white border-2 border-primary text-primary px-8 py-4 text-lg font-semibold !rounded-button hover:bg-primary/10 transition-colors"
             >
               <i class="ri-message-3-line mr-2 text-xl"></i>
-              Text for a free consult
+              Text Now for a Free Consultation & Quote
             </a>
           </div>
         </div>
@@ -1269,80 +962,11 @@
         </div>
       </footer>
     </main>
-
-    <!-- Sticky mobile CTA bar (md+ hidden via CSS) -->
-    <div class="sticky-cta-bar" role="navigation" aria-label="Quick contact">
-      <a
-        href="sms:563-261-0200"
-        class="bg-primary text-white sticky-sms-cta sms-cta"
-        data-cta="sticky_sms"
-      >
-        <i class="ri-message-3-line mr-1"></i> Text Josh
-      </a>
-      <a
-        href="#kits"
-        class="bg-white text-primary border-2 border-primary sticky-kits-cta"
-        data-cta="sticky_kits"
-      >
-        <i class="ri-store-2-line mr-1"></i> Browse kits
-      </a>
-    </div>
     <script>
       function toggleMobileMenu() {
         const mobileMenu = document.getElementById("mobileMenu");
         mobileMenu.classList.toggle("hidden");
       }
-
-      function trackEvent(name, params) {
-        try {
-          if (typeof gtag === "function") {
-            gtag("event", name, params || {});
-          }
-        } catch (e) {}
-      }
-      document.addEventListener("click", function (e) {
-        var el = e.target.closest("a");
-        if (!el) return;
-        var href = el.getAttribute("href") || "";
-        if (el.classList.contains("nav-sms-cta") || (el.classList.contains("sms-cta") && href.indexOf("sms:") === 0)) {
-          trackEvent("sms_click", {
-            cta: el.getAttribute("data-cta") || "sms",
-            location: el.classList.contains("nav-sms-cta") ? "nav" : (el.getAttribute("data-cta") || "page"),
-          });
-        }
-        if (el.classList.contains("kit-cta") || href.indexOf("gumroad.com") !== -1) {
-          trackEvent("kit_click", {
-            kit: el.getAttribute("data-kit") || "unknown",
-            cta: el.getAttribute("data-cta") || "kit_link",
-          });
-        }
-        if (el.classList.contains("sticky-kits-cta") || el.getAttribute("data-cta") === "sticky_kits") {
-          trackEvent("sticky_kits_click", { cta: "sticky_kits" });
-        }
-      });
-      (function () {
-        var form = document.getElementById("bookingMailtoForm");
-        if (!form) return;
-        form.addEventListener("submit", function (e) {
-          e.preventDefault();
-          var name = (document.getElementById("booking-name").value || "").trim();
-          var issue = (document.getElementById("booking-issue").value || "").trim();
-          var time = (document.getElementById("booking-time").value || "").trim();
-          if (!name || !issue) {
-            alert("Please enter your name and a short description of the issue.");
-            return;
-          }
-          var subject = encodeURIComponent("Tech help request from " + name);
-          var body = encodeURIComponent(
-            "Name: " + name + "\n" +
-            "Issue: " + issue + "\n" +
-            "Preferred time: " + (time || "(not specified)") + "\n"
-          );
-          trackEvent("booking_mailto_submit", { method: "mailto" });
-          window.location.href = "mailto:joshthetechtamer@gmail.com?subject=" + subject + "&body=" + body;
-        });
-      })();
-
       function handleScrollAnimations() {
         const elements = document.querySelectorAll(
           ".fade-up, .fade-in, .slide-in-left, .slide-in-right, .scale-up",
