@@ -91,20 +91,3 @@ img{height:auto}.portrait img{height:380px}.story .portrait img{height:460px}.pr
 .hero-art{padding-bottom:40px}
 @media(max-width:850px){.hero-art{padding-bottom:36px}}
 @media(max-width:620px){.hero-art{padding-bottom:32px}}
-
-/* Kits page: large 2x2 tile grid of .product chrome */
-.product-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:25px;align-items:stretch}
-.product-grid .product{margin-bottom:0;height:100%}
-.product-grid .product-art{min-height:240px;padding:22px}
-.product-grid .product-art img{max-height:200px}
-.product-grid .product-content{padding:28px 26px;display:flex;flex-direction:column}
-.product-grid .product-content h2{font-size:24px;margin-bottom:12px}
-.product-grid .product-price{font-size:26px;margin-bottom:12px}
-.product-grid .product-content .eyebrow{margin-bottom:14px;font-size:11px}
-.product-grid .product-content p{font-size:15px;margin-bottom:12px}
-.product-grid .checklist{margin:12px 0 18px}
-.product-grid .checklist li{font-size:14px;padding:8px 0 8px 25px}
-.product-grid .product-content .btn{align-self:flex-start;margin-top:auto}
-.product-grid .product-content .small{margin-top:12px!important}
-@media(max-width:980px){.product-grid{grid-template-columns:1fr}.product-grid .product-art{min-height:280px;padding:28px}.product-grid .product-art img{max-height:260px}.product-grid .product-content h2{font-size:28px}}
-@media(max-width:620px){.product-grid .product-art img{max-height:240px}.product-grid .product-content{padding:24px}.product-grid .product-content h2{font-size:26px}}
