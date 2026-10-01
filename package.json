@@ -1,0 +1,1 @@
+{"name":"tech-tamer-website","private":true,"scripts":{"dev":"node scripts/serve.mjs","build":"python3 scripts/build_pages.py"}}
