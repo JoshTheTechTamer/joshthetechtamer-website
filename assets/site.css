@@ -108,3 +108,17 @@ img{height:auto}.portrait img{height:380px}.story .portrait img{height:460px}.pr
 .product-grid .product-content .small{margin-top:12px!important}
 @media(max-width:980px){.product-grid{grid-template-columns:1fr}.product-grid .product-art{min-height:280px;padding:28px}.product-grid .product-art img{max-height:260px}.product-grid .product-content h2{font-size:28px}}
 @media(max-width:620px){.product-grid .product-art img{max-height:240px}.product-grid .product-content{padding:24px}.product-grid .product-content h2{font-size:26px}}
+
+/* Real, personal help: a shared photo on Tech Help and Digital Kits. */
+.help-photo{position:relative;isolation:isolate;margin:0 12px 12px 0;min-width:0}
+.help-photo::before{content:'';position:absolute;inset:18px -12px -12px 18px;background:var(--slate);clip-path:polygon(24px 0,100% 0,100% 100%,0 100%,0 24px);z-index:-1}
+.help-photo img{display:block;width:100%;height:auto;border:4px solid white;box-shadow:0 8px 26px #14244318}
+.page-hero .help-hero-grid{display:grid;grid-template-columns:1fr 1fr;align-items:center;gap:48px}
+.help-hero-copy{min-width:0}
+.tech-help-hero h1{font-size:clamp(36px,4.5vw,58px)}
+.cta-photo .wrap{display:grid;grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr);gap:60px}
+.cta-photo .help-cta-copy{min-width:0}
+.cta-photo .actions{margin-top:24px;flex-wrap:wrap}
+.cta-photo .help-photo::before{background:#6572a6}
+@media(max-width:850px){.page-hero .help-hero-grid,.cta-photo .wrap{gap:30px}.tech-help-hero h1{font-size:38px}}
+@media(max-width:620px){.page-hero .help-hero-grid,.cta-photo .wrap{grid-template-columns:minmax(0,1fr);gap:32px}.help-photo{margin-right:12px}.tech-help-hero h1{font-size:40px}.cta-photo .help-photo{max-width:480px}.cta-photo .actions{gap:12px}}
