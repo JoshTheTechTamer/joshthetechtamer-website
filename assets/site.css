@@ -223,8 +223,9 @@ img{height:auto}.portrait img{height:380px}.story .portrait img{height:460px}.pr
 .review-track{display:grid;gap:20px}
 .review-card{background:white;border:1px solid #d9e1ef;border-top:5px solid var(--slate);padding:clamp(24px,4vw,48px);position:relative}
 .review-card::after{content:'';position:absolute;right:0;bottom:0;width:48px;height:48px;background:#edf1f8;clip-path:polygon(100% 0,100% 100%,0 100%)}
-.review-carousel.is-enhanced .review-card{grid-area:1/1}
-.review-carousel.is-enhanced .review-card[hidden]{display:block!important;visibility:hidden;pointer-events:none}
+.review-carousel.is-enhanced .review-card{grid-area:1/1;opacity:1;visibility:visible;z-index:1;transition:opacity 400ms ease-in-out,visibility 0s linear}
+.review-carousel.is-enhanced .review-card[hidden]{display:block!important;opacity:0;visibility:hidden;pointer-events:none;z-index:0;transition:opacity 400ms ease-in-out,visibility 0s linear 400ms}
+@media(prefers-reduced-motion:reduce){.review-carousel.is-enhanced .review-card,.review-carousel.is-enhanced .review-card[hidden]{transition:none}}
 .review-card blockquote{margin:20px 0;font-size:clamp(19px,2.1vw,25px);line-height:1.65;max-width:900px}
 .review-card blockquote p{margin:0;color:var(--ink)}
 .review-stars{color:#9b6500;font-size:25px;letter-spacing:3px}
