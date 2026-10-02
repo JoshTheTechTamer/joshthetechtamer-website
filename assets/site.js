@@ -8,30 +8,20 @@ if(form){
  function replyType(){const email=reply.value==='email';contact.type=email?'email':'tel';contact.autocomplete=email?'email':'tel';contact.inputMode=email?'email':'tel';form.querySelector('label[for="contact"]').textContent=email?'Email address *':'Phone number *'}
  reply.addEventListener('change',replyType);replyType();
  const requested=new URLSearchParams(window.TECH_TAMER_QUERY||location.search).get('service');if(requested&&Array.from(service.options).some(o=>o.value===requested))service.value=requested;
- if(preview)status.textContent='Preview: this form demonstrates the request flow. Nothing will be sent.';
- let busy=false;
- form.addEventListener('submit',async e=>{
-  e.preventDefault();if(busy||!form.reportValidity())return;
+ form.addEventListener('submit',e=>{
+  e.preventDefault();if(!form.reportValidity())return;
   const data=new FormData(form);status.className='status';
-  if(!String(data.get('name')).trim()||!String(data.get('issue')).trim()){status.textContent='Please enter your name and a brief description.';return}
-  if(String(data.get('_gotcha')).trim()){status.textContent='Please call or text Josh to arrange help.';return}
-  if(reply.value!=='email'&&String(data.get('contact')).replace(/\D/g,'').length<10){status.textContent='Please enter a phone number with area code.';contact.focus();return}
-  const endpoint=form.dataset.endpoint;
-  if(!preview&&!/^https:\/\/formspree\.io\/f\/[a-zA-Z0-9]+$/.test(endpoint||'')){status.classList.add('is-error');status.textContent='Online requests are not available yet. Please call or text 563-261-0200, or use the email link on this page. Nothing has been sent.';return}
-  busy=true;button.disabled=true;button.textContent='Sending…';status.textContent=preview?'Previewing confirmation…':'Sending your request…';
-  const controller=new AbortController();const timer=setTimeout(()=>controller.abort(),20000);
-  try{
-   if(preview){await new Promise(resolve=>setTimeout(resolve,500));status.textContent='Preview complete — this is where your request confirmation will appear. No message was sent and no appointment was booked.'}
-   else{
-    if(reply.value==='email')data.set('email',String(data.get('contact')));
-    const response=await fetch(endpoint,{method:'POST',body:data,headers:{Accept:'application/json'},signal:controller.signal});
-    if(!response.ok)throw new Error('request failed');
-    status.textContent='Your request was submitted. Josh will contact you using the details you provided. Your appointment is not confirmed until you agree on a time.';
-    track('generate_lead',{method:'contact_form',service:service.value});form.reset();replyType();
-   }
-   status.classList.add('is-success');
-  }catch(error){status.classList.add('is-error');status.textContent='We couldn’t confirm delivery. Your details are still here. Please try again or call/text 563-261-0200.'}
-  finally{clearTimeout(timer);busy=false;button.disabled=false;button.textContent='Send request ↗'}
+  const value=key=>String(data.get(key)||'').trim();
+  if(!value('name')||!value('issue')){status.textContent='Please enter your name and a brief description.';return}
+  if(value('_gotcha')){status.textContent='Please call or text Josh to arrange help.';return}
+  if(reply.value!=='email'&&value('contact').replace(/\D/g,'').length<10){status.textContent='Please enter a phone number with area code.';contact.focus();return}
+  const subject=`Tech Tamer request: ${value('service')} — ${value('name')}`;
+  const replyLabel={text:'Text message',phone:'Phone call',email:'Email'}[reply.value];
+  const body=[`Name: ${value('name')}`,`Service: ${value('service')}`,`Reply by: ${replyLabel}`,`Contact: ${value('contact')}`,`City / service location: ${value('location')||'Not specified'}`,`Good times to reach me: ${value('preferred_time')||'Not specified'}`,'','Request:',value('issue')].join('\r\n');
+  const email='mailto:joshthetechtamer@gmail.com?subject='+encodeURIComponent(subject)+'&body='+encodeURIComponent(body);
+  status.textContent='Your email app will open with your request filled in. Review it and press Send there. If it does not open, email joshthetechtamer@gmail.com or call/text 563-261-0200. Your details remain here.';
+  track('email_draft_open',{placement:'contact_form',service:service.value});
+  window.location.href=email;
  });
 }
 const carousel=document.querySelector('.review-carousel');

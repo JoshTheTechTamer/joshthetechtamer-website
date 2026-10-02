@@ -28,5 +28,10 @@ assert 'class="review-carousel"' in (ROOT/'index.html').read_text()
 assert [r['rating'] for r in json.loads((ROOT/'data/reviews.json').read_text())].count(5)==2
 assert 'backups' in (ROOT/'_config.yml').read_text()
 if '--production' in sys.argv:
- endpoint=json.loads((ROOT/'data/site-config.json').read_text())['form_endpoint'];assert re.fullmatch(r'https://formspree\.io/f/[a-zA-Z0-9]+',endpoint),'Deployment blocked: real verified form endpoint not configured'
+ assert json.loads((ROOT/'data/site-config.json').read_text())['form_mode']=='mailto'
+ contact=(ROOT/'contact.html').read_text();script=(ROOT/'assets/site.js').read_text()
+ assert 'action="mailto:joshthetechtamer@gmail.com"' in contact
+ assert 'Create email draft' in contact and 'encodeURIComponent(subject)' in script and 'encodeURIComponent(body)' in script
+ assert 'fetch(endpoint' not in script and "track('generate_lead'" not in script
+
 print('PASS: HTML nesting, internal links/anchors, headings, images, structured data, all six kit links, review ratings and deployment exclusions.')
