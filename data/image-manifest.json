@@ -1,0 +1,218 @@
+{
+  "assets/about-cta-laptop.png": [
+    {
+      "src": "assets/optimized/about-cta-laptop-640.webp",
+      "width": 640,
+      "height": 641
+    },
+    {
+      "src": "assets/optimized/about-cta-laptop-1280.webp",
+      "width": 1280,
+      "height": 1282
+    }
+  ],
+  "assets/business-cta-working.png": [
+    {
+      "src": "assets/optimized/business-cta-working-640.webp",
+      "width": 640,
+      "height": 427
+    },
+    {
+      "src": "assets/optimized/business-cta-working-1280.webp",
+      "width": 1280,
+      "height": 853
+    }
+  ],
+  "assets/contact-hero.png": [
+    {
+      "src": "assets/optimized/contact-hero-640.webp",
+      "width": 640,
+      "height": 427
+    },
+    {
+      "src": "assets/optimized/contact-hero-1280.webp",
+      "width": 1280,
+      "height": 853
+    }
+  ],
+  "assets/home-cta-housecall.png": [
+    {
+      "src": "assets/optimized/home-cta-housecall-640.webp",
+      "width": 640,
+      "height": 427
+    },
+    {
+      "src": "assets/optimized/home-cta-housecall-1280.webp",
+      "width": 1280,
+      "height": 853
+    }
+  ],
+  "assets/josh-business.jpg": [
+    {
+      "src": "assets/optimized/josh-business-640.webp",
+      "width": 640,
+      "height": 641
+    },
+    {
+      "src": "assets/optimized/josh-business-1280.webp",
+      "width": 1280,
+      "height": 1282
+    }
+  ],
+  "assets/josh-helping.jpg": [
+    {
+      "src": "assets/optimized/josh-helping-640.webp",
+      "width": 640,
+      "height": 480
+    },
+    {
+      "src": "assets/optimized/josh-helping-1280.webp",
+      "width": 1280,
+      "height": 960
+    }
+  ],
+  "assets/josh.jpg": [
+    {
+      "src": "assets/optimized/josh-640.webp",
+      "width": 640,
+      "height": 856
+    },
+    {
+      "src": "assets/optimized/josh-1148.webp",
+      "width": 1148,
+      "height": 1536
+    }
+  ],
+  "assets/kits-hero.webp": [
+    {
+      "src": "assets/optimized/kits-hero-640.webp",
+      "width": 640,
+      "height": 427
+    },
+    {
+      "src": "assets/optimized/kits-hero-1280.webp",
+      "width": 1280,
+      "height": 853
+    }
+  ],
+  "assets/logo.png": [
+    {
+      "src": "assets/optimized/logo-640.webp",
+      "width": 640,
+      "height": 640
+    },
+    {
+      "src": "assets/optimized/logo-1080.webp",
+      "width": 1080,
+      "height": 1080
+    }
+  ],
+  "assets/rates-cta-shrug.png": [
+    {
+      "src": "assets/optimized/rates-cta-shrug-640.webp",
+      "width": 640,
+      "height": 427
+    },
+    {
+      "src": "assets/optimized/rates-cta-shrug-1280.webp",
+      "width": 1280,
+      "height": 853
+    }
+  ],
+  "assets/rates-hero.png": [
+    {
+      "src": "assets/optimized/rates-hero-640.webp",
+      "width": 640,
+      "height": 427
+    },
+    {
+      "src": "assets/optimized/rates-hero-1280.webp",
+      "width": 1280,
+      "height": 853
+    }
+  ],
+  "assets/tech-help-cta-headache.png": [
+    {
+      "src": "assets/optimized/tech-help-cta-headache-640.webp",
+      "width": 640,
+      "height": 427
+    },
+    {
+      "src": "assets/optimized/tech-help-cta-headache-1280.webp",
+      "width": 1280,
+      "height": 853
+    }
+  ],
+  "images/family-scam-safety-kit-cover.jpg": [
+    {
+      "src": "assets/optimized/family-scam-safety-kit-cover-640.webp",
+      "width": 640,
+      "height": 360
+    },
+    {
+      "src": "assets/optimized/family-scam-safety-kit-cover-1280.webp",
+      "width": 1280,
+      "height": 720
+    }
+  ],
+  "images/home-network-admin-playbook-cover.jpg": [
+    {
+      "src": "assets/optimized/home-network-admin-playbook-cover-640.webp",
+      "width": 640,
+      "height": 360
+    },
+    {
+      "src": "assets/optimized/home-network-admin-playbook-cover-1280.webp",
+      "width": 1280,
+      "height": 720
+    }
+  ],
+  "images/home-network-lockdown-kit-cover.jpg": [
+    {
+      "src": "assets/optimized/home-network-lockdown-kit-cover-640.webp",
+      "width": 640,
+      "height": 360
+    },
+    {
+      "src": "assets/optimized/home-network-lockdown-kit-cover-1280.webp",
+      "width": 1280,
+      "height": 720
+    }
+  ],
+  "images/main-street-ai-playbook-cover.jpg": [
+    {
+      "src": "assets/optimized/main-street-ai-playbook-cover-640.webp",
+      "width": 640,
+      "height": 358
+    },
+    {
+      "src": "assets/optimized/main-street-ai-playbook-cover-1280.webp",
+      "width": 1280,
+      "height": 716
+    }
+  ],
+  "images/new-computer-setup-kit-cover.jpg": [
+    {
+      "src": "assets/optimized/new-computer-setup-kit-cover-640.webp",
+      "width": 640,
+      "height": 360
+    },
+    {
+      "src": "assets/optimized/new-computer-setup-kit-cover-1280.webp",
+      "width": 1280,
+      "height": 720
+    }
+  ],
+  "images/smb-cyber-hygiene-kit-cover.jpg": [
+    {
+      "src": "assets/optimized/smb-cyber-hygiene-kit-cover-640.webp",
+      "width": 640,
+      "height": 360
+    },
+    {
+      "src": "assets/optimized/smb-cyber-hygiene-kit-cover-1280.webp",
+      "width": 1280,
+      "height": 720
+    }
+  ]
+}

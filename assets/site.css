@@ -217,3 +217,24 @@ img{height:auto}.portrait img{height:380px}.story .portrait img{height:460px}.pr
   }
   .hero-art{padding-bottom:28px}
 }
+
+/* Customer feedback: readable without JavaScript, one slide when enhanced. */
+.reviews-section{background:#f1f4fa;position:relative}
+.review-track{display:grid;gap:20px}
+.review-card{background:white;border:1px solid #d9e1ef;border-top:5px solid var(--slate);padding:clamp(24px,4vw,48px);position:relative}
+.review-card::after{content:'';position:absolute;right:0;bottom:0;width:48px;height:48px;background:#edf1f8;clip-path:polygon(100% 0,100% 100%,0 100%)}
+.review-carousel.is-enhanced .review-card{grid-area:1/1;opacity:1;visibility:visible;z-index:1;transition:opacity 400ms ease-in-out,visibility 0s linear}
+.review-carousel.is-enhanced .review-card[hidden]{display:block!important;opacity:0;visibility:hidden;pointer-events:none;z-index:0;transition:opacity 400ms ease-in-out,visibility 0s linear 400ms}
+@media(prefers-reduced-motion:reduce){.review-carousel.is-enhanced .review-card,.review-carousel.is-enhanced .review-card[hidden]{transition:none}}
+.review-card blockquote{margin:20px 0;font-size:clamp(19px,2.1vw,25px);line-height:1.65;max-width:900px}
+.review-card blockquote p{margin:0;color:var(--ink)}
+.review-stars{color:#9b6500;font-size:25px;letter-spacing:3px}
+.review-kind{display:inline-block;color:var(--navy);background:#edf1f8;padding:5px 12px;font-size:13px;font-weight:700}
+.review-credit{display:flex;gap:14px;flex-wrap:wrap;align-items:center;margin:0}.review-credit span{font-size:13px;color:#59677b}
+.review-controls{display:flex;gap:15px;align-items:center;flex-wrap:wrap;margin-top:22px}.review-controls[hidden]{display:none}
+.review-count{min-width:46px;text-align:center;font-size:14px}.review-pause{padding:12px;border:1px solid #71819a;background:white;color:var(--navy);cursor:pointer;min-height:44px}
+.review-note{margin-top:18px;max-width:850px}.review-pause:focus-visible{outline:3px solid #0084c4;outline-offset:3px}
+.form-trap{position:absolute;left:-10000px;width:1px;height:1px;overflow:hidden}
+.status.is-success{padding:15px;background:#e7f5ed;color:#20543c}.status.is-error{padding:15px;background:#fff0ef;color:#862d27}
+button:disabled{opacity:.65;cursor:wait}
+@media(max-width:620px){.review-controls{gap:9px}.review-controls .btn{padding:12px 24px}.review-pause{width:100%}.review-card blockquote{font-size:19px}}

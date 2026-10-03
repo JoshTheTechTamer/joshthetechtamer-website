@@ -1,0 +1,11 @@
+# Preserve repository backups and source files without publishing them.
+exclude:
+  - backups
+  - templates
+  - scripts
+  - data
+  - docs
+  - tests
+  - README.md
+  - package.json
+  - package-lock.json
