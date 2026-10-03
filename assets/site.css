@@ -238,3 +238,10 @@ img{height:auto}.portrait img{height:380px}.story .portrait img{height:460px}.pr
 .status.is-success{padding:15px;background:#e7f5ed;color:#20543c}.status.is-error{padding:15px;background:#fff0ef;color:#862d27}
 button:disabled{opacity:.65;cursor:wait}
 @media(max-width:620px){.review-controls{gap:9px}.review-controls .btn{padding:12px 24px}.review-pause{width:100%}.review-card blockquote{font-size:19px}}
+
+/* header-full-logo-2026-10-02: use the complete lockup in the header, while the favicon remains mascot-only. */
+.site-header .nav-row{height:110px}.site-header .brand-lockup{gap:0;align-self:center}
+.site-header .brand-lockup img{width:128px;height:110px;object-fit:contain;flex:0 0 auto}
+@media(max-width:1100px){.site-header .brand-lockup img{width:118px;height:101px}}
+@media(max-width:850px){.site-header .nav-row{height:98px}.site-header .brand-lockup img{width:108px;height:93px}.site-header .navlinks{top:98px}}
+@media(max-width:620px){.site-header .nav-row{height:92px}.site-header .brand-lockup img{width:102px;height:88px}.site-header .navlinks{top:92px}}
