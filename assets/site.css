@@ -148,8 +148,8 @@ img{height:auto}.portrait img{height:380px}.story .portrait img{height:460px}.pr
 }
 .hero-logo-stack .art-label,
 .hero-art .art-label{
-  /* logo.png ~14.35% empty canvas below underline — pull ribbon into that for lockup gap */
-  margin-top:calc(-14.35% + 2px);
+  /* dedicated hero-logo.png has no transparent lower canvas — keep ribbon tight under wordmark */
+  margin-top:6px;
   width:100%;
   max-width:none;
   min-width:0;
@@ -202,7 +202,7 @@ img{height:auto}.portrait img{height:380px}.story .portrait img{height:460px}.pr
     padding:.5em .8em;
     letter-spacing:.045em;
     min-width:0;
-    margin-top:calc(-14.35% + 2px);
+    margin-top:6px;
   }
   .hero-art{padding-bottom:32px}
 }
@@ -213,7 +213,7 @@ img{height:auto}.portrait img{height:380px}.story .portrait img{height:460px}.pr
     padding:.52em .75em;
     letter-spacing:.05em;
     min-width:0;
-    margin-top:calc(-14.35% + 2px);
+    margin-top:6px;
   }
   .hero-art{padding-bottom:28px}
 }
