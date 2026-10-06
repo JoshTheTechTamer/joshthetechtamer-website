@@ -245,3 +245,14 @@ button:disabled{opacity:.65;cursor:wait}
 @media(max-width:1100px){.site-header .brand-lockup img{width:118px;height:101px}}
 @media(max-width:850px){.site-header .nav-row{height:98px}.site-header .brand-lockup img{width:108px;height:93px}.site-header .navlinks{top:98px}}
 @media(max-width:620px){.site-header .nav-row{height:92px}.site-header .brand-lockup img{width:102px;height:88px}.site-header .navlinks{top:92px}}
+
+/* Homepage service introduction and client photo, October 2026. */
+.home-paths-intro{display:grid;grid-template-columns:1.25fr 1fr;align-items:center;gap:64px;margin-bottom:40px}
+.home-paths-copy h2{font-size:clamp(2.4rem,4.4vw,3.85rem);max-width:660px;margin-bottom:24px}
+.home-paths-copy p{color:var(--muted);font-size:18px;margin:0;max-width:600px}
+.home-paths-photo{position:relative;isolation:isolate;margin:0 0 12px 12px}
+.home-paths-photo:before{content:'';position:absolute;inset:16px 16px -12px -12px;background:#e7f1fa;clip-path:polygon(0 0,calc(100% - 48px) 0,100% 48px,100% 100%,48px 100%,0 calc(100% - 48px));z-index:-1}
+.home-paths-frame{padding:12px;background:var(--slate);clip-path:polygon(0 0,calc(100% - 48px) 0,100% 48px,100% 100%,48px 100%,0 calc(100% - 48px))}
+.home-paths-frame img{width:100%;height:auto;clip-path:polygon(0 0,calc(100% - 42px) 0,100% 42px,100% 100%,42px 100%,0 calc(100% - 42px))}
+@media(max-width:850px){.home-paths-intro{gap:30px;grid-template-columns:1.1fr 1fr}.home-paths-copy h2{font-size:38px}.home-paths-copy p{font-size:16px}}
+@media(max-width:620px){.home-paths-intro{grid-template-columns:1fr;gap:26px;margin-bottom:30px}.home-paths-copy h2{font-size:32px;margin-bottom:16px}.home-paths-copy .eyebrow{margin-bottom:16px}.home-paths-photo{width:calc(100% - 12px);max-width:420px;justify-self:center}.home-paths .path-card{display:grid;grid-template-columns:36px minmax(0,1fr);gap:10px 14px;padding:22px 18px}.home-paths .path-card .icon{grid-column:1;grid-row:1 / span 2;width:36px;height:36px}.home-paths .path-card h3{grid-column:2;font-size:22px;margin:0}.home-paths .path-card p{grid-column:2;font-size:15px;margin:0}.home-paths .path-card .tags{grid-column:2;gap:5px;margin:2px 0}.home-paths .tag{padding:3px 6px;font-size:11px}.home-paths .path-card .textlink{grid-column:2;justify-self:start;margin:3px 0 0;max-width:100%;font-size:13px;padding:12px 23px}}
