@@ -52,8 +52,11 @@ rect(-49,-12,98,47,7,'#f0f5fb');rect(-30,9,60,13,3,navy);ellipse(34,1,4,4,fixed?
 if(fixed){let amount=smooth((t-5.5)/.6);rect(-23,17,46,8+amount*26,2,'white');line([[-12,28],[-4,35],[12,22]],blue,3);line([[-15,-2],[-10,-5],[-5,-2]],slate,2);line([[8,-2],[13,-5],[18,-2]],slate,2)}else{line([[-17,-5],[-8,2],[-17,2],[-8,-5]],slate,2);line([[9,-5],[18,2],[9,2],[18,-5]],slate,2);for(let i=0;i<3;i++){let p=(t*.7+i*.3)%1;c.globalAlpha=(1-p)*.5;ellipse(16+Math.sin(t*3+i)*9,-48-p*28,4+p*6,5+p*8,'#8b9bad',null)}c.globalAlpha=1}
 c.restore()}
 function frame(now){let t=((now-start)/1000)%13; if(reduced)t=10;
+const compact=mobile();
+const targetWidth=compact?1080:1400;
+if(canvas.width!==targetWidth){canvas.width=targetWidth;c.setTransform(2,0,0,2,0,0);}
 c.clearRect(0,0,700,200);c.fillStyle='white';c.fillRect(0,0,700,200);
-let drag=smooth((t-3.5)/2),px=mix(572,331,drag),fixed=t>5.5;
+let drag=smooth((t-3.5)/2),px=mix(compact?460:572,compact?236:331,drag),fixed=t>5.5;
 let hand=mascot(t,drag);
 // Words occupy the cleared space behind the printer, revealed right-to-left.
 let reveal=smooth((t-3.5)/2);
@@ -63,7 +66,7 @@ if(t>3.5){
 c.save();c.beginPath();
 const edge=px+49;
 c.rect(edge,45,Math.max(0,700-edge),95);c.clip();
-if(mobile()){text('House calls.',520,64,27);text('Office visits.',520,95,27);text('Tech tamed.',520,132,31,blue)}else{text('House calls. Office visits.',516,84,19);text('Tech tamed.',516,117,27,blue)}c.restore();
+if(mobile()){text('House calls.',410,64,29);text('Office visits.',410,95,29);text('Tech tamed.',410,132,31,blue)}else{text('House calls. Office visits.',516,84,19);text('Tech tamed.',516,117,27,blue)}c.restore();
 }
 // One continuous sampled rope, including the phone tether and lasso.
 function cubic(a,b,d,e){const out=[];for(let i=0;i<=64;i++){let u=i/64,v=1-u;out.push([v*v*v*a[0]+3*v*v*u*b[0]+3*v*u*u*d[0]+u*u*u*e[0],v*v*v*a[1]+3*v*v*u*b[1]+3*v*u*u*d[1]+u*u*u*e[1]])}return out}
@@ -81,7 +84,7 @@ cx=mix(cx,hand[0]+8,resting);cy=mix(cy,hand[1]+17,resting);rx=mix(rx,14,resting)
 // Release in three stages: open, slip below the paper, then reel left.
 if(t>=5.85){
  let loosen=smooth((t-5.85)/.4),drop=smooth((t-6.2)/.65);
- let reel=smooth((t-6.9)/1.45),lift=smooth((t-7.65)/.7);
+ let reel=smooth((t-6.9)/1.45),lift=smooth((t-(compact?8.05:7.65))/(compact?.5:.7));
  cx=mix(px,hand[0]+8,reel);
  cy=mix(mix(125,184,drop),hand[1]+17,lift);
  rx=mix(mix(53,66,loosen),14,reel);
@@ -95,6 +98,7 @@ angle=mix(angle,Math.PI,resting);let side=Math.cos(angle);
 let join=[cx+Math.cos(angle)*rx,cy+Math.sin(angle)*ry];
 let swing=t<2.6?Math.sin(t*8)*uncoil:0;
 let lead=cubic(hand,[hand[0]+mix(40+18*swing,3,resting),hand[1]+mix(-9+sag,5,resting)],[join[0]+side*mix(26,2,resting),join[1]+mix(25+sag,-8,resting)],join);
+if(compact&&t>=3.3&&t<5.85){let span=join[0]-hand[0];lead=cubic(hand,[hand[0]+span/3,hand[1]+4],[join[0]-span/3,join[1]+4],join);}
 let front=tether.concat(lead.slice(1),ring(cx,cy,rx,ry,angle,angle-Math.PI).slice(1));
 let back=ring(cx,cy,rx,ry,angle,angle+Math.PI);
 c.save();c.globalAlpha=hand.active;twisted(back);c.restore();
