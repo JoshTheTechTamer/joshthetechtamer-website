@@ -36,12 +36,11 @@ if(logo.complete&&logo.naturalWidth){
 c.save();c.beginPath();c.ellipse(685,635,386,386,0,0,Math.PI*2);c.clip();
 c.drawImage(logo,0,912/1162*logo.naturalHeight,logo.naturalWidth,106/1162*logo.naturalHeight,0,912,1353,106);c.restore();
 c.drawImage(logo,0,1018/1162*logo.naturalHeight,logo.naturalWidth,144/1162*logo.naturalHeight,0,1018,1353,144);}
-// Exact static logo at the opening and closing, with a brief pose dissolve.
-if(active<1&&logo.complete&&logo.naturalWidth){c.globalAlpha=1-active;c.fillStyle='white';c.fillRect(0,0,1353,1162);c.drawImage(logo,0,0,1353,1162);c.globalAlpha=1}
+
 c.restore();
 function anchor(x,y){return [ox+(690+dx+(x-690)*Math.cos(lean)-(y-910)*Math.sin(lean))*scale,oy+(910+dy+(x-690)*Math.sin(lean)+(y-910)*Math.cos(lean))*scale]}
 const hand=anchor(1155,736);hand.phone=anchor(131,466);hand.slack=anchor(350,800);hand.active=active;
-hand.fingers=()=>{c.save();c.globalAlpha=active;c.translate(ox,oy);c.scale(scale,scale);c.translate(690+dx,910+dy);c.rotate(lean);c.translate(-690,-910);c.translate(45,24);c.scale(1220/1353,1000/1162);
+hand.fingers=()=>{c.save();c.globalAlpha=1;c.translate(ox,oy);c.scale(scale,scale);c.translate(690+dx,910+dy);c.rotate(lean);c.translate(-690,-910);c.translate(45,24);c.scale(1220/1353,1000/1162);
 c.beginPath();[[1168,823],[1178,806],[1193,805],[1200,790],[1219,785],[1235,776],[1251,780],[1265,795],[1280,795],[1296,823],[1302,843],[1285,866],[1253,877],[1200,882],[1177,870]].forEach((p,i)=>i?c.lineTo(...p):c.moveTo(...p));c.closePath();c.clip();c.drawImage(actor,0,0,1353,1162);c.restore()};return hand;
 }
 
@@ -51,7 +50,14 @@ rect(-42,-32,84,52,8,'#dce8f4');rect(-29,-47,58,28,4,slate);rect(-23,-43,46,21,2
 rect(-49,-12,98,47,7,'#f0f5fb');rect(-30,9,60,13,3,navy);ellipse(34,1,4,4,fixed?blue:'#e58b42',ink,2);
 if(fixed){let amount=smooth((t-5.5)/.6);rect(-23,17,46,8+amount*26,2,'white');line([[-12,28],[-4,35],[12,22]],blue,3);line([[-15,-2],[-10,-5],[-5,-2]],slate,2);line([[8,-2],[13,-5],[18,-2]],slate,2)}else{line([[-17,-5],[-8,2],[-17,2],[-8,-5]],slate,2);line([[9,-5],[18,2],[9,2],[18,-5]],slate,2);for(let i=0;i<3;i++){let p=(t*.7+i*.3)%1;c.globalAlpha=(1-p)*.5;ellipse(16+Math.sin(t*3+i)*9,-48-p*28,4+p*6,5+p*8,'#8b9bad',null)}c.globalAlpha=1}
 c.restore()}
-function frame(now){let t=((now-start)/1000)%13; if(reduced)t=10;
+function frame(now){
+// Two complete extra revolutions, then continue the existing throw timing.
+const extraDuration=4*Math.PI/8;
+let elapsed=((now-start)/1000)%(13+extraDuration);
+if(reduced)elapsed=10+extraDuration;
+const extraElapsed=clamp((elapsed-2.5)/extraDuration)*extraDuration;
+let t=elapsed-extraElapsed;
+const extraSpin=extraElapsed*8;
 const compact=mobile();
 const targetWidth=compact?1080:1400;
 if(canvas.width!==targetWidth){canvas.width=targetWidth;c.setTransform(2,0,0,2,0,0);}
@@ -75,11 +81,11 @@ function twisted(points){if(points.length<2)return;line(points,ink,4.4);line(poi
 let phone=hand.phone,slack=hand.slack;
 let tether=cubic(phone,[phone[0]-19,phone[1]+42],[slack[0]-29,slack[1]+9],slack).concat(cubic(slack,[slack[0]+26,slack[1]-7],[hand[0]-32,hand[1]-9],hand).slice(1));
 let cx,cy,rx,ry,sag=0;
-if(t<2.6){let spin=t*8;cx=hand[0]+25+Math.cos(spin)*8;cy=hand[1]-59+Math.sin(spin)*5;rx=43;ry=15+Math.sin(spin)*6}
+if(t<2.6){let spin=2.6*8+(t-2.6)*8*smooth((t-1.25)/1.0)+extraSpin;cx=hand[0]+25+Math.cos(spin)*8;cy=hand[1]-59+Math.sin(spin)*5;rx=43;ry=15+Math.sin(spin)*6}
 else if(t<3.3){let p=smooth((t-2.6)/.7);cx=mix(hand[0]+25,px,p);cy=mix(hand[1]-59,125,p)-Math.sin(p*Math.PI)*48;rx=mix(43,70,p);ry=mix(15,46,p);sag=20*Math.sin(p*Math.PI)}
 else {cx=px;cy=125;rx=mix(70,53,smooth((t-3.3)/.35));ry=mix(46,21,smooth((t-3.3)/.35));sag=28*(1-smooth((t-3.3)/.45))}
 // Retract the loop to the grip before restoring the original pose.
-let uncoil=smooth((t-.65)/1.05),resting=1-uncoil;
+let uncoil=smooth((t-.6)/1.55),resting=1-uncoil;
 cx=mix(cx,hand[0]+8,resting);cy=mix(cy,hand[1]+17,resting);rx=mix(rx,14,resting);ry=mix(ry,17,resting);
 // Release in three stages: open, slip below the paper, then reel left.
 if(t>=5.85){
@@ -92,20 +98,21 @@ if(t>=5.85){
  resting=reel;
  sag=19*Math.sin(drop*Math.PI)*(1-reel);
 }
-let whirlAngle=.5*Math.PI+.5*Math.PI*Math.sin(t*8);
+let spin=2.6*8+(t-2.6)*8*smooth((t-1.25)/1.0)+extraSpin;
+let whirlAngle=.5*Math.PI+.5*Math.PI*Math.sin(spin);
 let angle=t<2.6?whirlAngle:mix(.5*Math.PI+.5*Math.PI*Math.sin(2.6*8),Math.PI,smooth((t-2.6)/.7));
-angle=mix(angle,Math.PI,resting);let side=Math.cos(angle);
+angle=mix(angle,-Math.PI/2,resting);let side=Math.cos(angle);
 let join=[cx+Math.cos(angle)*rx,cy+Math.sin(angle)*ry];
-let swing=t<2.6?Math.sin(t*8)*uncoil:0;
+let swing=t<2.6?Math.sin(spin)*uncoil:0;
 let lead=cubic(hand,[hand[0]+mix(40+18*swing,3,resting),hand[1]+mix(-9+sag,5,resting)],[join[0]+side*mix(26,2,resting),join[1]+mix(25+sag,-8,resting)],join);
 if(compact&&t>=3.3&&t<5.85){let span=join[0]-hand[0];lead=cubic(hand,[hand[0]+span/3,hand[1]+4],[join[0]-span/3,join[1]+4],join);}
 let front=tether.concat(lead.slice(1),ring(cx,cy,rx,ry,angle,angle-Math.PI).slice(1));
 let back=ring(cx,cy,rx,ry,angle,angle+Math.PI);
-c.save();c.globalAlpha=hand.active;twisted(back);c.restore();
+c.save();c.globalAlpha=1-smooth((t-8.5)/1.25);twisted(back);c.restore();
 printer(px,122,t,fixed);
-c.save();c.globalAlpha=hand.active;twisted(front);c.restore();hand.fingers();
+c.save();c.globalAlpha=1-smooth((t-8.5)/1.25);twisted(front);c.restore();hand.fingers();
 // The untouched source logo is the final compositing layer during both holds.
-if(hand.active<1&&logo.complete&&logo.naturalWidth){c.save();c.globalAlpha=1-hand.active;c.fillStyle='white';c.fillRect(8,24,166,166*1162/1353);c.drawImage(logo,8,24,166,166*1162/1353);c.restore()}
+if((t<=.6||t>8.5)&&logo.complete&&logo.naturalWidth){c.save();c.globalAlpha=t<=.6?1:smooth((t-8.5)/1.25);c.fillStyle='white';c.fillRect(8,24,166,166*1162/1353);c.drawImage(logo,8,24,166,166*1162/1353);c.restore()}
 
 if(fixed){for(let i=0;i<3;i++){let p=clamp((t-5.5-i*.12)/.65);if(p>0&&p<1){c.globalAlpha=1-p;let x=px+Math.cos(i*2)*70*p,y=100+Math.sin(i*2)*45*p;line([[x-5,y],[x+5,y]],blue,2);line([[x,y-5],[x,y+5]],blue,2)}}c.globalAlpha=1;}
 
