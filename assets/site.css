@@ -256,3 +256,11 @@ button:disabled{opacity:.65;cursor:wait}
 .home-paths-frame img{width:100%;height:auto;clip-path:polygon(0 0,calc(100% - 42px) 0,100% 42px,100% 100%,42px 100%,0 calc(100% - 42px))}
 @media(max-width:850px){.home-paths-intro{gap:30px;grid-template-columns:1.1fr 1fr}.home-paths-copy h2{font-size:38px}.home-paths-copy p{font-size:16px}}
 @media(max-width:620px){.home-paths-intro{grid-template-columns:1fr;gap:26px;margin-bottom:30px}.home-paths-copy h2{font-size:32px;margin-bottom:16px}.home-paths-copy .eyebrow{margin-bottom:16px}.home-paths-photo{width:calc(100% - 12px);max-width:420px;justify-self:center}.home-paths .path-card{display:grid;grid-template-columns:36px minmax(0,1fr);gap:10px 14px;padding:22px 18px}.home-paths .path-card .icon{grid-column:1;grid-row:1 / span 2;width:36px;height:36px}.home-paths .path-card h3{grid-column:2;font-size:22px;margin:0}.home-paths .path-card p{grid-column:2;font-size:15px;margin:0}.home-paths .path-card .tags{grid-column:2;gap:5px;margin:2px 0}.home-paths .tag{padding:3px 6px;font-size:11px}.home-paths .path-card .textlink{grid-column:2;justify-self:start;margin:3px 0 0;max-width:100%;font-size:13px;padding:12px 23px}}
+
+/* Mascot speech bubble: readable live text at every screen size. */
+.hero-speech{position:relative;align-self:flex-start;width:88%;margin:0 0 28px;padding:18px 22px;border:3px solid var(--slate);border-radius:22px;background:white;color:var(--navy);font-size:clamp(18px,2vw,24px);line-height:1.35;text-align:center;box-shadow:5px 5px 0 #e7edf6;z-index:2}
+.hero-speech strong{font-weight:750}
+.hero-speech:before{content:'';position:absolute;bottom:-22px;left:58%;width:0;height:0;border-left:20px solid transparent;border-top:22px solid var(--slate)}
+.hero-speech:after{content:'';position:absolute;bottom:-15px;left:calc(58% + 3px);width:0;height:0;border-left:14px solid transparent;border-top:17px solid white}
+@media(max-width:850px){.hero-speech{font-size:18px;padding:15px 14px}}
+@media(max-width:620px){.hero-speech{width:100%;font-size:18px;margin-top:18px;margin-bottom:26px;padding:14px 12px}}
