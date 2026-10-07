@@ -15,6 +15,7 @@ meta={
 'contact.html':('Request a Tech Help Visit in Muscatine | The Tech Tamer','Request home or office tech help in Muscatine and Eastern Iowa. Call or text 563-261-0200, or send an inquiry. Free initial consultation.','contact')}
 # The header uses the readable full lockup; the favicon stays the mascot crop.
 def apply_header_logo(s):
+ if 'class="brand brand-lockup header-animation"' in s:return s
  m=re.search(r'<header\b.*?<a href="[^"]+" class="brand(?: brand-lockup)?" aria-label="The Tech Tamer home">.*?</a>',s,re.S)
  if not m:return s
  header=m.group()

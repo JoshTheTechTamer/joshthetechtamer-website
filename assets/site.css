@@ -264,3 +264,25 @@ button:disabled{opacity:.65;cursor:wait}
 .hero-speech:after{content:none}
 @media(max-width:850px){.hero-speech{font-size:18px;padding:11px 17px}}
 @media(max-width:620px){.hero-speech{align-self:center;max-width:100%;font-size:18px;margin:30px 0 12px;padding:11px 16px}}
+
+/* Approved lasso animation: full-width mobile row, compact desktop lockup. */
+.site-header .nav-row{height:auto;min-height:140px;gap:20px}
+.site-header .header-animation{display:block;flex:0 1 480px;width:480px;min-width:0;line-height:0}
+.header-animation canvas{display:block;width:100%;height:auto;aspect-ratio:3.5;background:#fff}
+.site-header .navlinks{gap:14px}
+.site-header .navlinks a{font-size:13px}
+@media(max-width:1250px){
+ .site-header .nav-row{min-height:130px;justify-content:space-between}
+ .site-header .header-animation{flex:1 1 auto;width:auto;max-width:620px}
+ .site-header .menu{display:block;flex-shrink:0}
+ .site-header .navlinks{display:none;position:absolute;top:100%;left:0;right:0;padding:16px 28px 22px;background:#fff;border-bottom:1px solid var(--line);box-shadow:0 15px 20px #23335c0c;align-items:stretch}
+ .site-header .navlinks.open{display:flex;flex-direction:column;gap:2px}
+ .site-header .navlinks a{font-size:16px;padding:10px}
+ .site-header .navlinks .nav-contact{margin-top:10px}
+}
+@media(max-width:620px){
+ .site-header .nav-row{display:grid;grid-template-columns:1fr;gap:0;padding:4px 16px 8px;min-height:0}
+ .site-header .header-animation{width:100%;max-width:none}
+ .site-header .menu{justify-self:end;margin-top:0;padding:8px 24px;min-height:42px}
+ .site-header .navlinks{top:100%}
+}
