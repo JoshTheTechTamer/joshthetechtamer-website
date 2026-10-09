@@ -287,3 +287,21 @@ button:disabled{opacity:.65;cursor:wait}
  .site-header .menu{flex:0 0 82px;margin:0;padding:9px 14px;min-height:42px;font-size:14px;white-space:nowrap}
  .site-header .navlinks{top:100%}
 }
+
+/* lead-form-success-2026-10-09: bold green success panel (clipped corners, Montserrat Black, glitch accents) */
+.status.lead-success{position:relative;display:flex;align-items:center;gap:18px;margin-top:22px;padding:22px 28px 22px 24px;color:#fff;background:linear-gradient(120deg,#0b7a43 0%,#11994f 55%,#17b25e 100%);clip-path:polygon(18px 0,100% 0,100% calc(100% - 18px),calc(100% - 18px) 100%,0 100%,0 18px);overflow:hidden;isolation:isolate;animation:leadSuccessIn .55s cubic-bezier(.2,.9,.25,1.15) both}
+.status.lead-success::before{content:'';position:absolute;z-index:-1;top:0;bottom:0;right:-30px;width:42%;background:linear-gradient(120deg,transparent 0 22%,#ffffff14 22% 48%,transparent 48% 58%,#0000001a 58%);pointer-events:none}
+.status.lead-success::after{content:'';position:absolute;left:0;right:0;bottom:0;height:5px;background:linear-gradient(90deg,#00e5ff 0 33%,#23335c 33% 66%,#ff2bd6 66%);pointer-events:none}
+.lead-success__icon{flex:0 0 auto;display:grid;place-items:center;width:58px;height:58px;color:#0b7a43;background:#fff;clip-path:polygon(12px 0,100% 0,100% calc(100% - 12px),calc(100% - 12px) 100%,0 100%,0 12px);animation:leadSuccessPop .5s .2s cubic-bezier(.2,.9,.25,1.4) both}
+.lead-success__icon path{stroke-dasharray:24;stroke-dashoffset:0;animation:leadSuccessCheck .45s .45s ease-out both}
+.status.lead-success .lead-success__body{display:block;min-width:0}
+.status.lead-success .lead-success__title{display:block;margin:0 0 6px;font-family:"Montserrat",Arial,Helvetica,sans-serif;font-weight:900;font-size:clamp(24px,3.2vw,32px);line-height:1.05;letter-spacing:.02em;text-transform:uppercase;color:#fff;text-shadow:2px 0 #00e5ff,-2px 0 #ff2bd6;animation:leadSuccessGlitch .7s .25s steps(2,end) both}
+.status.lead-success .lead-success__msg{display:block;margin:0;font-size:15px;line-height:1.5;color:#effcf4}
+.status.lead-success .lead-success__msg a{color:#fff;font-weight:800;text-decoration:underline;text-underline-offset:3px;white-space:nowrap}
+.status.lead-success .lead-success__msg a:focus-visible{outline:3px solid #fff;outline-offset:3px}
+@keyframes leadSuccessIn{from{opacity:0;transform:translateY(16px) scale(.97)}to{opacity:1;transform:none}}
+@keyframes leadSuccessPop{from{opacity:0;transform:scale(.4) rotate(-12deg)}to{opacity:1;transform:none}}
+@keyframes leadSuccessCheck{from{stroke-dashoffset:24}to{stroke-dashoffset:0}}
+@keyframes leadSuccessGlitch{0%{transform:translateX(-4px);text-shadow:5px 0 #00e5ff,-5px 0 #ff2bd6}35%{transform:translateX(3px);text-shadow:-4px 0 #00e5ff,4px 0 #ff2bd6}70%{transform:translateX(-1px);text-shadow:2px 0 #00e5ff,-2px 0 #ff2bd6}100%{transform:none;text-shadow:2px 0 #00e5ff,-2px 0 #ff2bd6}}
+@media (max-width:620px){.status.lead-success{gap:14px;padding:18px 18px 20px 16px;align-items:flex-start}.lead-success__icon{width:46px;height:46px}.lead-success__icon svg{width:24px;height:24px}.status.lead-success .lead-success__msg{font-size:14px}}
+@media (prefers-reduced-motion:reduce){.status.lead-success,.lead-success__icon,.lead-success__icon path,.lead-success__title{animation:none}}

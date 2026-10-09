@@ -5,7 +5,7 @@ set -euo pipefail
 rm -rf dist && mkdir dist
 for f in *; do
   case "$f" in
-    dist|backups|previews|scripts|data|docs|templates|tests|node_modules|README.md|REDESIGN-REVIEW.md|package.json|package-lock.json|_config.yml|CNAME|booking-handler.php) continue ;;
+    dist|backups|previews|scripts|functions|workers|data|docs|templates|tests|node_modules|README.md|REDESIGN-REVIEW.md|package.json|package-lock.json|_config.yml|CNAME|booking-handler.php) continue ;;
   esac
   cp -R "$f" dist/
 done
