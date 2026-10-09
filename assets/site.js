@@ -8,20 +8,33 @@ if(form){
  function replyType(){const email=reply.value==='email';contact.type=email?'email':'tel';contact.autocomplete=email?'email':'tel';contact.inputMode=email?'email':'tel';form.querySelector('label[for="contact"]').textContent=email?'Email address *':'Phone number *'}
  reply.addEventListener('change',replyType);replyType();
  const requested=new URLSearchParams(window.TECH_TAMER_QUERY||location.search).get('service');if(requested&&Array.from(service.options).some(o=>o.value===requested))service.value=requested;
- form.addEventListener('submit',e=>{
-  e.preventDefault();if(!form.reportValidity())return;
+ let widgetId,sending=false;const holder=form.querySelector('#request-turnstile');
+ window.onTechTamerTurnstile=()=>{if(!holder||widgetId!==undefined||!window.turnstile)return;widgetId=window.turnstile.render(holder,{sitekey:holder.dataset.sitekey,action:'lead',theme:'light'})};
+ if(window.turnstile)window.onTechTamerTurnstile();
+ const fail=msg=>{status.className='status is-error';status.textContent=msg||'Sorry, that didn’t go through. Please try again, or call or text Josh at 563-261-0200.'};
+ form.addEventListener('submit',async e=>{
+  e.preventDefault();if(sending)return;if(!form.reportValidity())return;
   const data=new FormData(form);status.className='status';
   const value=key=>String(data.get(key)||'').trim();
   if(!value('name')||!value('issue')){status.textContent='Please enter your name and a brief description.';return}
   if(value('_gotcha')){status.textContent='Please call or text Josh to arrange help.';return}
   if(reply.value!=='email'&&value('contact').replace(/\D/g,'').length<10){status.textContent='Please enter a phone number with area code.';contact.focus();return}
-  const subject=`Tech Tamer request: ${value('service')} — ${value('name')}`;
-  const replyLabel={text:'Text message',phone:'Phone call',email:'Email'}[reply.value];
-  const body=[`Name: ${value('name')}`,`Service: ${value('service')}`,`Reply by: ${replyLabel}`,`Contact: ${value('contact')}`,`City / service location: ${value('location')||'Not specified'}`,`Good times to reach me: ${value('preferred_time')||'Not specified'}`,'','Request:',value('issue')].join('\r\n');
-  const email='mailto:joshthetechtamer@gmail.com?subject='+encodeURIComponent(subject)+'&body='+encodeURIComponent(body);
-  status.textContent='Your email app will open with your request filled in. Review it and press Send there. If it does not open, email joshthetechtamer@gmail.com or call/text 563-261-0200. Your details remain here.';
-  track('email_draft_open',{placement:'contact_form',service:service.value});
-  window.location.href=email;
+  if(!value('cf-turnstile-response')){fail('Please wait a moment for the security check to finish, then press Send again. You can also call or text Josh at 563-261-0200.');return}
+  const label=button.textContent;sending=true;button.disabled=true;button.textContent='Sending…';status.textContent='Sending your request…';
+  try{
+   const res=await fetch(form.getAttribute('action')||'/api/lead',{method:'POST',body:data,headers:{Accept:'application/json'}});
+   const out=await res.json().catch(()=>({}));
+   if(!res.ok||out.ok!==true)throw new Error(out.error||'send_failed');
+   const first=value('name').split(/\s+/)[0];
+   form.querySelectorAll('input,select,textarea,button').forEach(el=>{if(el!==button)el.disabled=true});
+   if(holder)holder.hidden=true;
+   button.textContent='Request sent ✓';button.style.opacity='1';button.style.cursor='default';
+   status.className='status is-success';status.textContent=`Thanks, ${first}! Your request is on its way. Josh will get back to you soon. If it’s urgent, call or text 563-261-0200.`;
+   track('generate_lead',{placement:'contact_form',service:service.value});
+  }catch(err){
+   button.disabled=false;button.textContent=label;fail();
+   if(widgetId!==undefined&&window.turnstile)window.turnstile.reset(widgetId);
+  }finally{sending=false}
  });
 }
 const carousel=document.querySelector('.review-carousel');

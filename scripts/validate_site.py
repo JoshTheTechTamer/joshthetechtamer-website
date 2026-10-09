@@ -28,10 +28,11 @@ assert 'class="review-carousel"' in (ROOT/'index.html').read_text()
 assert [r['rating'] for r in json.loads((ROOT/'data/reviews.json').read_text())].count(5)==2
 assert 'backups' in (ROOT/'_config.yml').read_text()
 if '--production' in sys.argv:
- assert json.loads((ROOT/'data/site-config.json').read_text())['form_mode']=='mailto'
+ assert json.loads((ROOT/'data/site-config.json').read_text())['form_mode']=='cloudflare'
  contact=(ROOT/'contact.html').read_text();script=(ROOT/'assets/site.js').read_text()
- assert 'action="mailto:joshthetechtamer@gmail.com"' in contact
- assert 'Create email draft' in contact and 'encodeURIComponent(subject)' in script and 'encodeURIComponent(body)' in script
- assert 'fetch(endpoint' not in script and "track('generate_lead'" not in script
+ assert 'action="/api/lead" method="post"' in contact and 'mailto:joshthetechtamer@gmail.com" method' not in contact
+ assert 'challenges.cloudflare.com/turnstile/v0/api.js' in contact and 'id="request-turnstile"' in contact
+ assert 'Send request' in contact and "action:'lead'" in script and 'encodeURIComponent(body)' not in script
+ assert (ROOT/'functions/api/lead.js').is_file()
 
 print('PASS: HTML nesting, internal links/anchors, headings, images, structured data, all six kit links, review ratings and deployment exclusions.')

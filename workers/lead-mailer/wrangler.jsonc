@@ -1,0 +1,14 @@
+// Reference config for the private lead-mailer Worker (deployed via the Cloudflare API).
+{
+  "name": "tech-tamer-lead-mailer",
+  "main": "index.js",
+  "compatibility_date": "2026-10-01",
+  "workers_dev": false,
+  "send_email": [
+    {
+      "name": "EMAIL",
+      "destination_address": "joshthetechtamer@gmail.com",
+      "allowed_sender_addresses": ["leads@joshthetechtamer.com"]
+    }
+  ]
+}
