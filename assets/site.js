@@ -29,7 +29,13 @@ if(form){
    form.querySelectorAll('input,select,textarea,button').forEach(el=>{if(el!==button)el.disabled=true});
    if(holder)holder.hidden=true;
    button.textContent='Request sent ✓';button.style.opacity='1';button.style.cursor='default';
-   status.className='status is-success';status.textContent=`Thanks, ${first}! Your request is on its way. Josh will get back to you soon. If it’s urgent, call or text 563-261-0200.`;
+   status.className='status is-success lead-success';status.textContent='';
+   const el=(tag,cls,text)=>{const n=document.createElement(tag);if(cls)n.className=cls;if(text)n.textContent=text;return n};
+   const icon=el('span','lead-success__icon');icon.setAttribute('aria-hidden','true');icon.innerHTML='<svg viewBox="0 0 24 24" width="30" height="30"><path d="M5 12.5l4.5 4.5L19 7.5" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+   const body=el('span','lead-success__body'),title=el('span','lead-success__title','Request sent!');title.dataset.text='Request sent!';
+   const msg=el('span','lead-success__msg',`Thanks, ${first}! Your request is on its way. Josh will get back to you soon. If it’s urgent, call or text `),tel=el('a','','563-261-0200');tel.href='tel:+15632610200';msg.append(tel,'.');
+   body.append(title,msg);status.append(icon,body);
+   if(status.scrollIntoView)status.scrollIntoView({block:'nearest',behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth'});
    track('generate_lead',{placement:'contact_form',service:service.value});
   }catch(err){
    button.disabled=false;button.textContent=label;fail();
