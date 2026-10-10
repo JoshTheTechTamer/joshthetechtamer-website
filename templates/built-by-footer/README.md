@@ -9,8 +9,10 @@ with "Website & business tech" preselected, in a new tab.
 
 On dark footers (`ttb--dark`) there is no white plate. The badge swaps in
 `built-by-lockup-dark.webp` (142×120, embedded), where the black "TECH TAMER" letters
-are recolored light (#f4f6fa) and the cyan/magenta glitch accents are kept, plus a
-faint light glow so the hat and suit edges stay visible on black.
+are recolored light (#f4f6fa) and the cyan/magenta glitch accents are kept. The white
+fills inside the lasso loop and behind the phone arm are removed (fully transparent, with
+the white fringe color-to-alpha'd out), so no white blobs or halos show on dark footers.
+No glow or filter is applied.
 
 This folder lives in `templates/`, which `scripts/cf_build.sh` and `_config.yml` both
 keep out of the published site. `scripts/build_pages.py` only reads `templates/*.html`,
