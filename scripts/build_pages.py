@@ -72,8 +72,8 @@ for file in (ROOT/'templates').glob('*.html'):
   s=re.sub(r'<script type="application/ld\+json">.*?</script>','<script type="application/ld+json">'+json.dumps({'@context':'https://schema.org','@graph':graph})+'</script>',s)
  else:s=s.replace('</head>','<meta name="robots" content="noindex,follow"></head>')
  s=re.sub(r'<img\b[^>]*>',image_tag,s)
- s=re.sub(r'<link rel="icon"[^>]*>','<link rel="icon" href="/assets/logo.png?v=20261002" type="image/png">',s)
- s=re.sub(r'<link rel="apple-touch-icon"[^>]*>','<link rel="apple-touch-icon" href="/assets/logo.png?v=20261002">',s)
+ # Favicons: transparent mascot icons (no white fills), navy apple-touch icon, web manifest.
+ s=re.sub(r'(?:<link rel="(?:icon|apple-touch-icon|manifest)"[^>]*>\s*)+','<link rel="icon" href="/favicon.ico?v=20261010" sizes="any"><link rel="icon" href="/assets/favicon-32.png?v=20261010" type="image/png" sizes="32x32"><link rel="icon" href="/assets/favicon-16.png?v=20261010" type="image/png" sizes="16x16"><link rel="apple-touch-icon" href="/assets/apple-touch-icon.png?v=20261010" sizes="180x180"><link rel="manifest" href="/site.webmanifest?v=20261010">',s,count=1)
  # Root-relative paths also make custom 404 pages work at nested URLs.
  s=re.sub(r'(href|src)="((?:assets/|images/)[^"]*|[a-z0-9-]+\.html(?:\?[^"]*)?)"',lambda m:m[1]+'="/'+m[2]+'"',s)
  (ROOT/name).write_text(s)
