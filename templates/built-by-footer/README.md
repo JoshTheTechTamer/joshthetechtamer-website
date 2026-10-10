@@ -12,7 +12,9 @@ On dark footers (`ttb--dark`) there is no white plate. The badge swaps in
 are recolored light (#f4f6fa) and the cyan/magenta glitch accents are kept. The white
 fills inside the lasso loop and behind the phone arm are removed (fully transparent, with
 the white fringe color-to-alpha'd out), so no white blobs or halos show on dark footers.
-No glow or filter is applied.
+The dark logo gets a subtle cyan glow on its outer silhouette only
+(`filter:drop-shadow(0 0 1.5px rgba(80,200,255,.6))`), never white; the transparent
+loop and arm gaps stay dark.
 
 This folder lives in `templates/`, which `scripts/cf_build.sh` and `_config.yml` both
 keep out of the published site. `scripts/build_pages.py` only reads `templates/*.html`,
