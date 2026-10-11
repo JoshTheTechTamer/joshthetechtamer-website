@@ -27,6 +27,17 @@ assert re.findall(r'https://joshthetechtamer.gumroad.com/l/[^" ]+',kit)==re.find
 assert 'class="review-carousel"' in (ROOT/'index.html').read_text()
 assert [r['rating'] for r in json.loads((ROOT/'data/reviews.json').read_text())].count(5)==2
 assert 'backups' in (ROOT/'_config.yml').read_text()
+# Website Package page: linked from Rates and For Business; unapproved example sites stay hidden.
+pkg=(ROOT/'website-package.html').read_text();cfg=json.loads((ROOT/'data/site-config.json').read_text())
+for needed in ['$800','$400 deposit','$25','First month free, cancel anytime','billed monthly to your card through Stripe','$120/year','sms:+15632610200','tel:+15632610200','Built by']:assert needed in pkg,needed
+assert ('mvp563.com' in pkg)==bool(cfg.get('show_mvp563_example')),'mvp563 example flag'
+assert '<!--EXAMPLE:' not in pkg
+for page in ['rates.html','business.html']:assert '/website-package.html' in (ROOT/page).read_text(),page
+rates=(ROOT/'rates.html').read_text();assert 'one-hour minimum' in rates and 'No subscription required.' not in rates
+assert '/website-package.html' in (ROOT/'sitemap.xml').read_text()
+# Every page shares the homepage header (only aria-current and For Business's contact ?service= may differ).
+hdr=lambda n:re.sub(r' aria-current="page"|\?service=[^"]*','',re.search(r'<header.*?</header>',(ROOT/n).read_text(),re.S).group())
+for f in ROOT.glob('*.html'):assert hdr(f.name)==hdr('index.html'),('header differs',f.name)
 if '--production' in sys.argv:
  assert json.loads((ROOT/'data/site-config.json').read_text())['form_mode']=='cloudflare'
  contact=(ROOT/'contact.html').read_text();script=(ROOT/'assets/site.js').read_text()
