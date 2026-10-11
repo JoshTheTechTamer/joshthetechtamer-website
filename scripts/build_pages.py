@@ -98,10 +98,10 @@ def footer(s):
   s=s[:hdr.start()]+h2+s[hdr.end():]
  s=s.replace('<a href="digital-kits.html">Digital kits</a><a href="rates.html">','<a href="rates.html">',1)
  s=s.replace('<a href="about.html">Meet Josh</a></div>','<a href="about.html">Meet Josh</a><a href="tech-help-muscatine.html">Tech help in Muscatine</a><a href="scam-help.html">Scam &amp; hacked accounts</a><a href="service-area.html">Areas I serve</a><a href="digital-kits.html">Digital kits</a></div>',1)
- # Scam Help in the main menu (desktop + mobile), right after Get a Website, as a soft-red pill.
+ # Scam Help in the main menu (desktop + mobile), first item, as a soft-red pill.
  hdr=re.search(r'<header\b.*?</header>',s,re.S)
  if hdr:
-  h2=re.sub(r'(<a href="website-package\.html"(?: aria-current="page")?>Get a Website</a>)',lambda m:m.group(1)+NAV_SCAM,hdr.group(),count=1);assert h2!=hdr.group(),'nav scam link'
+  h2=re.sub(r'(<a href="services\.html"(?: aria-current="page")?>Tech Help</a>)',lambda m:NAV_SCAM+m.group(1),hdr.group(),count=1);assert h2!=hdr.group(),'nav scam link'
   s=s[:hdr.start()]+h2+s[hdr.end():]
  # "Built by" badge on joshthetechtamer.com itself points to the Website Package.
  s=s.replace('<a class="ttb" href="contact.html?service=Website%20%26%20business%20tech">','<a class="ttb" href="website-package.html">',1)

@@ -50,7 +50,7 @@ hdr=lambda n:re.sub(r' aria-current="page"|\?service=[^"]*','',re.search(r'<head
 for f in ROOT.glob('*.html'):assert hdr(f.name)==hdr('index.html'),('header differs',f.name)
 # Main menu order (desktop nav and mobile slide-out share this markup); current page marked on Website Package.
 nav=re.search(r'<nav class="navlinks".*?</nav>',(ROOT/'index.html').read_text(),re.S).group()
-assert re.findall(r'>([^<>]+)</a>',nav)==['Tech Help','For Business','Get a Website','Scam Help','Rates & FAQ','About Josh','Request a visit ↗'],nav
+assert re.findall(r'>([^<>]+)</a>',nav)==['Scam Help','Tech Help','For Business','Get a Website','Rates & FAQ','About Josh','Request a visit ↗'],nav
 assert '<a href="/website-package" aria-current="page">Get a Website</a>' in (ROOT/'website-package.html').read_text()
 
 # ---- Website Package showcase (Oct 2026): copy, timeline, slider, features, extras card, motion + weight ----
@@ -235,7 +235,7 @@ for n,t in pages.items():
  if n=='scam-help.html':assert 'digital-kits' not in t and '<a href="/service-area">Areas I serve</a></div>' in ft,'no kit links on the scam page, footer included'
  else:assert 'digital-kits' not in hdr and '<a href="/service-area">Areas I serve</a><a href="/digital-kits">Digital kits</a></div>' in ft and ft.count('/digital-kits"')==1,n
  # Scam Help pill in the menu (after Get a Website), current on its own page
- assert re.search(r'Get a Website</a><a class="nav-scam" href="/scam-help"'+(' aria-current="page"' if n=='scam-help.html' else '')+r'><svg class="nav-scam__icon"[^>]*aria-hidden="true"',hdr),n
+ assert re.search(r'<nav class="navlinks"[^>]*><a class="nav-scam" href="/scam-help"'+(' aria-current="page"' if n=='scam-help.html' else '')+r'><svg class="nav-scam__icon"[^>]*aria-hidden="true"',hdr),n
  assert '<a href="/scam-help">Scam &amp; hacked accounts</a>' in ft,n
 for sn in ['snippet.html','demo.html','README.md']:
  st=(ROOT/'templates/built-by-footer'/sn).read_text()
@@ -268,6 +268,8 @@ assert not re.search(r'(?i)\b(kits?|download\w*|gumroad)\b',sc),'no kit/download
 assert 'If there’s a way back in, we’ll find it together.' in sc
 assert '<div class="scam-hero-art" aria-hidden="true"><svg class="scam-shield"' in sc and '<img' not in re.search(r'<section class="[^"]*ds-hero.*?</section>',sc,re.S).group()
 assert '.scam-shield *{animation:none!important;stroke-dashoffset:0!important}' in dcss
+wpcss=(ROOT/'assets/website-package.css').read_text()
+assert '.site-header .navlinks a.nav-scam{' in dcss and '.site-header .navlinks a.nav-scam{' in wpcss,'Scam Help pill styled on every page (design layer + showcase)'
 for bad in ['guarantee','recover your money','get your money back','money back','100%']:assert bad not in sc.lower().replace('doesn’t always get money back',''),bad
 # timelines: twisted rope above the headings (JS-built, decorative), drawn in on view
 assert "rope.className='ds-rope'" in djs and "setAttribute('aria-hidden','true')" in djs and "url(/assets/design/rope-h.svg)" in dcss and "url(/assets/design/rope-v.svg)" in dcss
