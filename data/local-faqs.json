@@ -1,0 +1,72 @@
+{
+ "tech-help-muscatine.html": [
+  {
+   "q": "Do you really come to my house?",
+   "a": "Yes. House calls are what I do. I come to your home or office anywhere in Muscatine, and out to nearby towns too. See the <a href=\"service-area.html\">areas I serve</a>."
+  },
+  {
+   "q": "What does it cost?",
+   "a": "Tech help is $50 an hour, and the first conversation is free. On-site visits have a one-hour minimum. Bigger projects get an estimate before any work starts. If you’re a bit farther out, there may be a small added gas charge on your invoice, and I’ll let you know before we book. Details are on <a href=\"rates.html\">Rates &amp; FAQ</a>."
+  },
+  {
+   "q": "Can you come in the evening or on a weekend?",
+   "a": "Yes. I’m available Sunday through Tuesday and Thursday through Saturday, 8 AM to 8 PM. Wednesdays are for setting appointments, so text or call and we’ll find a time that works."
+  },
+  {
+   "q": "I’m not very good with technology. Will you explain things?",
+   "a": "Absolutely. Ask whatever you need to ask. I’ll explain it in plain English, and we’ll try it together before I leave so you feel comfortable using it."
+  },
+  {
+   "q": "Can you help with scams or a hacked account?",
+   "a": "Yes. If a pop-up, phone call, or strange email has you worried, or you’re locked out of an account, start with my <a href=\"scam-help.html\">scam and hacked-account help</a> page, then give me a call."
+  },
+  {
+   "q": "Is there a local alternative to Geek Squad?",
+   "a": "Yes. If you’d rather work with one local person, I’m Josh, The Tech Tamer, based right here in Muscatine. I come to your home or office, explain things in plain English, and you deal with me from start to finish. Text or call 563-261-0200 and tell me what’s going on."
+  },
+  {
+   "q": "How much does computer help cost in Muscatine?",
+   "a": "With me, it’s $50 an hour. On-site visits have a one-hour minimum, and the first consultation is free. Bigger projects get an estimate before any work starts. If you’re a bit farther out, there may be a small added gas charge on your invoice, and I’ll let you know before we book."
+  },
+  {
+   "q": "How can I find someone to help me with my computer?",
+   "a": "Look for someone local who will come to you and explain what they’re doing. In Muscatine and nearby towns, that can be me. I come to your home, so there’s nothing to haul anywhere. Text or call 563-261-0200, tell me what’s happening, and we’ll set up a time."
+  },
+  {
+   "q": "Do you look at computers for free?",
+   "a": "The first consultation is free. Call or text, tell me what’s happening, and I’ll help you figure out the next step. Hands-on work at your home is $50 an hour with a one-hour minimum, so you’ll know the cost before I come out."
+  }
+ ],
+ "scam-help.html": [
+  {
+   "q": "A pop-up says my computer is infected and gives a phone number. Should I call?",
+   "a": "No. Real companies like Microsoft and Apple don’t put phone numbers in warning pop-ups. Don’t call, don’t let anyone connect to your computer, and don’t pay. Close the browser, or turn the computer off if it won’t close, and text me."
+  },
+  {
+   "q": "I already let someone onto my computer. What now?",
+   "a": "Don’t panic. Turn the computer off or disconnect it from the internet. If you shared banking details or paid anything, call your bank using the number on the back of your card. Then call me, and we’ll check the computer and change the passwords that matter, from a safe device."
+  },
+  {
+   "q": "Can you get my hacked account back?",
+   "a": "I’ll work through every recovery option the company offers with you, step by step. I can’t promise every account can be recovered, because that decision is up to the company. If there’s a way back in, we’ll find it together."
+  },
+  {
+   "q": "What does scam help cost?",
+   "a": "The same as any tech help: $50 an hour, and the first conversation is free. On-site visits have a one-hour minimum. I’ll never ask you for gift cards."
+  },
+  {
+   "q": "How do I keep this from happening again?",
+   "a": "Turn on 2-step verification for your email and important accounts, use a different password for each one, and pause before you click. My <a href=\"digital-kits.html\">Family Scam Safety Kit</a> has a simple Stop. Check. Call. plan you can keep by the phone."
+  }
+ ],
+ "tech-help-quad-cities.html": [
+  {
+   "q": "Which Quad Cities towns do you cover?",
+   "a": "The whole Quad Cities, on both sides of the river: Davenport and Bettendorf in Iowa, and Moline, Rock Island, East Moline, Silvis and Milan in Illinois. I’m in the Quad Cities a couple times a week, so text to get on the schedule."
+  },
+  {
+   "q": "Is there a gas charge?",
+   "a": "Tech help is $50 an hour with a one-hour minimum on-site. Parts of the Quad Cities are a little past my usual 30-mile radius, so there may be a small added gas charge on your invoice. I’ll let you know before we book."
+  }
+ ]
+}

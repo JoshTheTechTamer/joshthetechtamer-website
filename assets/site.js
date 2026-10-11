@@ -54,7 +54,7 @@ if(carousel){
  carousel.addEventListener('mouseenter',()=>{hovered=true;schedule()});carousel.addEventListener('mouseleave',()=>{hovered=false;schedule()});
  carousel.addEventListener('focusin',()=>{paused=true;schedule()});document.addEventListener('visibilitychange',schedule);show(0);schedule();
 }
-if(!preview&&(location.pathname.endsWith('/')||location.pathname.endsWith('index.html'))){const old={services:'/services.html',kits:'/digital-kits.html',rates:'/rates.html',about:'/about.html',booking:'/contact.html'};const dest=old[location.hash.slice(1)];if(dest)location.replace(dest)}
+if(!preview&&(location.pathname.endsWith('/')||location.pathname.endsWith('index.html'))){const old={services:'/services',kits:'/digital-kits',rates:'/rates',about:'/about',booking:'/contact'};const dest=old[location.hash.slice(1)];if(dest)location.replace(dest)}
 if(!preview&&(location.hostname==='joshthetechtamer.com'||location.hostname==='www.joshthetechtamer.com')){
  window.dataLayer=window.dataLayer||[];window.gtag=function(){window.dataLayer.push(arguments)};
  window.gtag('js',new Date());window.gtag('config','G-MTSTNDKSQH');
