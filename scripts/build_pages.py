@@ -17,7 +17,7 @@ meta={
 # Pages without their own share image or a one-word breadcrumb name.
 share_key={'website':'business'};crumb={'website':'Website Package'}
 # Example sites appear only once the client has OK'd it (flags in data/site-config.json, off by default).
-examples={'mvp563':('show_mvp563_example','<article class="service-card"><h2>MVP 563</h2><p>A local business site built and hosted the same way.</p><a class="textlink" href="https://mvp563.com/">Visit mvp563.com</a></article>')}
+examples={'mvp563':('show_mvp563_example','<article class="wp-example"><div class="wp-example-body"><h3>MVP 563</h3><p>A local business site built and hosted the same way.</p><a class="btn wp-btn-blue" href="https://mvp563.com/">Visit mvp563.com<span aria-hidden="true">↗</span></a></div></article>')}
 # The header uses the readable full lockup; the favicon stays the mascot crop.
 def apply_header_logo(s):
  if 'class="brand brand-lockup header-animation"' in s:return s
@@ -59,6 +59,10 @@ for file in (ROOT/'templates').glob('*.html'):
   s=s.replace('href="contact.html"','href="/contact.html?service=Startup%20consulting"')
   s=s.replace('<li>Computer, printer, and network support</li></ul></article>','<li>Computer, printer, and network support</li></ul><a class="textlink" href="website-package.html">See the Website Package</a></article>',1)
  if name=='website-package.html':
+  # Hero wording lives in data/website-package-copy.json so it is easy to edit.
+  copy=json.loads((ROOT/'data/website-package-copy.json').read_text())
+  for k,v in copy.items():s=s.replace('{{'+k+'}}',escape(v,quote=False))
+  assert '{{' not in s,'missing website-package copy key'
   for slot,(flag,card) in examples.items():s=s.replace('<!--EXAMPLE:'+slot+'-->',card if config.get(flag) else '')
  if name=='contact.html':
   s=s.replace('I’ll tame promptly on your schedule','Let’s find a time to tame your tech.')
