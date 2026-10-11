@@ -30,7 +30,7 @@ kit=(ROOT/'digital-kits.html').read_text();base=(ROOT/'templates/digital-kits.ht
 assert kit.count('class="product"')==6
 assert re.findall(r'https://joshthetechtamer.gumroad.com/l/[^" ]+',kit)==re.findall(r'https://joshthetechtamer.gumroad.com/l/[^" ]+',base)
 assert 'class="review-carousel"' in (ROOT/'index.html').read_text()
-assert [r['rating'] for r in json.loads((ROOT/'data/reviews.json').read_text())].count(5)==2
+assert [r['rating'] for r in json.loads((ROOT/'data/reviews.json').read_text())].count(5)==3
 assert 'backups' in (ROOT/'_config.yml').read_text()
 # Website Package page: linked from Rates and For Business; unapproved example sites stay hidden.
 pkg=(ROOT/'website-package.html').read_text();cfg=json.loads((ROOT/'data/site-config.json').read_text())
@@ -50,7 +50,7 @@ hdr=lambda n:re.sub(r' aria-current="page"|\?service=[^"]*','',re.search(r'<head
 for f in ROOT.glob('*.html'):assert hdr(f.name)==hdr('index.html'),('header differs',f.name)
 # Main menu order (desktop nav and mobile slide-out share this markup); current page marked on Website Package.
 nav=re.search(r'<nav class="navlinks".*?</nav>',(ROOT/'index.html').read_text(),re.S).group()
-assert re.findall(r'>([^<>]+)</a>',nav)==['Tech Help','For Business','Get a Website','Digital Kits','Rates & FAQ','About Josh','Request a visit ↗'],nav
+assert re.findall(r'>([^<>]+)</a>',nav)==['Scam Help','Tech Help','For Business','Get a Website','Rates & FAQ','About Josh','Request a visit ↗'],nav
 assert '<a href="/website-package" aria-current="page">Get a Website</a>' in (ROOT/'website-package.html').read_text()
 
 # ---- Website Package showcase (Oct 2026): copy, timeline, slider, features, extras card, motion + weight ----
@@ -142,8 +142,11 @@ assert 'hero-logo.png' not in ''.join((ROOT/n).read_text() for n in pages+['404.
 assert 'image/webp' in idx and 'hero-logo-800.webp' in idx
 for n in ['index.html','services.html']:assert 'href="/tech-help-muscatine"' in (ROOT/n).read_text(),n
 # Homepage hero stays exactly as Josh approved it (only the image is the optimized <picture>, and links are extensionless).
-hero=re.search(r'<section class="hero">.*?</section>',idx,re.S).group()
-assert '<div class="eyebrow">Your local tech guy · Muscatine, Iowa</div><h1>Not very tech savvy?<br><span>I’ll come to you.</span></h1>' in hero and 'eyebrow-h1' not in hero and 'hero-local' not in hero,'home hero changed'
+# (Sitewide redesign: the band and the gold accent on "savvy" are restyling only; the words, buttons and photo stay.)
+hero=re.search(r'<section class="hero ds-hero">.*?</section>',idx,re.S).group()
+plain=re.sub(r'<span class="ds-deco".*?</span></span></span>|<svg class="ds-swoosh".*?</svg>','',hero,flags=re.S).replace('<span class="ds-gold">you</span>','you')
+assert '<div class="eyebrow">Your local tech guy · Muscatine, Iowa</div><h1>Not very tech savvy?<br><span>I’ll come to you.</span></h1>' in plain and 'eyebrow-h1' not in hero and 'hero-local' not in hero,'home hero changed'
+assert '<a class="btn " href="sms:+15632610200">Text Josh<span aria-hidden="true">↗</span></a><a class="btn secondary" href="/services">Explore services<span aria-hidden="true">↗</span></a>' in hero and 'hero-logo-800.webp' in hero and '<a class="art-label" href="tel:+15632610200">563-261-0200</a>' in hero,'home hero buttons/photo'
 assert 'In-home computer &amp; tech help in Muscatine, IA' in idx and 'House calls all over' in idx
 # Josh's final list (small towns first, then the Quad Cities on both sides of the river), no Iowa City/Coralville.
 served=[a['name'] for a in json.loads(re.search(r'<script type="application/ld\+json">(.*?)</script>',idx).group(1))['@graph'][0]['areaServed']]
@@ -169,14 +172,115 @@ for n in ['services.html','business.html']:assert 'residential' in (ROOT/n).read
 assert '<svg class="area-svg"' in (ROOT/'service-area.html').read_text() and 'See me on Google Maps' in (ROOT/'service-area.html').read_text()
 # Review carousel: every entry in data/reviews.json renders verbatim; stars only for the two Google 5-star reviews; Facebook items carry no rating.
 revs=json.loads((ROOT/'data/reviews.json').read_text())
-assert idx.count('class="review-card"')==len(revs) and idx.count('class="review-stars"')==2 and f'1 / {len(revs)}' in idx
-assert len(revs)==13 and '1 / 13' in idx,'13 carousel cards (Barbara M. second card added Oct 11)'
+assert idx.count('class="review-card"')==len(revs) and idx.count('class="review-stars"')==3 and f'1 / {len(revs)}' in idx
+assert len(revs)==14 and '1 / 14' in idx,'14 carousel cards (Barb Google review added Oct 11)'
+assert revs[2]=={'name':'Barb','source':'Google review','quote':'Josh is very knowledgeable and friendly. He helped me 2 times in home and a few times on line. Rates are very reasonable. If you need help contact him.','rating':5},'Barb Google card is card 3'
+assert [x['name'] for x in revs].count('Barbara M.')==3,'her Facebook cards stay Barbara M.'
 assert {'name':'Barbara M.','source':'Facebook comment','quote':'JOSH is very helpful explains things so you understand.','rating':None} in revs
 for r in revs:
  assert escape(r['quote'],quote=True) in idx,('review not verbatim',r['name'])
  assert (r['rating'] is None)==r['source'].startswith('Facebook'),r
 # Never publish the street address (service-area business).
 for n in pages+['404.html']:assert 'Cedar' not in (ROOT/n).read_text() and 'streetAddress' not in (ROOT/n).read_text(),n
+
+# ---- Sitewide redesign (Oct 2026): shared design layer on every page except the Website Package showcase ----
+sys.path.insert(0,str(ROOT/'scripts'));import content_lock
+# Content lock: words, links, images (src + alt), forms, header, footer, review cards, JSON-LD, title/metas/canonical
+# are exactly what was on main before the restyle (data/content-lock.json).
+locked=json.loads((ROOT/'data/content-lock.json').read_text());now=content_lock.snapshot()
+assert set(locked)==set(now),set(locked)^set(now)
+for n in locked:
+ for k in locked[n]:
+  a,b=locked[n][k],now[n][k]
+  if k=='images':a,b=[list(x) for x in a],[list(x) for x in b]
+  assert a==b,('content changed by the redesign',n,k)
+dcss=(ROOT/'assets/design.css').read_text();djs=(ROOT/'assets/design.js').read_text()
+GOLD={'index.html':'you','services.html':'Working','business.html':'work','digital-kits.html':'confidence','rates.html':'pricing','about.html':'local','contact.html':'tame','tech-help-muscatine.html':'Muscatine','service-area.html':'Muscatine','scam-help.html':'Help','tech-help-quad-cities.html':'In-Home','404.html':'wandered'}
+for f in ROOT.glob('*.html'):
+ t=f.read_text();head=t[:t.index('</head>')]
+ if f.name=='website-package.html':assert 'design.css' not in t and 'ds-hero' not in t,'showcase keeps its own layer';continue
+ assert re.search(r'<link rel="stylesheet" href="/assets/design\.css\?v=[^"]+">',head) and re.search(r'<script src="/assets/design\.js\?v=[^"]+" defer></script>',head),('design layer',f.name)
+ assert head.index('site.css')<head.index('design.css'),f.name
+ assert 'family=Montserrat' in head,f.name
+ # one dark hero band (first section), with decorative dots + stripe hidden from assistive tech
+ first=re.search(r'<main[^>]*>\s*<section class="([^"]*)">(<span class="ds-deco" aria-hidden="true">)?',t)
+ assert first and 'ds-hero' in first.group(1).split() and first.group(2),('hero band',f.name)
+ assert t.count('ds-hero')==1 and t.count('class="ds-deco"')==1,f.name
+ # exactly one gold word, inside the H1, aria-hidden swoosh, word itself unchanged
+ h1=re.search(r'<h1\b[^>]*>(.*?)</h1>',t,re.S).group(1)
+ assert t.count('class="ds-gold"')==1 and h1.count('<span class="ds-gold">'+GOLD[f.name]+'<svg class="ds-swoosh"')==1,('gold word',f.name)
+ assert all('aria-hidden="true"' in sv for sv in re.findall(r'<svg class="ds-swoosh"[^>]*>',t))
+ # card icons stay decorative; every shape can draw in
+ for ic in re.findall(r'<div class="icon[ "][^>]*><svg\b.*?</svg>',t,re.S):
+  assert 'aria-hidden="true"' in ic and not re.search(r'<(path|rect|circle|line|polyline|polygon|ellipse)\b(?![^>]*pathLength="1")',ic),(f.name,ic[:80])
+# timelines wherever there are steps
+for n in ['index.html','services.html','tech-help-muscatine.html','tech-help-quad-cities.html']:
+ t=(ROOT/n).read_text();assert t.count('data-ds-steps')==1 and not re.search(r'<div class="grid3">(?=<(?:article|div) class="step">)',t),n
+# motion: hidden states only behind .ds-anim (JS on, no reduced motion); reduced motion = everything still and visible; tilt mouse-only
+for sel,body in re.findall(r'([^{}]*)\{([^{}]*opacity:0[^{}]*)\}',dcss):
+ if 'ds-rv' in sel:assert sel.strip().startswith('.ds-anim'),sel
+assert '.ds-anim .icon:not(.is-drawn) svg *{stroke-dashoffset:1}' in dcss
+rmd=re.search(r'@media\(prefers-reduced-motion:reduce\)\{(.*?)\n\}',dcss,re.S).group(1)
+for need in ['.ds-rv{opacity:1!important;transform:none!important}','.ds-swoosh path{animation:none!important}','.icon svg *{stroke-dashoffset:0!important}','.ds-tilt{transform:none!important}','.ds-rope{clip-path:none!important;transition:none!important}']:assert need in rmd,need
+assert "matchMedia('(prefers-reduced-motion: reduce)')" in djs.replace('mm(','matchMedia(') and "(hover: hover) and (pointer: fine)" in djs and "pointerType!=='mouse'" in djs
+assert 'review-carousel' in djs and "closest('form')" in djs,'no reveal/tilt inside the carousel or forms'
+# weight: the shared layer stays small
+assert len(dcss)<26_000 and len(djs)<9_000,(len(dcss),len(djs))
+# ---- Round 2 (Josh's feedback) ----
+pages={f.name:f.read_text() for f in ROOT.glob('*.html')}
+for n,t in pages.items():
+ # Built-by badge -> Website Package; Digital Kits only in the footer (next to the scam + area links)
+ assert re.search(r'<a class="ttb" href="/website-package">',t) and 'service=Website%20%26%20business%20tech"' not in re.search(r'<footer\b.*?</footer>',t,re.S).group(),n
+ hdr=re.search(r'<header\b.*?</header>',t,re.S).group();ft=re.search(r'<footer\b.*?</footer>',t,re.S).group()
+ if n=='scam-help.html':assert 'digital-kits' not in t and '<a href="/service-area">Areas I serve</a></div>' in ft,'no kit links on the scam page, footer included'
+ else:assert 'digital-kits' not in hdr and '<a href="/service-area">Areas I serve</a><a href="/digital-kits">Digital kits</a></div>' in ft and ft.count('/digital-kits"')==1,n
+ # Scam Help pill in the menu (after Get a Website), current on its own page
+ assert re.search(r'<nav class="navlinks"[^>]*><a class="nav-scam" href="/scam-help"'+(' aria-current="page"' if n=='scam-help.html' else '')+r'><svg class="nav-scam__icon"[^>]*aria-hidden="true"',hdr),n
+ assert '<a href="/scam-help">Scam &amp; hacked accounts</a>' in ft,n
+for sn in ['snippet.html','demo.html','README.md']:
+ st=(ROOT/'templates/built-by-footer'/sn).read_text()
+ assert 'joshthetechtamer.com/contact?service=' not in st and 'https://joshthetechtamer.com/website-package?ref=client-footer' in st,sn
+home=pages['index.html']
+assert '<a class="hero-speech hero-speech-link" href="/website-package">If you like my website,<br><strong>I can build you one!</strong></a>' in home
+assert 'a.hero-speech-link:focus-visible' in dcss and 'a.hero-speech-link:hover' in dcss
+# recliner photo in the "A little help goes a long way." frame; alt describes Josh; no client photo left on the homepage
+fr=re.search(r'<div class="home-paths-frame">(<img\b[^>]*>)</div>',home).group(1)
+assert 'about-cta-laptop-' in fr and 'alt="Josh Sargent, The Tech Tamer, smiling in a recliner with a laptop on his lap"' in fr and 'loading="lazy"' in fr and 'client' not in fr and 'home-client-visit' not in home
+# scam badges: own spot on Services (not stacked with the card button), and on the homepage under the help cards
+WARN='<span class="scam-badge__icon"><svg viewBox="0 0 24 24" aria-hidden="true"'
+svc=pages['services.html']
+assert svc.count('class="scam-badge"')==1 and re.search(r'</ul><a class="scam-badge" href="/scam-help">'+re.escape(WARN),svc) and '<a class="textlink" href="/scam-help">' not in svc
+assert re.search(r'Browse digital kits</a></article></div><a class="scam-badge scam-badge--wide" href="/scam-help">',home)
+assert '.scam-badge:focus-visible' in dcss and 'background:#fff1ec' in dcss and 'color:#8f2a17' in dcss
+# scam page: calm heading, 8-step numbered checklist, help-now block near top and bottom; FAQ JSON-LD matches the visible FAQ (checked above)
+sc=pages['scam-help.html']
+assert '<h2 id="scam-steps-heading">Think you’ve been scammed or hacked? Take a breath. Here’s what to do.</h2>' in sc
+ol=re.search(r'<ol class="calm-steps">(.*?)</ol>',sc,re.S).group(1);assert ol.count('<li>')==8
+hn=[m.start() for m in re.finditer(r'<div class="help-now[ "]',sc)];assert len(hn)==1 and hn[0]>sc.index('id="faq"'),hn
+assert sc.count('Need help right now? Call or text Josh at <a href="tel:+15632610200">563-261-0200</a>.')==1
+# r3: standalone free guide
+assert re.search(r'</ol><div class="reach-out"><div class="reach-out__copy"><h3>Still worried, or need a hand with this\? Reach out to me\.</h3>.*?href="sms:\+15632610200".*?href="tel:\+15632610200"',sc,re.S),'CTA right under the checklist'
+for gid in ['what-to-do','spot-scams','hacked-signs','lock-down','family','report','faq']:assert f'id="{gid}"' in sc and f'href="#{gid}"' in sc,gid
+for topic in ['Fake “virus” pop-ups','Tech-support calls','Bank, Amazon and delivery texts','Gift cards and odd payments','Grandparent and family emergencies','Romance and too-good-to-be-true','Password manager basics','2-step verification','Recovery info']:assert f'<h3>{topic}</h3>' in sc,topic
+ext=set(re.findall(r'href="(https?://[^"]+)"',sc[sc.index('<main'):sc.index('</main>')]))
+assert ext=={'https://reportfraud.ftc.gov/','https://www.identitytheft.gov/','https://www.ic3.gov/'},ext
+assert not re.search(r'(?i)\b(kits?|download\w*|gumroad)\b',sc),'no kit/download mentions on the scam page'
+assert 'If there’s a way back in, we’ll find it together.' in sc
+assert '<div class="scam-hero-art" aria-hidden="true"><svg class="scam-shield"' in sc and '<img' not in re.search(r'<section class="[^"]*ds-hero.*?</section>',sc,re.S).group()
+assert '.scam-shield *{animation:none!important;stroke-dashoffset:0!important}' in dcss
+wpcss=(ROOT/'assets/website-package.css').read_text()
+assert '.site-header .navlinks a.nav-scam{' in dcss and '.site-header .navlinks a.nav-scam{' in wpcss,'Scam Help pill styled on every page (design layer + showcase)'
+for bad in ['guarantee','recover your money','get your money back','money back','100%']:assert bad not in sc.lower().replace('doesn’t always get money back',''),bad
+# timelines: twisted rope above the headings (JS-built, decorative), drawn in on view
+assert "rope.className='ds-rope'" in djs and "setAttribute('aria-hidden','true')" in djs and "url(/assets/design/rope-h.svg)" in dcss and "url(/assets/design/rope-v.svg)" in dcss
+assert (ROOT/'assets/design/rope-h.svg').is_file() and (ROOT/'assets/design/rope-v.svg').is_file()
+assert '.ds-anim .ds-steps.is-drawn .ds-rope{clip-path:inset(0 0 0 0' in dcss and 'url(/assets/design/rope-v.svg)' in (ROOT/'assets/website-package.css').read_text()
+# shared gold icon set: contact methods + rate cards get icons
+icons=json.loads((ROOT/'data/icons.json').read_text());assert {'devices','phone','map-star','globe','cloud-check','pencil'}<=set(icons)
+assert pages['contact.html'].count('<div class="contact-option has-icon"><div class="icon" aria-hidden="true">')==4
+assert pages['rates.html'].count('<div class="icon')==2
+# subtle dot-matrix accents are CSS backgrounds only (nothing announced)
+assert dcss.count('var(--ds-dots')>=6
 if '--production' in sys.argv:
  assert json.loads((ROOT/'data/site-config.json').read_text())['form_mode']=='cloudflare'
  contact=(ROOT/'contact.html').read_text();script=(ROOT/'assets/site.js').read_text()

@@ -1,0 +1,268 @@
+/* Shared design layer (Oct 2026): the Website Package showcase's look on every other page.
+   Loaded after site.css. Decorative only: no content is hidden without JS, and reduced motion shows everything still. */
+/* Montserrat Black (SIL Open Font License), self-hosted + preloaded so hero headlines do not jump when it loads (CLS) */
+@font-face{font-family:"Montserrat DS";font-style:normal;font-weight:900;font-display:swap;src:url(/assets/fonts/montserrat-900-latin.woff2) format("woff2")}
+:root{--ds-deep:#172443;--ds-deep2:#1d2c55;--ds-gold:#f5b731;--ds-gold2:#e39b18;--ds-sky:#12aef5;--ds-sky2:#0a84c9;--ds-head:"Montserrat DS","Montserrat",Arial,Helvetica,sans-serif;
+ --ds-border:linear-gradient(135deg,rgba(245,183,49,.9) 0%,rgba(18,174,245,.55) 48%,rgba(66,77,125,.28) 100%)}
+
+/* ---------- 1) Dark navy hero band: dot grids + diagonal blue stripe ---------- */
+.ds-hero{position:relative;isolation:isolate;overflow:hidden;color:#fff;
+ background:radial-gradient(ellipse at 28% 0%,#2a3d6e 0%,transparent 62%),linear-gradient(180deg,var(--ds-deep2) 0%,var(--ds-deep) 100%)!important}
+.ds-hero::before,.ds-hero::after,.ds-hero .hero-art::before{content:none!important;display:none!important}
+.ds-deco{position:absolute;inset:0;z-index:-1;pointer-events:none;overflow:hidden}
+.ds-deco::before{content:'';position:absolute;inset:0;background:linear-gradient(115deg,transparent 0 6%,rgba(255,255,255,.035) 6% 13%,transparent 13%)}
+.ds-stripe{position:absolute;inset:0;background:linear-gradient(160deg,var(--ds-sky) 0%,var(--ds-sky2) 100%);clip-path:polygon(84% 100%,91% 100%,100% 78%,100% 60%)}
+.ds-dots{position:absolute;width:132px;height:132px;background-image:radial-gradient(rgba(255,255,255,.26) 1.7px,transparent 2.2px);background-size:22px 22px}
+.ds-dots--tr{top:26px;right:26px}.ds-dots--bl{left:46%;bottom:18px;width:110px;height:66px;opacity:.8}
+.ds-hero>.wrap,.ds-hero>h1,.ds-hero>p,.ds-hero>a{position:relative;z-index:1}
+
+/* hero type */
+.ds-hero h1{color:#fff;font-family:var(--ds-head);font-weight:900;letter-spacing:-.03em;line-height:1.07}
+.page-hero.ds-hero h1{font-size:clamp(2.2rem,4.3vw,3.7rem)}
+.tech-help-hero.ds-hero h1{font-size:clamp(2.1rem,3.9vw,3.35rem)}
+.local-hero.ds-hero h1{font-size:clamp(2rem,3.4vw,3rem)}
+.hero.ds-hero h1{font-size:clamp(2.6rem,4.6vw,4.05rem)}
+.ds-hero h1 span:not(.eyebrow-h1):not(.ds-gold){color:var(--ds-sky)}
+.ds-hero h1 .eyebrow-h1{font-family:Arial,Helvetica,sans-serif;font-weight:700;letter-spacing:.17em;color:#aebbd6;line-height:1.4}
+.ds-hero .eyebrow{color:#aebbd6}
+.ds-hero .eyebrow::before{background:var(--ds-sky)}
+.ds-hero .lead,.ds-hero p{color:#cdd8ec}
+.ds-hero .breadcrumb{color:#aebbd6}.ds-hero .breadcrumb a{color:#e1e8f6}.ds-hero .breadcrumb a:hover{color:#fff}.ds-hero .breadcrumb span{color:#6f7fa6}
+.ds-hero .hero-facts{color:#aebbd6}.ds-hero .hero-facts b{color:#fff}
+.ds-hero .hero-facts>div{padding-left:12px;border-left:2px solid var(--ds-gold)}
+.ds-hero p a:not(.btn):not(.textlink){color:#9fdcff!important}
+.ds-hero a:focus-visible,.ds-hero .btn:focus-visible,.ds-hero .textlink:focus-visible{outline-color:var(--ds-gold)}
+
+/* hero buttons: gold primary, slate-blue secondary (same ribbon shape) */
+.ds-hero .btn:not(.secondary):not(.light):not(.outline-light){color:var(--ds-deep)!important}
+.ds-hero .btn:not(.secondary):not(.light):not(.outline-light)::before{background:var(--ds-gold)}
+.ds-hero .btn:not(.secondary):not(.light):not(.outline-light):hover::before{background:#ffc94d}
+.ds-hero .btn.secondary::before,.ds-hero .textlink::before{background:#3a4f82}
+.ds-hero .btn.secondary:hover::before,.ds-hero .textlink:hover::before{background:var(--ds-sky2)}
+.ds-hero .textlink{color:#fff!important}
+
+/* gold text-art accent with a hand-drawn swoosh (same as the showcase's "built") */
+.ds-gold{position:relative;display:inline-block;color:var(--ds-gold)!important;white-space:nowrap}
+.ds-swoosh{position:absolute;left:-3%;bottom:-.17em;width:106%;height:.3em;color:var(--ds-gold);overflow:visible;pointer-events:none}
+.ds-swoosh path{stroke-dasharray:1;stroke-dashoffset:0;animation:ds-draw 1s cubic-bezier(.6,0,.3,1) .45s backwards}
+.ds-swoosh path+path{animation-delay:.75s}
+@keyframes ds-draw{from{stroke-dashoffset:1}}
+
+/* home hero: the mascot + phone ribbon sit on a light "spotlight" panel so the navy wordmark stays readable */
+.hero.ds-hero{background:radial-gradient(ellipse at 22% 0%,#2a3d6e 0%,transparent 60%),linear-gradient(180deg,var(--ds-deep2) 0%,var(--ds-deep) 100%)!important}
+.ds-hero .hero-logo-stack{border:2px solid transparent;border-radius:26px;padding:6px 18px 18px;
+ background:radial-gradient(circle at 50% 42%,#fff 0%,#f4f7fc 55%,#e3eaf6 100%) padding-box,var(--ds-border) border-box;
+ box-shadow:0 30px 60px rgba(5,10,30,.42),0 0 0 8px rgba(255,255,255,.04)}
+.ds-hero .hero-speech{margin-top:14px}
+.ds-hero+.ribbon{box-shadow:inset 0 1px 0 rgba(255,255,255,.07)}
+
+/* page-hero photos: the offset block behind the photo becomes a gold-to-blue gradient */
+.ds-hero .help-photo::before{background:linear-gradient(135deg,var(--ds-gold) 0%,var(--ds-sky) 60%,var(--ds-sky2) 100%)}
+.ds-hero .help-photo img{border-color:#fff;box-shadow:0 26px 54px rgba(5,10,30,.45)}
+
+/* 404 */
+.notfound.ds-hero{padding:110px 25px 120px}
+.notfound.ds-hero h1{font-size:clamp(2.3rem,5vw,4rem)}
+
+/* ---------- 2) Polished cards: subtle gradient border + soft depth ---------- */
+.path-card,.service-card{border:1px solid transparent!important;
+ background:linear-gradient(135deg,#edf1f8 0 24px,#fff 24px) padding-box,var(--ds-border) border-box!important;
+ box-shadow:0 14px 34px rgba(35,51,92,.08)}
+.price-card:not(.featured),.product,.review-card,.local-review-grid .review-card{border:1px solid transparent!important;
+ background:linear-gradient(#fff,#fff) padding-box,var(--ds-border) border-box!important;box-shadow:0 16px 38px rgba(35,51,92,.08)}
+.review-card{border-top:5px solid transparent!important}
+.price-card.featured{box-shadow:0 0 0 1px rgba(245,183,49,.5),0 26px 54px rgba(23,36,67,.32)}
+.price-card.featured .price{color:#fff}
+.notice{border-left:3px solid;border-image:linear-gradient(180deg,var(--ds-gold),var(--ds-sky)) 1}
+
+/* gold accent icons that draw themselves in */
+.icon svg *{stroke-dasharray:1;stroke-dashoffset:0}
+.ds-anim .icon:not(.is-drawn) svg *{stroke-dashoffset:1}
+.ds-anim .icon.is-drawn svg *{transition:stroke-dashoffset 1.25s cubic-bezier(.5,0,.25,1) .25s}
+
+/* tilt + glow (JS adds these only for a mouse / fine pointer) */
+.ds-tilt{transform:perspective(1100px) rotateX(var(--rx,0deg)) rotateY(var(--ry,0deg))}
+.ds-tilt.is-tilt{transition:transform .12s linear,box-shadow .3s ease!important;box-shadow:0 26px 50px rgba(35,51,92,.16)}
+.ds-glow{position:absolute;inset:0;pointer-events:none;opacity:0;transition:opacity .3s ease;z-index:1;
+ background:radial-gradient(340px circle at var(--mx,50%) var(--my,50%),rgba(18,174,245,.11),transparent 62%)}
+.price-card.featured .ds-glow{background:radial-gradient(360px circle at var(--mx,50%) var(--my,50%),rgba(255,255,255,.12),transparent 62%)}
+.is-tilt>.ds-glow{opacity:1}
+
+/* ---------- 3) Scroll reveal (only once JS has added .ds-anim) ---------- */
+.ds-rv{transition:opacity .7s ease,transform .7s cubic-bezier(.2,.8,.2,1);transition-delay:calc(var(--i,0)*90ms)}
+.ds-anim .ds-rv:not(.is-in){opacity:0;transform:translateY(28px)}
+
+/* ---------- 4) Step timelines: a twisted gold rope (like the logo's lasso) above the headings ---------- */
+.ds-steps{position:relative;--ds-n:54px;--ds-rope:10px}
+.ds-steps .step{position:relative;z-index:1;display:flex;flex-direction:column;align-items:center;text-align:center;padding:0 8px!important}
+.ds-steps .step p{max-width:32ch}
+.ds-steps .number{position:relative;z-index:2;width:var(--ds-n);height:var(--ds-n);flex:0 0 auto;border-radius:50%;display:grid!important;place-items:center;gap:0!important;
+ font-family:var(--ds-head);font-weight:900;font-size:17px!important;color:#fff!important;background:#424d7d;letter-spacing:0;
+ border:3px solid #33426f;box-shadow:0 0 0 6px #fff,0 10px 20px rgba(35,51,92,.22);transition:border-color .4s ease,box-shadow .4s ease,transform .4s ease;margin:0 0 24px!important}
+.section.tint .ds-steps .number{box-shadow:0 0 0 6px #eef1f8,0 10px 20px rgba(35,51,92,.22)}
+.ds-steps .number::after{content:none!important}
+.ds-steps .step.is-on .number{border-color:var(--ds-gold);box-shadow:0 0 0 6px #fff,0 0 0 9px rgba(245,183,49,.3),0 10px 20px rgba(35,51,92,.22)}
+.section.tint .ds-steps .step.is-on .number{box-shadow:0 0 0 6px #eef1f8,0 0 0 9px rgba(245,183,49,.3),0 10px 20px rgba(35,51,92,.22)}
+.ds-anim .ds-steps .step:not(.is-on) .number{transform:scale(.9)}
+.ds-rope{position:absolute;z-index:0;left:var(--l,0);top:var(--t,0);width:var(--w,0);height:var(--h,0);border-radius:var(--ds-rope);pointer-events:none;
+ background:linear-gradient(180deg,rgba(255,255,255,.3),rgba(255,255,255,0) 42%,rgba(70,40,0,.3)),url(/assets/design/rope-h.svg) repeat-x 0 0/14px 100%;
+ box-shadow:0 3px 8px rgba(120,80,10,.28);clip-path:inset(0 0 0 0 round var(--ds-rope))}
+.ds-steps.is-vertical .ds-rope{background:linear-gradient(90deg,rgba(255,255,255,.3),rgba(255,255,255,0) 42%,rgba(70,40,0,.3)),url(/assets/design/rope-v.svg) repeat-y 0 0/100% 14px}
+.ds-anim .ds-rope{clip-path:inset(0 100% 0 0 round var(--ds-rope));transition:clip-path 1.6s cubic-bezier(.55,0,.3,1)}
+.ds-anim .ds-steps.is-vertical .ds-rope{clip-path:inset(0 0 100% 0 round var(--ds-rope))}
+.ds-anim .ds-steps.is-drawn .ds-rope{clip-path:inset(0 0 0 0 round var(--ds-rope))}
+@media(max-width:620px){
+ .ds-dots{width:88px;height:88px}.ds-dots--tr{top:12px;right:8px}.ds-dots--bl{display:none}
+ .ds-stripe{clip-path:polygon(72% 100%,84% 100%,100% 88%,100% 74%)}
+ .ds-hero .hero-logo-stack{padding:4px 12px 14px;border-radius:20px}
+ .notfound.ds-hero{padding:70px 22px 80px}
+ .page-hero.ds-hero h1{font-size:31px}.tech-help-hero.ds-hero h1{font-size:30px}.local-hero.ds-hero h1{font-size:28px}
+ .ds-steps{--ds-n:46px;--ds-rope:9px}
+ .ds-steps .step{display:grid;grid-template-columns:var(--ds-n) minmax(0,1fr);column-gap:20px;align-items:start;text-align:left;padding:0 0 10px!important}
+ .ds-steps .number{grid-row:1/span 3;margin:0!important;font-size:15px!important}
+ .ds-steps .step>:not(.number){grid-column:2}
+ .ds-steps .step h3{margin-top:10px}
+ .ds-steps .step p{max-width:none}
+}
+
+/* ---------- 5) Shared gold line-icon tiles (same as the Website Package essentials grid) ---------- */
+.icon,.path-card .icon,.service-card .icon{width:52px!important;height:52px!important;border-radius:15px!important;clip-path:none!important;flex:0 0 auto;
+ display:grid!important;place-items:center;background:linear-gradient(140deg,#23335c,#424d7d)!important;color:var(--ds-gold)!important;box-shadow:0 10px 20px rgba(35,51,92,.22)}
+.icon svg{width:28px!important;height:28px!important;fill:none;stroke:currentColor;stroke-width:1.7!important;stroke-linecap:round;stroke-linejoin:round}
+.home-paths .path-card .icon{width:46px!important;height:46px!important}
+.icon--light{background:rgba(255,255,255,.1)!important;box-shadow:inset 0 0 0 1px rgba(255,255,255,.18)!important;margin-bottom:18px}
+.price-card>.icon{margin-bottom:18px}
+.contact-option.has-icon{display:grid;grid-template-columns:52px minmax(0,1fr);column-gap:18px;align-items:start}
+.contact-option.has-icon>.icon{grid-row:1/span 6}
+.contact-option.has-icon>:not(.icon){grid-column:2}
+.contact-option h2::before{content:none!important}
+
+/* ---------- 6) Subtle dot-matrix accents (CSS backgrounds: decorative, not read by assistive tech) ---------- */
+:root{--ds-dots:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='72' height='48'%3E%3Cdefs%3E%3Cpattern id='p' width='12' height='12' patternUnits='userSpaceOnUse'%3E%3Ccircle cx='6' cy='6' r='1.6' fill='%23424d7d'/%3E%3C/pattern%3E%3C/defs%3E%3Crect width='72' height='48' fill='url(%23p)' opacity='.28'/%3E%3C/svg%3E");
+ --ds-dots-w:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='72' height='48'%3E%3Cdefs%3E%3Cpattern id='p' width='12' height='12' patternUnits='userSpaceOnUse'%3E%3Ccircle cx='6' cy='6' r='1.6' fill='%23ffffff'/%3E%3C/pattern%3E%3C/defs%3E%3Crect width='72' height='48' fill='url(%23p)' opacity='.22'/%3E%3C/svg%3E")}
+main .section:not(.tint):not(.ds-hero){background:var(--ds-dots) no-repeat right max(18px,3%) top 22px/72px 48px}
+main .section.tint{background:var(--ds-dots) no-repeat left max(14px,2%) bottom 20px/72px 48px,linear-gradient(118deg,#eef1f8 0%,#eef1f8 70%,#e7ecf5 70%,#e7ecf5 83%,#f3f5f9 83%)}
+.path-card,.service-card{background:var(--ds-dots) no-repeat right 14px top 16px/48px 32px padding-box,linear-gradient(135deg,#edf1f8 0 24px,#fff 24px) padding-box,var(--ds-border) border-box!important}
+.price-card:not(.featured),.product,.review-card,.local-review-grid .review-card{background:var(--ds-dots) no-repeat right 14px top 16px/48px 32px padding-box,linear-gradient(#fff,#fff) padding-box,var(--ds-border) border-box!important}
+.price-card.featured{background:var(--ds-dots-w) no-repeat right 18px top 18px/60px 40px,linear-gradient(135deg,var(--navy) 0%,var(--navy) 78%,var(--slate) 78%)!important}
+.cta .wrap{background:var(--ds-dots-w) no-repeat right 8px top 14px/72px 48px}
+.footer .footer-grid{background:var(--ds-dots) no-repeat right 0 top 0/60px 40px}
+
+/* ---------- 7) Homepage speech bubble = link to the Website Package ---------- */
+a.hero-speech-link{display:block;color:#fff!important;text-decoration:none;cursor:pointer;transition:transform .2s ease,background .2s ease,box-shadow .2s ease}
+a.hero-speech-link strong{text-decoration:underline;text-decoration-color:rgba(245,183,49,.0);text-underline-offset:3px;transition:text-decoration-color .2s ease}
+a.hero-speech-link:hover,a.hero-speech-link:focus-visible{background:#2f3f73;transform:translateY(-2px);box-shadow:0 10px 22px rgba(35,51,92,.3)}
+a.hero-speech-link:hover::before,a.hero-speech-link:focus-visible::before{background:#2f3f73}
+a.hero-speech-link:hover strong,a.hero-speech-link:focus-visible strong{text-decoration-color:var(--ds-gold)}
+a.hero-speech-link:focus-visible{outline:3px solid var(--ds-gold)!important;outline-offset:4px}
+
+/* ---------- 8) Calm scam warning badge (soft red, amber icon) ---------- */
+.scam-badge{display:inline-flex;align-items:center;gap:12px;margin:4px 0 18px;padding:11px 18px 11px 12px;border-radius:999px;align-self:flex-start;
+ background:#fff1ec;border:1px solid #f3b8a6;color:#8f2a17!important;font-size:15px;font-weight:700;line-height:1.35;text-decoration:none;
+ box-shadow:0 6px 16px rgba(180,60,30,.1);transition:background .2s ease,transform .2s ease,box-shadow .2s ease}
+.scam-badge__icon{flex:0 0 auto;display:grid;place-items:center;width:34px;height:34px;border-radius:50%;background:#fff;box-shadow:0 0 0 1px #f6cdbf}
+.scam-badge__icon svg{width:22px;height:22px}
+.scam-badge:hover,.scam-badge:focus-visible{background:#ffe5db;color:#7a2213!important;transform:translateY(-1px);box-shadow:0 10px 22px rgba(180,60,30,.16)}
+.scam-badge:focus-visible{outline:3px solid #c2410c!important;outline-offset:3px}
+.scam-badge--wide{display:flex;width:100%;margin:26px 0 0;padding:16px 22px 16px 16px;border-radius:18px;font-weight:400;font-size:16px}
+.scam-badge--wide strong{font-weight:800}
+.scam-badge--wide .scam-badge__icon{width:44px;height:44px}
+.scam-badge--wide .scam-badge__icon svg{width:26px;height:26px}
+.scam-badge__go{margin-left:auto;font-size:22px;font-weight:800;padding-left:10px}
+
+/* ---------- 9) Scam page: calm checklist + "Need help right now?" ---------- */
+.help-now{display:grid;grid-template-columns:auto minmax(0,1fr) auto;align-items:center;gap:18px 22px;margin:0 0 30px;padding:20px 24px;border-radius:20px;
+ border:2px solid transparent;background:linear-gradient(#fff7f1,#fff7f1) padding-box,linear-gradient(135deg,#f2a516,#e8735a 60%,#f3b8a6) border-box;box-shadow:0 14px 30px rgba(180,60,30,.1)}
+.help-now--bottom{margin:0 0 26px}
+.help-now__icon{display:grid;place-items:center;width:52px;height:52px;border-radius:15px;background:linear-gradient(140deg,#23335c,#424d7d);color:var(--ds-gold)}
+.help-now__icon svg{width:28px;height:28px;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:1}
+.help-now__title{margin:0 0 4px;font-size:20px;font-weight:800;color:#7a2213;line-height:1.3}
+.help-now__title a{color:#7a2213;text-decoration:underline;text-underline-offset:3px;white-space:nowrap}
+.help-now__sub{margin:0;font-size:14px;color:var(--muted)}
+.help-now .actions{margin:0;display:flex;gap:10px;flex-wrap:wrap}
+.calm-steps{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px 22px;counter-reset:none}
+.calm-steps li{display:grid;grid-template-columns:44px minmax(0,1fr);gap:16px;align-items:start;padding:18px 20px;border-radius:16px;border:1px solid transparent;
+ background:linear-gradient(#fff,#fff) padding-box,linear-gradient(135deg,rgba(242,165,22,.7),rgba(18,174,245,.4) 55%,rgba(66,77,125,.25)) border-box;box-shadow:0 10px 24px rgba(35,51,92,.07)}
+.calm-steps__n{display:grid;place-items:center;width:44px;height:44px;border-radius:50%;background:#424d7d;color:#fff;font-family:var(--ds-head);font-weight:900;font-size:17px;box-shadow:0 0 0 3px #fbe2b0}
+.calm-steps h3{font-size:18px;margin:2px 0 6px;letter-spacing:-.015em}
+.calm-steps p{margin:0;font-size:15.5px;color:var(--muted)}
+@media(max-width:850px){.help-now{grid-template-columns:auto minmax(0,1fr)}.help-now .actions{grid-column:1/-1}.calm-steps{grid-template-columns:1fr}}
+@media(max-width:620px){.help-now{padding:18px;gap:14px}.help-now__title{font-size:18px}.help-now .actions .btn{flex:1 1 auto}
+ .scam-badge--wide{font-size:15px;padding:14px 16px 14px 12px}.scam-badge__go{display:none}
+ main .section:not(.tint):not(.ds-hero){background-size:54px 36px}}
+
+
+/* ---------- 10) Scam Help: nav pill, hero shield, free guide ---------- */
+.site-header .navlinks a.nav-scam{display:inline-flex;align-items:center;gap:6px;padding:7px 12px 7px 9px;border:1px solid #f3b8a6;border-bottom:1px solid #f3b8a6;border-radius:999px;background:#fff1ec;color:#8f2a17;font-weight:700;line-height:1.1}
+.nav-scam__icon{width:16px;height:16px;flex:0 0 auto}
+.site-header .navlinks a.nav-scam:hover,.site-header .navlinks a.nav-scam:focus-visible{background:#ffe2d6;color:#7a2213}
+.site-header .navlinks a.nav-scam:focus-visible{outline:3px solid #c2410c;outline-offset:3px}
+.site-header .navlinks a.nav-scam[aria-current=page]{border-color:#e8735a;box-shadow:0 0 0 2px rgba(232,115,90,.25);color:#7a2213}
+@media(min-width:1251px){.site-header .nav-row{gap:12px}.site-header .navlinks{gap:8px}.site-header .navlinks .nav-contact{padding:12px 16px}.site-header .navlinks a.nav-scam{padding:6px 10px 6px 8px;gap:5px}}
+@media(max-width:1250px){.site-header .navlinks a.nav-scam{align-self:flex-start;margin:4px 0;padding:9px 16px 9px 12px}.nav-scam__icon{width:18px;height:18px}}
+.scam-hero-art{display:grid;place-items:center;align-self:center;position:relative}
+.scam-shield{width:min(100%,380px);height:auto;overflow:visible;filter:drop-shadow(0 22px 36px rgba(0,0,0,.35))}
+.scam-shield__draw{stroke-dasharray:1;stroke-dashoffset:0}
+.ds-anim .scam-shield__draw{stroke-dashoffset:1;animation:scamDraw 1.4s .25s cubic-bezier(.55,0,.3,1) forwards}
+.ds-anim .scam-shield__inner{animation-delay:.7s}
+.ds-anim .scam-shield__check{animation-duration:.8s;animation-delay:1.35s}
+.ds-anim .scam-shield__glow{animation:scamBreathe 6s ease-in-out infinite;transform-origin:160px 160px}
+.ds-anim .scam-shield__spark{animation:scamSpark 3.6s ease-in-out infinite}
+@keyframes scamDraw{to{stroke-dashoffset:0}}
+@keyframes scamBreathe{0%,100%{opacity:.75;transform:scale(.96)}50%{opacity:1;transform:scale(1.03)}}
+@keyframes scamSpark{0%,100%{opacity:.55}50%{opacity:1}}
+.reach-out{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:center;gap:18px 28px;margin:30px 0 0;padding:26px 30px;border-radius:22px;color:#fff;position:relative;overflow:hidden;
+ background:var(--ds-dots-w) no-repeat right 18px top 14px/72px 48px,linear-gradient(135deg,#1c2a52,#2d3d70 70%,#424d7d)}
+.reach-out h3{margin:0 0 6px;color:#fff;font-size:24px;letter-spacing:-.02em}
+.reach-out p{margin:0;color:#d7def0}
+.reach-out .actions{margin:0;display:flex;gap:12px;flex-wrap:wrap}
+.reach-out .btn{background:none}
+.reach-out .btn:not(.secondary)::before{background:var(--ds-gold)}
+.reach-out .btn:not(.secondary){color:#1c2a52!important}
+.reach-out .btn.secondary::before{background:rgba(255,255,255,.16)}
+.scam-toc{margin:30px 0 0;padding:20px 24px;border-radius:18px;border:1px solid transparent;background:linear-gradient(#f6f8fc,#f6f8fc) padding-box,var(--ds-border) border-box}
+.scam-toc__title{margin:0 0 10px;font-weight:800;color:var(--navy);font-size:15px;letter-spacing:.02em}
+.scam-toc ul{list-style:none;margin:0;padding:0;display:flex;flex-wrap:wrap;gap:8px 10px}
+.scam-toc a{display:inline-block;padding:7px 14px;border-radius:999px;background:#fff;border:1px solid #d6dcea;font-size:14px;font-weight:600;color:#23335c;text-decoration:none}
+.scam-toc a:hover,.scam-toc a:focus-visible{border-color:var(--ds-gold);background:#fff8e6}
+.guide-sec{scroll-margin-top:20px}
+.guide-head{display:grid;grid-template-columns:auto minmax(0,1fr);gap:20px;align-items:start;margin-bottom:30px;max-width:860px}
+.guide-head .icon{width:60px!important;height:60px!important;border-radius:17px!important}
+.guide-head .icon svg{width:32px!important;height:32px!important}
+.guide-head h2{margin:4px 0 10px}
+.guide-head p{margin:0;color:var(--muted);font-size:17px}
+.guide-card p{margin-bottom:0}
+.guide-card a{font-weight:700}
+.report-grid{gap:22px}
+.red-flags{margin-top:26px}
+.guide-split{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,1fr);gap:28px;align-items:start}
+.guide-list li{font-size:16px}
+.guide-aside{padding:24px 26px;border-radius:18px;border:1px solid transparent;background:linear-gradient(#fff7f1,#fff7f1) padding-box,linear-gradient(135deg,#f2a516,#e8735a 60%,#f3b8a6) border-box}
+.guide-aside h3{margin:0 0 8px;color:#7a2213}
+.guide-aside p{margin:0}
+.guide-tips{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:22px 30px}
+.guide-tips li{display:grid;grid-template-columns:52px minmax(0,1fr);gap:16px;align-items:start}
+.guide-tips h3{margin:2px 0 6px;font-size:18px}
+.guide-tips p{margin:0;color:var(--muted)}
+.scam-more{margin:0;text-align:center}
+#faq{scroll-margin-top:20px}
+@media(max-width:850px){.reach-out{grid-template-columns:1fr}.guide-split,.guide-tips{grid-template-columns:1fr}.report-grid{grid-template-columns:1fr}
+ .scam-hero-art{margin-top:10px}.scam-shield{width:min(78%,300px)}}
+@media(max-width:620px){.reach-out{padding:22px 20px}.reach-out h3{font-size:20px}.reach-out .btn{flex:1 1 auto}
+ .guide-head{grid-template-columns:1fr;gap:12px}.guide-head .icon{width:52px!important;height:52px!important}
+ .scam-shield{width:min(70%,240px)}}
+
+/* ---------- Reduced motion: everything visible and still ---------- */
+@media(prefers-reduced-motion:reduce){
+ .ds-rv,.ds-steps .number,.ds-glow,.icon svg *{transition:none!important}
+ .ds-rv{opacity:1!important;transform:none!important}
+ .ds-swoosh path{animation:none!important}
+ .icon svg *{stroke-dashoffset:0!important}
+ .ds-tilt{transform:none!important}
+ .ds-steps .number{transform:none!important}
+ .ds-rope{clip-path:none!important;transition:none!important}
+ .scam-shield *{animation:none!important;stroke-dashoffset:0!important}
+ .scam-badge,a.hero-speech-link{transition:none!important;transform:none!important}
+}
+.ds-hero .hero-speech{color:#fff}
+.ds-tilt{position:relative}
