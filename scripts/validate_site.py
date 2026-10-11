@@ -2,7 +2,7 @@ from pathlib import Path
 from html.parser import HTMLParser
 from urllib.parse import urlparse,unquote
 import json,re,sys
-from html import unescape
+from html import unescape,escape
 ROOT=Path(__file__).resolve().parents[1]
 class Page(HTMLParser):
  def __init__(self,s):super().__init__();self.tags=[];self.stack=[];self.feed(s);assert not self.stack,self.stack
@@ -106,6 +106,12 @@ assert 'Illinois-side customers can ask' not in (ROOT/'tech-help-quad-cities.htm
 # Security cameras/systems are residential (in-home) only: never offered for businesses (not licensed for commercial security in Iowa).
 for n in ['services.html','business.html']:assert 'residential' in (ROOT/n).read_text() and 'commercial or business security' in (ROOT/n).read_text(),n
 assert '<svg class="area-svg"' in (ROOT/'service-area.html').read_text() and 'See me on Google Maps' in (ROOT/'service-area.html').read_text()
+# Review carousel: every entry in data/reviews.json renders verbatim; stars only for the two Google 5-star reviews; Facebook items carry no rating.
+revs=json.loads((ROOT/'data/reviews.json').read_text())
+assert idx.count('class="review-card"')==len(revs) and idx.count('class="review-stars"')==2 and f'1 / {len(revs)}' in idx
+for r in revs:
+ assert escape(r['quote'],quote=True) in idx,('review not verbatim',r['name'])
+ assert (r['rating'] is None)==r['source'].startswith('Facebook'),r
 # Never publish the street address (service-area business).
 for n in pages+['404.html']:assert 'Cedar' not in (ROOT/n).read_text() and 'streetAddress' not in (ROOT/n).read_text(),n
 if '--production' in sys.argv:
