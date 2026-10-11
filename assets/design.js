@@ -29,38 +29,34 @@
     icons.forEach(function(el){ico.observe(el);});
   }else{icons.forEach(function(el){el.classList.add('is-drawn');});}
 
-  /* 3) Step timelines: a gold line runs through the step numbers and fills as you scroll. */
+  /* 3) Step timelines: a twisted gold rope runs through the number circles (above the headings) and draws itself in
+        when the steps scroll into view; each step lights up as the rope reaches it. */
   all('[data-ds-steps]').forEach(function(tl){
     var steps=all('.step',tl),nums=steps.map(function(s){return s.querySelector('.number');});
     if(steps.length<2||nums.indexOf(null)>-1)return;
-    var track=d.createElement('span'),fill=d.createElement('span');
-    track.className='ds-track';fill.className='ds-fill';track.setAttribute('aria-hidden','true');fill.setAttribute('aria-hidden','true');
-    tl.insertBefore(fill,tl.firstChild);tl.insertBefore(track,tl.firstChild);
-    var vertical=false;
+    var rope=d.createElement('span');rope.className='ds-rope';rope.setAttribute('aria-hidden','true');
+    tl.insertBefore(rope,tl.firstChild);
+    var dur=1600,drawn=false;
     function layout(){
       var b=tl.getBoundingClientRect(),a=nums[0].getBoundingClientRect(),z=nums[nums.length-1].getBoundingClientRect();
       var ax=a.left+a.width/2-b.left,ay=a.top+a.height/2-b.top,zx=z.left+z.width/2-b.left,zy=z.top+z.height/2-b.top;
-      vertical=Math.abs(zy-ay)>Math.abs(zx-ax);tl.classList.toggle('is-vertical',vertical);
-      var t=5;
+      var vertical=Math.abs(zy-ay)>Math.abs(zx-ax),t=parseFloat(getComputedStyle(tl).getPropertyValue('--ds-rope'))||10;
+      tl.classList.toggle('is-vertical',vertical);
       if(vertical){tl.style.setProperty('--l',(ax-t/2)+'px');tl.style.setProperty('--t',ay+'px');tl.style.setProperty('--w',t+'px');tl.style.setProperty('--h',(zy-ay)+'px');}
       else{tl.style.setProperty('--l',ax+'px');tl.style.setProperty('--t',(ay-t/2)+'px');tl.style.setProperty('--w',(zx-ax)+'px');tl.style.setProperty('--h',t+'px');}
     }
-    function paint(){
-      var p=1;
-      if(!reduce){
-        var b=tl.getBoundingClientRect(),vh=w.innerHeight;
-        p=vertical?(vh*.62-(b.top+nums[0].offsetHeight/2))/Math.max(1,b.height-nums[0].offsetHeight):(vh*.86-b.top)/(vh*.42);
-        p=Math.max(0,Math.min(1,p));
-      }
-      tl.style.setProperty('--fill',p.toFixed(3));
-      steps.forEach(function(s,i){if(p>=i/(steps.length-1)-.001)s.classList.add('is-on');else if(!reduce)s.classList.remove('is-on');});
+    function draw(){
+      if(drawn)return;drawn=true;tl.classList.add('is-drawn');
+      steps.forEach(function(s,i){
+        if(reduce){s.classList.add('is-on');return;}
+        setTimeout(function(){s.classList.add('is-on');},Math.round(dur*.9*i/(steps.length-1)));
+      });
     }
-    layout();paint();
-    var ticking=false;
-    function onScroll(){if(!ticking){ticking=true;requestAnimationFrame(function(){ticking=false;paint();});}}
-    if(!reduce){w.addEventListener('scroll',onScroll,{passive:true});}
-    w.addEventListener('resize',function(){layout();paint();});
-    w.addEventListener('load',function(){layout();paint();});
+    layout();
+    w.addEventListener('resize',layout);w.addEventListener('load',layout);
+    if(reduce||!hasIO){draw();return;}
+    var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){requestAnimationFrame(function(){requestAnimationFrame(draw);});io.disconnect();}});},{rootMargin:'0px 0px -18% 0px',threshold:.35});
+    io.observe(tl);
   });
 
   /* 4) Cards: subtle tilt + glow for mouse users only (no tilt on touch, none with reduced motion). */

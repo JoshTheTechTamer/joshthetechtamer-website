@@ -320,3 +320,8 @@
  .wp-feat-icon svg *{stroke-dashoffset:0!important;transition:none!important}
  .wp-tl{--fill:1!important}
 }
+
+/* Sitewide rope (Oct 2026): the timeline's gold fill uses the same twisted-rope texture as the rest of the site */
+.wp-tl::before,.wp-tl::after{width:10px;margin-left:-5px;border-radius:10px}
+.wp-tl::after{background:linear-gradient(90deg,rgba(255,255,255,.3),rgba(255,255,255,0) 42%,rgba(70,40,0,.32)),url(/assets/design/rope-v.svg) repeat-y 0 0/100% 14px;box-shadow:0 0 16px rgba(245,183,49,.4)}
+@media(max-width:760px){.wp-tl::before,.wp-tl::after{margin-left:-5px}}

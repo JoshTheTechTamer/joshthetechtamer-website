@@ -42,7 +42,7 @@ so this subfolder never gets built as a page.
 The link opens in a new tab with `rel="noopener"` and looks like this:
 
 ```
-https://joshthetechtamer.com/contact?service=Website%20%26%20business%20tech&ref=client-footer&utm_source=CLIENT-SLUG&utm_medium=referral&utm_campaign=built-by
+https://joshthetechtamer.com/website-package?ref=client-footer&utm_source=CLIENT-SLUG&utm_medium=referral&utm_campaign=built-by
 ```
 
 `ref=client-footer` plus the UTM tags show which client site sent each visitor once
@@ -59,8 +59,7 @@ analytics (for example Cloudflare Web Analytics or GA4) is turned on.
 ## On joshthetechtamer.com itself
 
 Every page's `.footer-bottom` has a self-referencing version: **BUILT BY [lockup] · Want a site like this? →**. It links to
-`/contact.html?service=Website%20%26%20business%20tech`, which preselects
-"Website & business tech" on the contact form. The same `.ttb` styles are in
+`/website-package`, the Get a Website page (client sites link to `https://joshthetechtamer.com/website-package` with the referral tags above). The same `.ttb` styles are in
 `assets/site.css`, along with footer overrides so the theme's `.footer a` and mobile
 `.footer-bottom span` rules don't restyle it. The lockup crop is the full transparent `assets/hero-logo.png` with 14px of padding around everything, so the phone, the rope loop and the wordmark underline are all fully visible.
 

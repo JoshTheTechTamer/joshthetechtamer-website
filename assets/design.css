@@ -74,11 +74,8 @@
 .price-card.featured{box-shadow:0 0 0 1px rgba(245,183,49,.5),0 26px 54px rgba(23,36,67,.32)}
 .price-card.featured .price{color:#fff}
 .notice{border-left:3px solid;border-image:linear-gradient(180deg,var(--ds-gold),var(--ds-sky)) 1}
-.contact-option h2::before{content:'';display:inline-block;width:9px;height:9px;margin-right:10px;vertical-align:.12em;background:var(--ds-gold);transform:rotate(45deg)}
 
 /* gold accent icons that draw themselves in */
-.icon{background:linear-gradient(140deg,#23335c,#424d7d)!important;color:var(--ds-gold)!important;box-shadow:0 8px 18px rgba(35,51,92,.2)}
-.icon svg{stroke-width:1.8!important}
 .icon svg *{stroke-dasharray:1;stroke-dashoffset:0}
 .ds-anim .icon:not(.is-drawn) svg *{stroke-dashoffset:1}
 .ds-anim .icon.is-drawn svg *{transition:stroke-dashoffset 1.25s cubic-bezier(.5,0,.25,1) .25s}
@@ -95,35 +92,104 @@
 .ds-rv{transition:opacity .7s ease,transform .7s cubic-bezier(.2,.8,.2,1);transition-delay:calc(var(--i,0)*90ms)}
 .ds-anim .ds-rv:not(.is-in){opacity:0;transform:translateY(28px)}
 
-/* ---------- 4) Gold-filling step timelines ---------- */
-.ds-steps{position:relative;--ds-n:52px}
-.ds-steps .step{position:relative;z-index:1}
-.ds-steps .number{width:var(--ds-n);height:var(--ds-n);border-radius:50%;display:grid!important;place-items:center;gap:0!important;
+/* ---------- 4) Step timelines: a twisted gold rope (like the logo's lasso) above the headings ---------- */
+.ds-steps{position:relative;--ds-n:54px;--ds-rope:10px}
+.ds-steps .step{position:relative;z-index:1;display:flex;flex-direction:column;align-items:center;text-align:center;padding:0 8px!important}
+.ds-steps .step p{max-width:32ch}
+.ds-steps .number{position:relative;z-index:2;width:var(--ds-n);height:var(--ds-n);flex:0 0 auto;border-radius:50%;display:grid!important;place-items:center;gap:0!important;
  font-family:var(--ds-head);font-weight:900;font-size:17px!important;color:#fff!important;background:#424d7d;letter-spacing:0;
- border:3px solid #33426f;box-shadow:0 0 0 6px #fff,0 10px 20px rgba(35,51,92,.22);transition:border-color .4s ease,box-shadow .4s ease,transform .4s ease;margin-bottom:20px!important}
+ border:3px solid #33426f;box-shadow:0 0 0 6px #fff,0 10px 20px rgba(35,51,92,.22);transition:border-color .4s ease,box-shadow .4s ease,transform .4s ease;margin:0 0 24px!important}
 .section.tint .ds-steps .number{box-shadow:0 0 0 6px #eef1f8,0 10px 20px rgba(35,51,92,.22)}
 .ds-steps .number::after{content:none!important}
 .ds-steps .step.is-on .number{border-color:var(--ds-gold);box-shadow:0 0 0 6px #fff,0 0 0 9px rgba(245,183,49,.3),0 10px 20px rgba(35,51,92,.22)}
 .section.tint .ds-steps .step.is-on .number{box-shadow:0 0 0 6px #eef1f8,0 0 0 9px rgba(245,183,49,.3),0 10px 20px rgba(35,51,92,.22)}
 .ds-anim .ds-steps .step:not(.is-on) .number{transform:scale(.9)}
-.ds-track,.ds-fill{position:absolute;z-index:0;left:var(--l,0);top:var(--t,0);width:var(--w,0);height:var(--h,0);border-radius:6px;pointer-events:none}
-.ds-track{background:#d7deeb}
-.ds-fill{background:linear-gradient(90deg,#fbd56e,var(--ds-gold) 55%,var(--ds-gold2));box-shadow:0 0 14px rgba(245,183,49,.5);transform-origin:0 0;transform:scaleX(var(--fill,0))}
-.ds-steps.is-vertical .ds-fill{background:linear-gradient(180deg,#fbd56e,var(--ds-gold) 55%,var(--ds-gold2));transform:scaleY(var(--fill,0))}
-@media(max-width:850px){
- .ds-steps .step{display:grid;grid-template-columns:var(--ds-n) minmax(0,1fr);column-gap:18px;align-items:start;padding:0 0 6px!important}
- .ds-steps .number{grid-row:1/span 3;margin:0!important}
- .ds-steps .step>:not(.number){grid-column:2}
- .ds-steps .step h3{margin-top:12px}
-}
+.ds-rope{position:absolute;z-index:0;left:var(--l,0);top:var(--t,0);width:var(--w,0);height:var(--h,0);border-radius:var(--ds-rope);pointer-events:none;
+ background:linear-gradient(180deg,rgba(255,255,255,.3),rgba(255,255,255,0) 42%,rgba(70,40,0,.3)),url(/assets/design/rope-h.svg) repeat-x 0 0/14px 100%;
+ box-shadow:0 3px 8px rgba(120,80,10,.28);clip-path:inset(0 0 0 0 round var(--ds-rope))}
+.ds-steps.is-vertical .ds-rope{background:linear-gradient(90deg,rgba(255,255,255,.3),rgba(255,255,255,0) 42%,rgba(70,40,0,.3)),url(/assets/design/rope-v.svg) repeat-y 0 0/100% 14px}
+.ds-anim .ds-rope{clip-path:inset(0 100% 0 0 round var(--ds-rope));transition:clip-path 1.6s cubic-bezier(.55,0,.3,1)}
+.ds-anim .ds-steps.is-vertical .ds-rope{clip-path:inset(0 0 100% 0 round var(--ds-rope))}
+.ds-anim .ds-steps.is-drawn .ds-rope{clip-path:inset(0 0 0 0 round var(--ds-rope))}
 @media(max-width:620px){
  .ds-dots{width:88px;height:88px}.ds-dots--tr{top:12px;right:8px}.ds-dots--bl{display:none}
  .ds-stripe{clip-path:polygon(72% 100%,84% 100%,100% 88%,100% 74%)}
- .ds-steps{--ds-n:46px}.ds-steps .number{font-size:15px!important}
  .ds-hero .hero-logo-stack{padding:4px 12px 14px;border-radius:20px}
  .notfound.ds-hero{padding:70px 22px 80px}
  .page-hero.ds-hero h1{font-size:31px}.tech-help-hero.ds-hero h1{font-size:30px}.local-hero.ds-hero h1{font-size:28px}
+ .ds-steps{--ds-n:46px;--ds-rope:9px}
+ .ds-steps .step{display:grid;grid-template-columns:var(--ds-n) minmax(0,1fr);column-gap:20px;align-items:start;text-align:left;padding:0 0 10px!important}
+ .ds-steps .number{grid-row:1/span 3;margin:0!important;font-size:15px!important}
+ .ds-steps .step>:not(.number){grid-column:2}
+ .ds-steps .step h3{margin-top:10px}
+ .ds-steps .step p{max-width:none}
 }
+
+/* ---------- 5) Shared gold line-icon tiles (same as the Website Package essentials grid) ---------- */
+.icon,.path-card .icon,.service-card .icon{width:52px!important;height:52px!important;border-radius:15px!important;clip-path:none!important;flex:0 0 auto;
+ display:grid!important;place-items:center;background:linear-gradient(140deg,#23335c,#424d7d)!important;color:var(--ds-gold)!important;box-shadow:0 10px 20px rgba(35,51,92,.22)}
+.icon svg{width:28px!important;height:28px!important;fill:none;stroke:currentColor;stroke-width:1.7!important;stroke-linecap:round;stroke-linejoin:round}
+.home-paths .path-card .icon{width:46px!important;height:46px!important}
+.icon--light{background:rgba(255,255,255,.1)!important;box-shadow:inset 0 0 0 1px rgba(255,255,255,.18)!important;margin-bottom:18px}
+.price-card>.icon{margin-bottom:18px}
+.contact-option.has-icon{display:grid;grid-template-columns:52px minmax(0,1fr);column-gap:18px;align-items:start}
+.contact-option.has-icon>.icon{grid-row:1/span 6}
+.contact-option.has-icon>:not(.icon){grid-column:2}
+.contact-option h2::before{content:none!important}
+
+/* ---------- 6) Subtle dot-matrix accents (CSS backgrounds: decorative, not read by assistive tech) ---------- */
+:root{--ds-dots:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='72' height='48'%3E%3Cdefs%3E%3Cpattern id='p' width='12' height='12' patternUnits='userSpaceOnUse'%3E%3Ccircle cx='6' cy='6' r='1.6' fill='%23424d7d'/%3E%3C/pattern%3E%3C/defs%3E%3Crect width='72' height='48' fill='url(%23p)' opacity='.28'/%3E%3C/svg%3E");
+ --ds-dots-w:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='72' height='48'%3E%3Cdefs%3E%3Cpattern id='p' width='12' height='12' patternUnits='userSpaceOnUse'%3E%3Ccircle cx='6' cy='6' r='1.6' fill='%23ffffff'/%3E%3C/pattern%3E%3C/defs%3E%3Crect width='72' height='48' fill='url(%23p)' opacity='.22'/%3E%3C/svg%3E")}
+main .section:not(.tint):not(.ds-hero){background:var(--ds-dots) no-repeat right max(18px,3%) top 22px/72px 48px}
+main .section.tint{background:var(--ds-dots) no-repeat left max(14px,2%) bottom 20px/72px 48px,linear-gradient(118deg,#eef1f8 0%,#eef1f8 70%,#e7ecf5 70%,#e7ecf5 83%,#f3f5f9 83%)}
+.path-card,.service-card{background:var(--ds-dots) no-repeat right 14px top 16px/48px 32px padding-box,linear-gradient(135deg,#edf1f8 0 24px,#fff 24px) padding-box,var(--ds-border) border-box!important}
+.price-card:not(.featured),.product,.review-card,.local-review-grid .review-card{background:var(--ds-dots) no-repeat right 14px top 16px/48px 32px padding-box,linear-gradient(#fff,#fff) padding-box,var(--ds-border) border-box!important}
+.price-card.featured{background:var(--ds-dots-w) no-repeat right 18px top 18px/60px 40px,linear-gradient(135deg,var(--navy) 0%,var(--navy) 78%,var(--slate) 78%)!important}
+.cta .wrap{background:var(--ds-dots-w) no-repeat right 8px top 14px/72px 48px}
+.footer .footer-grid{background:var(--ds-dots) no-repeat right 0 top 0/60px 40px}
+
+/* ---------- 7) Homepage speech bubble = link to the Website Package ---------- */
+a.hero-speech-link{display:block;color:#fff!important;text-decoration:none;cursor:pointer;transition:transform .2s ease,background .2s ease,box-shadow .2s ease}
+a.hero-speech-link strong{text-decoration:underline;text-decoration-color:rgba(245,183,49,.0);text-underline-offset:3px;transition:text-decoration-color .2s ease}
+a.hero-speech-link:hover,a.hero-speech-link:focus-visible{background:#2f3f73;transform:translateY(-2px);box-shadow:0 10px 22px rgba(35,51,92,.3)}
+a.hero-speech-link:hover::before,a.hero-speech-link:focus-visible::before{background:#2f3f73}
+a.hero-speech-link:hover strong,a.hero-speech-link:focus-visible strong{text-decoration-color:var(--ds-gold)}
+a.hero-speech-link:focus-visible{outline:3px solid var(--ds-gold)!important;outline-offset:4px}
+
+/* ---------- 8) Calm scam warning badge (soft red, amber icon) ---------- */
+.scam-badge{display:inline-flex;align-items:center;gap:12px;margin:4px 0 18px;padding:11px 18px 11px 12px;border-radius:999px;align-self:flex-start;
+ background:#fff1ec;border:1px solid #f3b8a6;color:#8f2a17!important;font-size:15px;font-weight:700;line-height:1.35;text-decoration:none;
+ box-shadow:0 6px 16px rgba(180,60,30,.1);transition:background .2s ease,transform .2s ease,box-shadow .2s ease}
+.scam-badge__icon{flex:0 0 auto;display:grid;place-items:center;width:34px;height:34px;border-radius:50%;background:#fff;box-shadow:0 0 0 1px #f6cdbf}
+.scam-badge__icon svg{width:22px;height:22px}
+.scam-badge:hover,.scam-badge:focus-visible{background:#ffe5db;color:#7a2213!important;transform:translateY(-1px);box-shadow:0 10px 22px rgba(180,60,30,.16)}
+.scam-badge:focus-visible{outline:3px solid #c2410c!important;outline-offset:3px}
+.scam-badge--wide{display:flex;width:100%;margin:26px 0 0;padding:16px 22px 16px 16px;border-radius:18px;font-weight:400;font-size:16px}
+.scam-badge--wide strong{font-weight:800}
+.scam-badge--wide .scam-badge__icon{width:44px;height:44px}
+.scam-badge--wide .scam-badge__icon svg{width:26px;height:26px}
+.scam-badge__go{margin-left:auto;font-size:22px;font-weight:800;padding-left:10px}
+
+/* ---------- 9) Scam page: calm checklist + "Need help right now?" ---------- */
+.help-now{display:grid;grid-template-columns:auto minmax(0,1fr) auto;align-items:center;gap:18px 22px;margin:0 0 30px;padding:20px 24px;border-radius:20px;
+ border:2px solid transparent;background:linear-gradient(#fff7f1,#fff7f1) padding-box,linear-gradient(135deg,#f2a516,#e8735a 60%,#f3b8a6) border-box;box-shadow:0 14px 30px rgba(180,60,30,.1)}
+.help-now--bottom{margin:0 0 26px}
+.help-now__icon{display:grid;place-items:center;width:52px;height:52px;border-radius:15px;background:linear-gradient(140deg,#23335c,#424d7d);color:var(--ds-gold)}
+.help-now__icon svg{width:28px;height:28px;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:1}
+.help-now__title{margin:0 0 4px;font-size:20px;font-weight:800;color:#7a2213;line-height:1.3}
+.help-now__title a{color:#7a2213;text-decoration:underline;text-underline-offset:3px;white-space:nowrap}
+.help-now__sub{margin:0;font-size:14px;color:var(--muted)}
+.help-now .actions{margin:0;display:flex;gap:10px;flex-wrap:wrap}
+.calm-steps{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px 22px;counter-reset:none}
+.calm-steps li{display:grid;grid-template-columns:44px minmax(0,1fr);gap:16px;align-items:start;padding:18px 20px;border-radius:16px;border:1px solid transparent;
+ background:linear-gradient(#fff,#fff) padding-box,linear-gradient(135deg,rgba(242,165,22,.7),rgba(18,174,245,.4) 55%,rgba(66,77,125,.25)) border-box;box-shadow:0 10px 24px rgba(35,51,92,.07)}
+.calm-steps__n{display:grid;place-items:center;width:44px;height:44px;border-radius:50%;background:#424d7d;color:#fff;font-family:var(--ds-head);font-weight:900;font-size:17px;box-shadow:0 0 0 3px #fbe2b0}
+.calm-steps h3{font-size:18px;margin:2px 0 6px;letter-spacing:-.015em}
+.calm-steps p{margin:0;font-size:15.5px;color:var(--muted)}
+@media(max-width:850px){.help-now{grid-template-columns:auto minmax(0,1fr)}.help-now .actions{grid-column:1/-1}.calm-steps{grid-template-columns:1fr}}
+@media(max-width:620px){.help-now{padding:18px;gap:14px}.help-now__title{font-size:18px}.help-now .actions .btn{flex:1 1 auto}
+ .scam-badge--wide{font-size:15px;padding:14px 16px 14px 12px}.scam-badge__go{display:none}
+ main .section:not(.tint):not(.ds-hero){background-size:54px 36px}}
 
 /* ---------- Reduced motion: everything visible and still ---------- */
 @media(prefers-reduced-motion:reduce){
@@ -133,7 +199,8 @@
  .icon svg *{stroke-dashoffset:0!important}
  .ds-tilt{transform:none!important}
  .ds-steps .number{transform:none!important}
- .ds-fill{transform:none!important}
+ .ds-rope{clip-path:none!important;transition:none!important}
+ .scam-badge,a.hero-speech-link{transition:none!important;transform:none!important}
 }
 .ds-hero .hero-speech{color:#fff}
 .ds-tilt{position:relative}

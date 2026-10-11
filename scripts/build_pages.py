@@ -90,11 +90,40 @@ SIGNOFF='<p>Muscatine · Iowa City · Quad Cities</p>'  # Josh's sign-off: left 
 FOOTER_AREAS=SIGNOFF+'<p>Muscatine · Fruitland · Wilton · West Liberty · Durant · Quad Cities (IA &amp; IL)<br><a class="footer-areas" href="service-area.html">Areas I serve</a></p>'
 def footer(s):
  s=s.replace(SIGNOFF,FOOTER_AREAS,1)
- s=s.replace('<a href="about.html">Meet Josh</a></div>','<a href="about.html">Meet Josh</a><a href="tech-help-muscatine.html">Tech help in Muscatine</a><a href="scam-help.html">Scam &amp; hacked accounts</a><a href="service-area.html">Areas I serve</a></div>',1)
+ # Digital Kits leaves the main menu (desktop + mobile share the nav markup); the page stays, linked from the footer.
+ hdr=re.search(r'<header\b.*?</header>',s,re.S)
+ if hdr:
+  h2=re.sub(r'<a href="digital-kits\.html"(?: aria-current="page")?>Digital Kits</a>','',hdr.group(),count=1);assert h2!=hdr.group(),'nav kits link'
+  s=s[:hdr.start()]+h2+s[hdr.end():]
+ s=s.replace('<a href="digital-kits.html">Digital kits</a><a href="rates.html">','<a href="rates.html">',1)
+ s=s.replace('<a href="about.html">Meet Josh</a></div>','<a href="about.html">Meet Josh</a><a href="tech-help-muscatine.html">Tech help in Muscatine</a><a href="scam-help.html">Scam &amp; hacked accounts</a><a href="service-area.html">Areas I serve</a><a href="digital-kits.html">Digital kits</a></div>',1)
+ # "Built by" badge on joshthetechtamer.com itself points to the Website Package.
+ s=s.replace('<a class="ttb" href="contact.html?service=Website%20%26%20business%20tech">','<a class="ttb" href="website-package.html">',1)
+ assert '<a class="ttb" href="website-package.html">' in s,'built-by badge link'
  g=(f'<a href="{escape(gbp)}" target="_blank" rel="noopener noreferrer">Find us on Google ↗</a>' if gbp else '')+(f'<a href="{escape(review_url)}" target="_blank" rel="noopener noreferrer">Leave a Google review ↗</a>' if review_url else '')
  s=s.replace('LinkedIn ↗</a></div>','LinkedIn ↗</a>'+g+'</div>',1)
- assert FOOTER_AREAS in s and 'tech-help-muscatine.html">Tech help in Muscatine' in s,'footer markup changed'
+ assert FOOTER_AREAS in s and 'tech-help-muscatine.html">Tech help in Muscatine' in s and 'service-area.html">Areas I serve</a><a href="digital-kits.html">Digital kits</a>' in s,'footer markup changed'
  return s
+
+# ---- Round 2 of the redesign (Josh's feedback, Oct 11) ----
+S=[None]
+def rep1(s,a,b):
+ assert a in s,('expected markup',a[:90]);S[0]=s.replace(a,b,1)
+WARN_ICON='<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 3.2 2.3 20h19.4z" fill="#f2a516" stroke="#b45309" stroke-width="1.4" stroke-linejoin="round"/><path d="M12 9.5v5" stroke="#3b1d06" stroke-width="2.2" stroke-linecap="round"/><circle cx="12" cy="17.4" r="1.25" fill="#3b1d06"/></svg>'
+SCAM_BADGE='<a class="scam-badge" href="scam-help.html"><span class="scam-badge__icon">'+WARN_ICON+'</span><span class="scam-badge__text">Scam &amp; hacked-account help</span></a>'
+SCAM_BADGE_HOME='<a class="scam-badge scam-badge--wide" href="scam-help.html"><span class="scam-badge__icon">'+WARN_ICON+'</span><span class="scam-badge__text"><strong>Worried about a scam or a hacked account?</strong> Take a breath. Here’s what to do right now.</span><span class="scam-badge__go" aria-hidden="true">→</span></a>'
+PHONE_ICON='<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path pathLength="1" d="M5 3.5h3.2l1.6 4.2-2.1 1.4a11 11 0 0 0 7.2 7.2l1.4-2.1 4.2 1.6V19a1.6 1.6 0 0 1-1.7 1.6A16.5 16.5 0 0 1 3.4 5.2 1.6 1.6 0 0 1 5 3.5z"/></svg>'
+HELP_NOW='<div class="help-now"><span class="help-now__icon">'+PHONE_ICON+'</span><div class="help-now__body"><p class="help-now__title">Need help right now? Call or text Josh at <a href="tel:+15632610200">563-261-0200</a>.</p><p class="help-now__sub">Evenings &amp; weekends: Sun–Tue &amp; Thu–Sat, 8 AM–8 PM. Wednesday: appointment setting only.</p></div><div class="actions"><a class="btn" href="sms:+15632610200">Text Josh<span aria-hidden="true">↗</span></a><a class="btn secondary" href="tel:+15632610200">Call Josh<span aria-hidden="true">↗</span></a></div></div>'
+_steps=[('Stop. Don’t pay or send anything more.','If someone is rushing you to pay, buy gift cards or move money, stop there. A real company will wait while you check.'),
+ ('Hang up or close the pop-up. Don’t call the number.','Close the browser. If a warning won’t go away, hold the power button to turn the computer off. Real companies don’t put phone numbers in warning pop-ups.'),
+ ('Don’t give out codes or remote access.','Never read back a code sent to your phone, and don’t let anyone connect to your computer, no matter who they say they are.'),
+ ('From a safe device, change your passwords. Start with email.','Use a phone or computer you trust. Your email comes first, because it can reset almost everything else.'),
+ ('Turn on 2-step verification.','Add it to your email, bank and social accounts, so a stolen password alone isn’t enough to get in.'),
+ ('Call your bank if money or a card was involved.','Use the number on the back of your card, not a number from a message or a caller.'),
+ ('Save screenshots and details.','Write down names, phone numbers, times and amounts, and take screenshots. They help your bank, and they help when you report it.'),
+ ('Check for remote-access software.','If you let someone connect to your computer, keep it off the internet until it’s checked for programs they may have left behind. I can check it with you.')]
+SCAM_STEPS=('<section class="section scam-steps-section" aria-labelledby="scam-steps-heading"><div class="wrap"><div class="section-head"><div><div class="eyebrow">Right now, before anything else</div><h2 id="scam-steps-heading">Think you’ve been scammed or hacked? Take a breath. Here’s what to do.</h2></div><p>These steps are safe to do on your own while you wait to hear back from me.</p></div>'
+ +HELP_NOW+'<ol class="calm-steps">'+''.join(f'<li><span class="calm-steps__n" aria-hidden="true">{i+1}</span><div><h3>{escape(t,quote=False)}</h3><p>{escape(d,quote=False)}</p></div></li>' for i,(t,d) in enumerate(_steps))+'</ol></div></section>')
 HERO_PICTURE='<picture style="display:contents"><source type="image/webp" srcset="/assets/optimized/hero-logo-400.webp 400w, /assets/optimized/hero-logo-800.webp 800w, /assets/optimized/hero-logo-1200.webp 1200w" sizes="(max-width: 620px) 290px, (max-width: 1100px) 380px, 490px"><img src="/assets/optimized/hero-logo-800.png" alt="The Tech Tamer: Josh’s top-hatted technology tamer mascot and wordmark" width="800" height="687" fetchpriority="high" decoding="async"></picture>'
 def normalize_urls(s,name):
  """Canonical, og:url and every internal link use the final extensionless URL (no redirect hops)."""
@@ -111,10 +140,17 @@ def normalize_urls(s,name):
 # Shared layer: assets/design.css + assets/design.js. Markup changes are decorative only (aria-hidden), so every
 # page's words, links, images, forms, header, footer, JSON-LD and metadata stay exactly as they were
 # (scripts/content_lock.py + data/content-lock.json, checked by validate_site.py).
-DESIGN_V='20261011-sitewide2'
-GOLD_WORD={'index.html':'savvy','services.html':'Working','business.html':'work','digital-kits.html':'confidence','rates.html':'pricing',
+DESIGN_V='20261011-sitewide3'
+GOLD_WORD={'index.html':'you','services.html':'Working','business.html':'work','digital-kits.html':'confidence','rates.html':'pricing',
  'about.html':'local','contact.html':'tame','tech-help-muscatine.html':'Muscatine','service-area.html':'Muscatine','scam-help.html':'Help',
  'tech-help-quad-cities.html':'In-Home','404.html':'wandered'}
+# Shared gold line-icon set (data/icons.json): the Website Package "essentials" icons plus matching ones for every icon spot.
+ICONS=json.loads((ROOT/'data/icons.json').read_text())
+ICON_FOR=[(r'locked-out','key'),(r'pop-up','warning'),(r'lock it down','lock'),(r'scam|hacked|accounts?\b','shield'),(r'computer|laptop','laptop'),(r'printer','printer'),
+ (r'phone|tablet','smartphone'),(r'wi-fi|network','wifi'),(r'\btvs?\b|streaming','tv'),(r'camera|smart home','camera'),(r'logo|brand','pencil'),(r'advertis','megaphone'),
+ (r'startup','lightbulb'),(r'\bweb','devices'),(r'tech help at home','home'),(r'business','briefcase'),(r'yourself','book')]
+def icon_tile(name,extra=''):return '<div class="icon'+extra+'" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false">'+ICONS[name]+'</svg></div>'
+CONTACT_ICONS={'Text or call':'phone','Email':'mail','Service area':'map-pin','Availability':'calendar'}
 DS_SWOOSH='<svg class="ds-swoosh" viewBox="0 0 200 18" preserveAspectRatio="none" aria-hidden="true" focusable="false"><path pathLength="1" d="M3 12.5C40 6.5 92 4.2 140 5.6c20 .6 38 2 55 4.4" fill="none" stroke="currentColor" stroke-width="5" stroke-linecap="round"/><path pathLength="1" d="M18 15.5c38-4.6 86-6 150-3.4" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" opacity=".55"/></svg>'
 DS_DECO='<span class="ds-deco" aria-hidden="true"><span class="ds-dots ds-dots--tr"></span><span class="ds-dots ds-dots--bl"></span><span class="ds-stripe"></span></span>'
 def redesign(s,name):
@@ -139,9 +175,20 @@ def redesign(s,name):
   if m:parts[i]=part[:m.start()]+'<span class="ds-gold">'+word+DS_SWOOSH+'</span>'+part[m.end():];break
  else:raise AssertionError(('gold word not in h1',name,word))
  s=s[:h.start(1)]+''.join(parts)+s[h.end(1):]
+ # 2b) Shared icon set: card icons by topic, plus icons for contact methods and rate cards.
+ def swap(m):
+  head=unescape(re.sub(r'<[^>]+>','',m.group(1)))
+  for pat,ic in ICON_FOR:
+   if re.search(pat,head,re.I):return icon_tile(ic)+m.group(1)
+  return m.group(0)
+ s=re.sub(r'<div class="icon" aria-hidden="true"><svg\b.*?</svg></div>(<h[23]>.*?</h[23]>)',swap,s,flags=re.S)
+ for h,ic in CONTACT_ICONS.items():
+  s=s.replace('<div class="contact-option"><h2>'+h+'</h2>','<div class="contact-option has-icon">'+icon_tile(ic)+'<h2>'+h+'</h2>',1)
+ s=s.replace('<article class="price-card featured"><div class="eyebrow">','<article class="price-card featured">'+icon_tile('dollar',' icon--light')+'<div class="eyebrow">',1)
+ s=s.replace('<article class="price-card"><h2>Something a little bigger?</h2>','<article class="price-card">'+icon_tile('clipboard')+'<h2>Something a little bigger?</h2>',1)
  # 3) Card icons draw themselves in (gold stroke): pathLength="1" lets CSS animate any shape the same way.
  def icon(m):return re.sub(r'<(path|rect|circle|line|polyline|polygon|ellipse)\b(?![^>]*pathLength)',r'<\1 pathLength="1"',m.group())
- s=re.sub(r'<div class="icon" aria-hidden="true"><svg\b.*?</svg>',icon,s,flags=re.S)
+ s=re.sub(r'<div class="icon(?: icon--light)?" aria-hidden="true"><svg\b.*?</svg>|<span class="help-now__icon"><svg\b.*?</svg>',icon,s,flags=re.S)
  # 4) Three-step rows become a gold-filling timeline.
  s=re.sub(r'<div class="grid3">(?=<(?:article|div) class="step">)','<div class="grid3 ds-steps" data-ds-steps>',s)
  return s
@@ -158,13 +205,24 @@ for file in (ROOT/'templates').glob('*.html'):
   a='<div class="eyebrow">No jargon. No runaround.</div><h2>Getting help should be easy.</h2></div>'
   assert a in s;s=s.replace(a,a+'<p class="home-local"><strong>In-home computer &amp; tech help in Muscatine, IA.</strong> House calls all over <a href="tech-help-muscatine.html">Muscatine</a> and <a href="service-area.html">nearby towns</a>, evenings &amp; weekends.</p>',1)
   s=s.replace('<a class="textlink" href="services.html">Find your tech fix</a>','<a class="textlink" href="tech-help-muscatine.html">Tech help in Muscatine</a>',1)
+  # Speech bubble = link to the Website Package (same words).
+  rep1(s,'<p class="hero-speech">If you like my website,<br><strong>I can build you one!</strong></p>','<a class="hero-speech hero-speech-link" href="website-package.html">If you like my website,<br><strong>I can build you one!</strong></a>')
+  s=S[0]
+  # "A little help goes a long way." photo: Josh in his recliner (same photo as the About page's closing section).
+  rep1(s,'<img src="/assets/home-client-visit.webp" alt="Josh, The Tech Tamer, with a client during a home visit" width="1084" height="1049" loading="lazy" decoding="async">','<img src="assets/about-cta-laptop.png" alt="Josh Sargent, The Tech Tamer, smiling in a recliner with a laptop on his lap" width="1534" height="1536" loading="lazy">')
+  s=S[0]
+  # Scam warning badge right under the three help cards.
+  rep1(s,'<a class="textlink" href="digital-kits.html">Browse digital kits</a></article></div></div></section>','<a class="textlink" href="digital-kits.html">Browse digital kits</a></article></div>'+SCAM_BADGE_HOME+'</div></section>')
+  s=S[0]
  if name=='services.html':
   # Security cameras/systems: residential (in-home) only. Never commercial or business security.
   for a,b in [('<h2>Smart devices & cameras</h2><p>Bring your connected devices together with less guesswork.</p><ul class="checklist"><li>Smart-home device setup</li><li>Compatible camera app setup</li><li>Notifications and remote viewing</li><li>Device selection and planning</li></ul>','<h2>Smart home & home cameras</h2><p>Bring your home’s connected devices together with less guesswork.</p><ul class="checklist"><li>Smart-home device setup</li><li>In-home security camera app setup</li><li>Notifications and remote viewing for your home cameras</li><li>Device selection and planning</li></ul><p class="small residential-note">Residential only: security cameras and systems for your home. I don’t do commercial or business security work.</p>'),
    ('Camera and smart-device projects start with a conversation about the equipment and setup needed.','Home camera and smart-device projects start with a conversation about the equipment and setup needed. Security cameras and systems are residential (in-home) only. I don’t do commercial or business security work.')]:
    assert a in s,a[:60];s=s.replace(a,b)
   s=s.replace('<div class="eyebrow">Tech help</div><h1>Your technology.<br>Working for you.</h1>','<h1><span class="eyebrow eyebrow-h1">Computer repair &amp; tech support at your home in Muscatine</span>Your technology.<br>Working for you.</h1>',1)
-  s=s.replace('<a class="textlink" href="contact.html">Ask Josh about this</a></article></div><div class="notice">','<a class="textlink" href="contact.html">Ask Josh about this</a><a class="textlink" href="scam-help.html">Scam &amp; hacked-account help</a></article></div><div class="notice">',1)
+  # Scam help gets its own spot in the Accounts card: a calm warning badge above the card's button.
+  rep1(s,'<li>Unwanted pop-up troubleshooting</li></ul><a class="textlink" href="contact.html">Ask Josh about this</a></article></div><div class="notice">','<li>Unwanted pop-up troubleshooting</li></ul>'+SCAM_BADGE+'<a class="textlink" href="contact.html">Ask Josh about this</a></article></div><div class="notice">')
+  s=S[0]
   s=s.replace('Serving Muscatine, Iowa City & the Quad Cities','Serving Muscatine, Wilton, West Liberty, Durant & the Quad Cities',1)
  if name=='contact.html':
   s=s.replace('<p>Based in Muscatine, Iowa.<br>Serving Iowa City and the Quad Cities.</p>','<p>Based in Muscatine, Iowa. House calls about 30 miles around Muscatine: Fruitland, Wilton, West Liberty, Durant, Columbus Junction, Letts, Nichols, Atalissa, Buffalo and Blue Grass, plus the whole Quad Cities (Davenport, Bettendorf, Moline, Rock Island, East Moline, Silvis and Milan), where I’m a couple times a week, Illinois City and the rest of Muscatine County. Trips farther out may have a small added gas charge.<br><a class="textlink" href="service-area.html">Areas I serve</a></p>',1)
@@ -177,6 +235,12 @@ for file in (ROOT/'templates').glob('*.html'):
   # Branded service-area map drawn from real lat/long by scripts/make_service_map.py (no street address).
   s=s.replace('<!--SERVICE_MAP-->',(ROOT/'data/service-area-map.svg').read_text())
  if name=='tech-help-muscatine.html':s=s.replace('<!--LOCAL_REVIEWS-->',local_reviews())
+ if name=='scam-help.html':
+  # Calm, numbered "what to do" checklist at the top, with a call/text block near the top and the bottom.
+  a=s.index('<section class="section"><div class="wrap"><div class="section-head"><div><div class="eyebrow">Right now, before anything else</div>');b=s.index('</section>',a)+len('</section>')
+  s=s[:a]+SCAM_STEPS+s[b:]
+  rep1(s,'<section class="section"><div class="wrap"><div class="notice"><strong>Report it, too.</strong>','<section class="section"><div class="wrap">'+HELP_NOW.replace('help-now"','help-now help-now--bottom"')+'<div class="notice"><strong>Report it, too.</strong>')
+  s=S[0]
  assert '<!--' not in s.split('</head>')[1].replace('<!--EXAMPLE:','') or name=='website-package.html',('unfilled slot',name)
  if name=='index.html':
   s=s.replace('From the Wi-Fi that won’t cooperate to the business you’re ready to launch. I’m Josh, and I’ll help you get it working.','Wi-Fi, printers, computers, and everyday tech—without the runaround. I’m Josh, and I come to your home or office in Muscatine and Eastern Iowa to help get it working.')
