@@ -30,7 +30,7 @@ kit=(ROOT/'digital-kits.html').read_text();base=(ROOT/'templates/digital-kits.ht
 assert kit.count('class="product"')==6
 assert re.findall(r'https://joshthetechtamer.gumroad.com/l/[^" ]+',kit)==re.findall(r'https://joshthetechtamer.gumroad.com/l/[^" ]+',base)
 assert 'class="review-carousel"' in (ROOT/'index.html').read_text()
-assert [r['rating'] for r in json.loads((ROOT/'data/reviews.json').read_text())].count(5)==2
+assert [r['rating'] for r in json.loads((ROOT/'data/reviews.json').read_text())].count(5)==3
 assert 'backups' in (ROOT/'_config.yml').read_text()
 # Website Package page: linked from Rates and For Business; unapproved example sites stay hidden.
 pkg=(ROOT/'website-package.html').read_text();cfg=json.loads((ROOT/'data/site-config.json').read_text())
@@ -172,8 +172,10 @@ for n in ['services.html','business.html']:assert 'residential' in (ROOT/n).read
 assert '<svg class="area-svg"' in (ROOT/'service-area.html').read_text() and 'See me on Google Maps' in (ROOT/'service-area.html').read_text()
 # Review carousel: every entry in data/reviews.json renders verbatim; stars only for the two Google 5-star reviews; Facebook items carry no rating.
 revs=json.loads((ROOT/'data/reviews.json').read_text())
-assert idx.count('class="review-card"')==len(revs) and idx.count('class="review-stars"')==2 and f'1 / {len(revs)}' in idx
-assert len(revs)==13 and '1 / 13' in idx,'13 carousel cards (Barbara M. second card added Oct 11)'
+assert idx.count('class="review-card"')==len(revs) and idx.count('class="review-stars"')==3 and f'1 / {len(revs)}' in idx
+assert len(revs)==14 and '1 / 14' in idx,'14 carousel cards (Barb Google review added Oct 11)'
+assert revs[2]=={'name':'Barb','source':'Google review','quote':'Josh is very knowledgeable and friendly. He helped me 2 times in home and a few times on line. Rates are very reasonable. If you need help contact him.','rating':5},'Barb Google card is card 3'
+assert [x['name'] for x in revs].count('Barbara M.')==3,'her Facebook cards stay Barbara M.'
 assert {'name':'Barbara M.','source':'Facebook comment','quote':'JOSH is very helpful explains things so you understand.','rating':None} in revs
 for r in revs:
  assert escape(r['quote'],quote=True) in idx,('review not verbatim',r['name'])
