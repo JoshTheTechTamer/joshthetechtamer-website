@@ -99,10 +99,18 @@ for n in ['index.html','services.html']:assert 'href="/tech-help-muscatine"' in 
 hero=re.search(r'<section class="hero">.*?</section>',idx,re.S).group()
 assert '<div class="eyebrow">Your local tech guy · Muscatine, Iowa</div><h1>Not very tech savvy?<br><span>I’ll come to you.</span></h1>' in hero and 'eyebrow-h1' not in hero and 'hero-local' not in hero,'home hero changed'
 assert 'In-home computer &amp; tech help in Muscatine, IA' in idx and 'House calls all over' in idx
-# Quad Cities on both sides of the river, plus Iowa City and Coralville, in the business areaServed.
+# Josh's final list (small towns first, then the Quad Cities on both sides of the river), no Iowa City/Coralville.
 served=[a['name'] for a in json.loads(re.search(r'<script type="application/ld\+json">(.*?)</script>',idx).group(1))['@graph'][0]['areaServed']]
-FINAL=['Muscatine, IA','Fruitland, IA','Wilton, IA','West Liberty, IA','Durant, IA','Columbus Junction, IA','Atalissa, IA','Buffalo, IA','Blue Grass, IA','Davenport, IA','Bettendorf, IA','Moline, IL','Rock Island, IL','East Moline, IL','Silvis, IL','Milan, IL','Illinois City, IL','Iowa City, IA','Coralville, IA','Letts, IA','Nichols, IA','Muscatine County, IA']
-assert sorted(served)==sorted(FINAL),('areaServed must match Josh’s Google profile list',set(served)^set(FINAL))
+FINAL=['Muscatine, IA','Fruitland, IA','Wilton, IA','West Liberty, IA','Durant, IA','Columbus Junction, IA','Letts, IA','Nichols, IA','Atalissa, IA','Buffalo, IA','Blue Grass, IA','Davenport, IA','Bettendorf, IA','Moline, IL','Rock Island, IL','East Moline, IL','Silvis, IL','Milan, IL','Illinois City, IL','Muscatine County, IA']
+assert served==FINAL,('areaServed must be exactly Josh’s list, in his order',served)
+for n in pages+['404.html']:
+ t=(ROOT/n).read_text().replace('Muscatine · Iowa City · Quad Cities','')  # Josh's sign-off is the only allowed mention
+ assert 'Iowa City' not in t and 'Coralville' not in t,('Iowa City/Coralville dropped',n)
+ assert (ROOT/n).read_text().count('Muscatine · Iowa City · Quad Cities')==1,('sign-off unchanged',n)
+sa=(ROOT/'service-area.html').read_text()
+order=[sa.index('<h3>'+t+'</h3>') for t in ['Muscatine','Fruitland','Wilton','West Liberty','Durant','Columbus Junction','Letts','Nichols','Atalissa','Buffalo','Blue Grass','The Quad Cities','Illinois City','Muscatine County']]
+assert order==sorted(order),'service-area town cards in Josh’s order'
+for t in ['Letts','Nichols']:assert f'>{t}</text>' in sa,('map label',t)
 site=''.join((ROOT/n).read_text() for n in pages)
 assert 'New Boston' not in site and 'trucker' not in site and 'Xbox accounts all at once' not in site
 assert '30-mile radius' in (ROOT/'service-area.html').read_text() and 'gas charge' in (ROOT/'service-area.html').read_text()

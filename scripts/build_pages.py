@@ -16,7 +16,7 @@ meta={
 'website-package.html':('Small-Business Websites in Muscatine, IA: $800 | Tech Tamer','A simple, phone-friendly website for your Muscatine or Quad Cities business: free preview first, then $800 to build and launch. Optional $25/month Care Plan.','website'),
 # Local SEO pages (Oct 2026 audit, section B4).
 'tech-help-muscatine.html':('Tech Help in Muscatine, IA: I Come to You | The Tech Tamer','Computer, printer, Wi-Fi and phone help at your home in Muscatine, IA. Evenings & weekends, $50/hr, free consultation. Call or text 563-261-0200.','muscatine'),
-'service-area.html':('Service Area: Tech Help Near Muscatine, IA | The Tech Tamer','House-call tech help about 30 miles around Muscatine: Wilton, West Liberty, Durant, Columbus Junction, the Quad Cities (IA & IL), Iowa City & Coralville.','areas'),
+'service-area.html':('Service Area: Tech Help Near Muscatine, IA | The Tech Tamer','House-call tech help about 30 miles around Muscatine: Fruitland, Wilton, West Liberty, Durant, Columbus Junction, Letts, Nichols & the Quad Cities.','areas'),
 'scam-help.html':('Scam & Hacked Account Help in Muscatine | The Tech Tamer','Pop-up scams, hacked email and Facebook, locked-out accounts and 2-step verification. Calm in-home help in Muscatine, IA. Call or text 563-261-0200.','scam'),
 'tech-help-quad-cities.html':('In-Home Tech Help in Davenport & the Quad Cities | Tech Tamer','In-home computer, printer, Wi-Fi and scam help in Davenport, Bettendorf, Moline, Rock Island, East Moline & nearby. $50/hr. Text 563-261-0200.','qc')}
 # Pages without their own share image or a one-word breadcrumb name.
@@ -57,7 +57,7 @@ visit='''<section class="section tint" id="your-visit"><div class="wrap"><div cl
 gbp=config.get('google_business_profile_url','').strip();review_url=config.get('google_review_url','').strip()
 local_faqs=json.loads((ROOT/'data/local-faqs.json').read_text())
 lastmod=json.loads((ROOT/'data/sitemap-lastmod.json').read_text())
-AREAS=['Muscatine, IA','Fruitland, IA','Wilton, IA','Atalissa, IA','West Liberty, IA','Durant, IA','Nichols, IA','Letts, IA','Columbus Junction, IA','Buffalo, IA','Blue Grass, IA','Davenport, IA','Bettendorf, IA','Moline, IL','Rock Island, IL','East Moline, IL','Silvis, IL','Milan, IL','Illinois City, IL','Iowa City, IA','Coralville, IA']
+AREAS=['Muscatine, IA','Fruitland, IA','Wilton, IA','West Liberty, IA','Durant, IA','Columbus Junction, IA','Letts, IA','Nichols, IA','Atalissa, IA','Buffalo, IA','Blue Grass, IA','Davenport, IA','Bettendorf, IA','Moline, IL','Rock Island, IL','East Moline, IL','Silvis, IL','Milan, IL','Illinois City, IL']  # Josh's order: small towns first
 QC=['Davenport, IA','Bettendorf, IA','Moline, IL','Rock Island, IL','East Moline, IL','Silvis, IL','Milan, IL']
 local_service={'tech-help-muscatine.html':('Computer repair and tech help',['Muscatine, IA','Fruitland, IA']),
  'service-area.html':('In-home computer and tech help',AREAS),
@@ -86,9 +86,10 @@ def local_reviews():
  picks=[next(r for r in reviews if r['name']==n) for n in ('Peggy S.','Bob','Arlene S.')]  # first card per name
  cards=''.join(f'<article class="review-card">'+('<span class="review-stars" aria-label="5 out of 5 stars">★★★★★</span>' if r['rating']==5 else '<span class="review-kind">'+escape(r['source'])+'</span>')+f'<blockquote><p>“{escape(r["quote"])}”</p></blockquote><p class="review-credit"><strong>{escape(r["name"])}</strong><span>{escape(r["source"])}</span></p></article>' for r in picks)
  return '<section class="section reviews-section" aria-labelledby="local-reviews-heading"><div class="wrap"><div class="section-head"><div><div class="eyebrow">A little reassurance</div><h2 id="local-reviews-heading">What folks are saying.</h2></div><p>Feedback shared by customers on Google and Facebook.</p></div><div class="grid3 local-review-grid">'+cards+'</div>'+google_links()+'<p class="small review-note">Names are shortened for privacy. Stars appear only where a five-star Google rating was provided.</p></div></section>'
-FOOTER_AREAS='<p>Muscatine · Wilton · West Liberty · Quad Cities (IA &amp; IL) · Iowa City &amp; Coralville<br><a class="footer-areas" href="service-area.html">Areas I serve</a></p>'
+SIGNOFF='<p>Muscatine · Iowa City · Quad Cities</p>'  # Josh's sign-off: left exactly as on main (question pending with Josh)
+FOOTER_AREAS=SIGNOFF+'<p>Muscatine · Fruitland · Wilton · West Liberty · Durant · Quad Cities (IA &amp; IL)<br><a class="footer-areas" href="service-area.html">Areas I serve</a></p>'
 def footer(s):
- s=s.replace('<p>Muscatine · Iowa City · Quad Cities</p>',FOOTER_AREAS,1)
+ s=s.replace(SIGNOFF,FOOTER_AREAS,1)
  s=s.replace('<a href="about.html">Meet Josh</a></div>','<a href="about.html">Meet Josh</a><a href="tech-help-muscatine.html">Tech help in Muscatine</a><a href="scam-help.html">Scam &amp; hacked accounts</a><a href="service-area.html">Areas I serve</a></div>',1)
  g=(f'<a href="{escape(gbp)}" target="_blank" rel="noopener noreferrer">Find us on Google ↗</a>' if gbp else '')+(f'<a href="{escape(review_url)}" target="_blank" rel="noopener noreferrer">Leave a Google review ↗</a>' if review_url else '')
  s=s.replace('LinkedIn ↗</a></div>','LinkedIn ↗</a>'+g+'</div>',1)
@@ -97,6 +98,7 @@ def footer(s):
 HERO_PICTURE='<picture style="display:contents"><source type="image/webp" srcset="/assets/optimized/hero-logo-400.webp 400w, /assets/optimized/hero-logo-800.webp 800w, /assets/optimized/hero-logo-1200.webp 1200w" sizes="(max-width: 620px) 290px, (max-width: 1100px) 380px, 490px"><img src="/assets/optimized/hero-logo-800.png" alt="The Tech Tamer: Josh’s top-hatted technology tamer mascot and wordmark" width="800" height="687" fetchpriority="high" decoding="async"></picture>'
 def normalize_urls(s,name):
  """Canonical, og:url and every internal link use the final extensionless URL (no redirect hops)."""
+ s=s.replace('"areaServed": ["Muscatine", "Iowa City", "Quad Cities"]','"areaServed": '+json.dumps([a.split(",")[0] for a in AREAS]+["Muscatine County"]))  # 404 keeps its own small JSON-LD
  s=re.sub(r'<link rel="canonical" href="[^"]*">','' if name=='404.html' else '<link rel="canonical" href="'+url(name)+'">',s)
  s=re.sub(r'<meta property="og:url" content="[^"]*">','' if name=='404.html' else '<meta property="og:url" content="'+url(name)+'">',s)
  def fix(m):
@@ -126,11 +128,11 @@ for file in (ROOT/'templates').glob('*.html'):
   s=s.replace('<a class="textlink" href="contact.html">Ask Josh about this</a></article></div><div class="notice">','<a class="textlink" href="contact.html">Ask Josh about this</a><a class="textlink" href="scam-help.html">Scam &amp; hacked-account help</a></article></div><div class="notice">',1)
   s=s.replace('Serving Muscatine, Iowa City & the Quad Cities','Serving Muscatine, Wilton, West Liberty, Durant & the Quad Cities',1)
  if name=='contact.html':
-  s=s.replace('<p>Based in Muscatine, Iowa.<br>Serving Iowa City and the Quad Cities.</p>','<p>Based in Muscatine, Iowa. House calls about 30 miles around Muscatine: Fruitland, Wilton, Atalissa, West Liberty, Durant, Nichols, Letts, Columbus Junction, Buffalo, Blue Grass and Illinois City, plus the whole Quad Cities (Davenport, Bettendorf, Moline, Rock Island, East Moline, Silvis and Milan), where I’m a couple times a week, and Iowa City and Coralville by appointment. Trips farther out may have a small added gas charge.<br><a class="textlink" href="service-area.html">Areas I serve</a></p>',1)
+  s=s.replace('<p>Based in Muscatine, Iowa.<br>Serving Iowa City and the Quad Cities.</p>','<p>Based in Muscatine, Iowa. House calls about 30 miles around Muscatine: Fruitland, Wilton, West Liberty, Durant, Columbus Junction, Letts, Nichols, Atalissa, Buffalo and Blue Grass, plus the whole Quad Cities (Davenport, Bettendorf, Moline, Rock Island, East Moline, Silvis and Milan), where I’m a couple times a week, Illinois City and the rest of Muscatine County. Trips farther out may have a small added gas charge.<br><a class="textlink" href="service-area.html">Areas I serve</a></p>',1)
  if name=='rates.html':
-  s=s.replace('Josh is based in Muscatine and serves the Iowa City and Quad Cities areas.','Josh is based in Muscatine and makes house calls about 30 miles around town: Fruitland, Wilton, West Liberty, Durant and nearby towns, plus the whole Quad Cities on both sides of the river (he’s there a couple times a week) and Iowa City and Coralville by appointment. Trips farther out may have a small added gas charge on your invoice. See <a href="service-area.html">areas I serve</a>.',1)
+  s=s.replace('Josh is based in Muscatine and serves the Iowa City and Quad Cities areas.','Josh is based in Muscatine and makes house calls about 30 miles around town: Fruitland, Wilton, West Liberty, Durant, Columbus Junction and the other small towns nearby, plus the whole Quad Cities on both sides of the river (he’s there a couple times a week). Trips farther out may have a small added gas charge on your invoice. See <a href="service-area.html">areas I serve</a>.',1)
  if name=='about.html':
-  s=s.replace('Based in Muscatine · Serving Iowa City and the Quad Cities','Based in Muscatine · Serving nearby towns, the Quad Cities, Iowa City and Coralville',1)
+  s=s.replace('Based in Muscatine · Serving Iowa City and the Quad Cities','Based in Muscatine · Serving nearby towns and the Quad Cities',1)
  if name=='service-area.html':
   s=s.replace('<!--GBP_BUTTON-->',f'<a class="btn secondary" href="{escape(gbp)}" target="_blank" rel="noopener noreferrer">See me on Google Maps<span aria-hidden="true">↗</span></a>' if gbp else '')
   # Branded service-area map drawn from real lat/long by scripts/make_service_map.py (no street address).

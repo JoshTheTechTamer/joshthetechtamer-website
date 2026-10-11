@@ -8,9 +8,9 @@ T={'Muscatine':(-91.0432,41.4245),'Fruitland':(-91.1294,41.3559),'Wilton':(-91.0
  'West Liberty':(-91.2638,41.5700),'Durant':(-90.9107,41.5997),'Nichols':(-91.3076,41.4812),'Letts':(-91.2369,41.3283),
  'Columbus Junction':(-91.3614,41.2792),'Buffalo':(-90.7172,41.4580),'Blue Grass':(-90.7659,41.5098),'Illinois City':(-90.8996,41.3975),
  'Davenport':(-90.5776,41.5236),'Bettendorf':(-90.4846,41.5525),'Moline':(-90.5150,41.5066),'Rock Island':(-90.5776,41.4920),
- 'East Moline':(-90.4409,41.5160),'Silvis':(-90.4151,41.5123),'Milan':(-90.5721,41.4531),'Iowa City':(-91.5299,41.6613),'Coralville':(-91.5807,41.6760)}
+ 'East Moline':(-90.4409,41.5160),'Silvis':(-90.4151,41.5123),'Milan':(-90.5721,41.4531)}
 RADIUS=30  # miles, shaded circle around Muscatine
-W=1000;LON0,LON1,LAT0,LAT1=-91.74,-90.06,40.97,41.88
+W=1000;LON0,LON1,LAT0,LAT1=-91.66,-90.12,40.975,41.875  # full 30-mile circle, with label room east of Silvis
 k=W/((LON1-LON0)*math.cos(math.radians(41.42)));H=round((LAT1-LAT0)*k)
 P=lambda lon,lat:((lon-LON0)*math.cos(math.radians(41.42))*k,(LAT1-lat)*k)
 mi=k/69.17  # SVG units per mile
@@ -20,8 +20,7 @@ L={'Fruitland':(-16,8,'end',0),'Wilton':(0,-20,'middle',0),'Atalissa':(0,-20,'mi
  'Durant':(14,-12,'start',0),'Nichols':(-16,-2,'end',0),'Letts':(16,22,'start',0),'Columbus Junction':(0,34,'middle',0),
  'Buffalo':(0,32,'middle',0),'Blue Grass':(-14,6,'end',0),'Illinois City':(16,24,'start',0),
  'Davenport':(-14,-14,'end',0),'Bettendorf':(0,-26,'middle',0),'Moline':(24,40,'start',1),'Rock Island':(-14,14,'end',0),
- 'East Moline':(30,-38,'start',1),'Silvis':(18,14,'start',0),'Milan':(16,26,'start',0),
- 'Iowa City':(-4,36,'end',1),'Coralville':(18,-30,'start',1)}
+ 'East Moline':(30,-38,'start',1),'Silvis':(18,14,'start',0),'Milan':(16,26,'start',0)}
 def hull(ps):
  ps=sorted(ps);lo=[];up=[]
  cr=lambda o,a,b:(a[0]-o[0])*(b[1]-o[1])-(a[1]-o[1])*(b[0]-o[0])
@@ -38,8 +37,8 @@ rpath=' '.join('M'+' L'.join(f(P(*p)[0])+','+f(P(*p)[1]) for p in seg) for seg i
 mx,my=pts['Muscatine']
 o=[f'<svg class="area-svg" viewBox="0 0 {W} {H}" role="img" aria-labelledby="area-map-title area-map-desc" xmlns="http://www.w3.org/2000/svg">',
  '<title id="area-map-title">Map of The Tech Tamer’s service area around Muscatine, Iowa</title>',
- '<desc id="area-map-desc">A shaded circle about 30 miles around Muscatine, covering Fruitland, Letts, Nichols, Columbus Junction, Atalissa, West Liberty, Wilton, Durant, Buffalo, Blue Grass, Illinois City, Iowa City and Coralville, and the Quad Cities on both sides of the Mississippi River: Davenport and Bettendorf in Iowa, and Moline, Rock Island, East Moline, Silvis and Milan in Illinois. No street address is shown.</desc>',
- '<style>.area-svg{font-family:inherit}.am-t{font-size:23px;font-weight:700;fill:#23335c;paint-order:stroke;stroke:#f4f7fc;stroke-width:6px;stroke-linejoin:round}.am-big{font-size:34px;font-weight:800}.am-sub{font-size:17px;font-weight:700;letter-spacing:.14em;fill:#0074aa}.am-state{font-size:22px;font-weight:800;letter-spacing:.4em;fill:#9aa9c6}.am-note{font-size:17px;fill:#52617f}.am-mob{display:none}@media(max-width:620px){.am-t{font-size:38px;stroke-width:10px}.am-big{font-size:48px}.am-sub{font-size:26px}.am-state{font-size:30px}.am-note{font-size:28px}.am-spokes,.am-desk,.am-key{display:none}.am-mob{display:inline}}</style>',
+ '<desc id="area-map-desc">A shaded circle about 30 miles around Muscatine, covering Fruitland, Wilton, West Liberty, Durant, Columbus Junction, Letts, Nichols, Atalissa, Buffalo and Blue Grass, the Quad Cities on both sides of the Mississippi River (Davenport and Bettendorf in Iowa; Moline, Rock Island, East Moline, Silvis and Milan in Illinois), and Illinois City. No street address is shown.</desc>',
+ '<style>.area-svg{font-family:inherit}.am-t{font-size:23px;font-weight:700;fill:#23335c;paint-order:stroke;stroke:#f4f7fc;stroke-width:6px;stroke-linejoin:round}.am-big{font-size:34px;font-weight:800}.am-sub{font-size:17px;font-weight:700;letter-spacing:.14em;fill:#0074aa}.am-state{font-size:22px;font-weight:800;letter-spacing:.4em;fill:#9aa9c6}.am-note{font-size:17px;fill:#52617f}.am-mob{display:none}@media(max-width:620px){.am-t{font-size:38px;stroke-width:10px}.am-big{font-size:48px}.am-sub{font-size:26px}.am-state{font-size:30px}.am-note{font-size:28px}.am-spokes,.am-desk,.am-key{display:none}.am-mob{display:inline}.am-s{font-size:30px;stroke-width:8px}}</style>',
  f'<rect width="{W}" height="{H}" fill="#f4f7fc"/>',
  '<g stroke="#e3e9f4" stroke-width="1">'+''.join(f'<line x1="{x}" y1="0" x2="{x}" y2="{H}"/>' for x in range(50,W,50))+''.join(f'<line x1="0" y1="{y}" x2="{W}" y2="{y}"/>' for y in range(50,H,50))+'</g>',
  f'<circle cx="{f(mx)}" cy="{f(my)}" r="{f(RADIUS*mi)}" fill="#cdeaf8" stroke="#00a3e0" stroke-opacity=".55" stroke-width="3" stroke-dasharray="10 8"/>',
@@ -53,14 +52,14 @@ for n,(x,y) in pts.items():
  o.append(f'<circle cx="{f(x)}" cy="{f(y)}" r="8" fill="#23335c" stroke="#fff" stroke-width="3"/>')
  o.append(f'<text class="am-t am-desk" x="{f(x+dx)}" y="{f(y+dy)}" text-anchor="{anc}">{n}</text>')
 o.append(f'<circle cx="{f(mx)}" cy="{f(my)}" r="30" fill="#00a3e0" fill-opacity=".25"/><circle cx="{f(mx)}" cy="{f(my)}" r="16" fill="#23335c" stroke="#00a3e0" stroke-width="5"/>')
-o.append(f'<g class="am-desk"><text class="am-t am-big" x="{f(mx-24)}" y="{f(my-20)}" text-anchor="end">Muscatine</text><text class="am-sub" x="{f(mx-26)}" y="{f(my+6)}" text-anchor="end">HOME BASE</text></g>')
-# Phone layout: bigger type, the Quad Cities and Iowa City/Coralville clusters get one label each (the full list is in the caption).
-M=[('Muscatine',390,340,'end','am-big'),('HOME BASE',390,374,'end','am-sub'),('Iowa City &amp; Coralville',40,124,'start',''),
- ('West Liberty',298,228,'end',''),('Wilton',440,192,'middle',''),('Durant',516,250,'start',''),('Nichols',240,288,'end',''),
- ('Fruitland',384,446,'start',''),('Letts',284,424,'end',''),('Columbus Jct.',225,532,'middle',''),('Illinois City',520,412,'start',''),
- ('Quad Cities',760,214,'middle','')]
+o.append(f'<g class="am-desk"><text class="am-t am-big" x="{f(mx-24)}" y="{f(my-10)}" text-anchor="end">Muscatine</text><text class="am-sub" x="{f(mx-26)}" y="{f(my+14)}" text-anchor="end">HOME BASE</text></g>')
+# Phone layout: bigger type; the Quad Cities cluster gets one label (the full list is in the caption).
+M=[('Muscatine',378,394,'end','am-big'),('HOME BASE',378,426,'end','am-sub'),
+ ('West Liberty',250,252,'end',''),('Atalissa',321,236,'middle','am-s'),('Wilton',440,206,'middle',''),('Durant',509,266,'start',''),
+ ('Nichols',214,330,'end',''),('Letts',260,459,'end',''),('Fruitland',366,480,'start',''),('Columbus Jct.',194,571,'middle',''),
+ ('Blue Grass',566,306,'end','am-s'),('Buffalo',612,398,'middle','am-s'),('Illinois City',514,442,'start',''),('Quad Cities',776,234,'middle','')]
 o.append('<g class="am-mob">'+''.join(f'<text class="am-t {c}" x="{x}" y="{y}" text-anchor="{a}">{t}</text>' for t,x,y,a,c in M)+'</g>')
-o.append(f'<text class="am-state" x="{f(P(-91.64,41.08)[0])}" y="{f(P(-91.64,41.08)[1])}">IOWA</text><text class="am-state" x="870" y="480" text-anchor="middle">ILLINOIS</text>')
+o.append(f'<text class="am-state" x="{f(P(-91.64,41.08)[0])}" y="{f(P(-91.64,41.08)[1])}">IOWA</text><text class="am-state" x="880" y="520" text-anchor="middle">ILLINOIS</text>')
 o.append(f'<text class="am-t am-sub am-desk" x="770" y="168" text-anchor="middle">QUAD CITIES · IA &amp; IL</text>')
 # scale bar (10 miles) and north arrow
 sx,sy=W-40-10*mi,H-30
