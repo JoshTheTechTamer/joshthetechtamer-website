@@ -68,7 +68,7 @@ for file in (ROOT/'templates').glob('*.html'):
   s=s.replace('I’ll tame promptly on your schedule','Let’s find a time to tame your tech.')
   s=s.replace('This prepares a message in your email app. Review it and press Send there to get in touch.','Tell me what you need and how you’d like me to get back to you. We’ll arrange the next step together.')
   s=re.sub(r'<form id="request-form".*?</form>',form,s)
-  s=s.replace('<script src="/assets/site.js" defer></script>','<script src="/assets/site.js" defer></script><script src="https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit&onload=onTechTamerTurnstile" async defer></script>',1)
+  s=s.replace('<script src="assets/site.js?v=20261009-leadsuccess" defer></script>','<script src="assets/site.js?v=20261009-leadsuccess" defer></script><script src="https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit&onload=onTechTamerTurnstile" async defer></script>',1)
  if name=='rates.html':
   s=s.replace('or prepare an email request on the Contact page','or send an inquiry on the Contact page')
   extra='<details><summary>What should I have ready for a visit?</summary><p>Keep the device and its usual cables available. If signing in is needed, you can enter your password yourself. Share your location and a brief description when arranging the visit.</p></details><details><summary>How are travel and payment details handled?</summary><p>Share your location when you request help. Ask Josh to confirm any travel charges, minimum billing, and payment arrangements before your visit.</p></details>'

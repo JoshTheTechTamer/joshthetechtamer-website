@@ -166,3 +166,18 @@
  .wp-step-num{top:16px}
  .wp-tag{top:12px}
 }
+/* v3 copy: longer headline, demo note, paired prices, Facebook link */
+.wp-demo-note{display:inline-block;margin:-18px auto 36px;font-size:15px;color:#c9d5eb;background:rgba(255,255,255,.06);border:1px dashed rgba(191,233,255,.4);border-radius:12px;padding:9px 16px;max-width:640px}
+.wp-kicker{display:flex;flex-wrap:wrap;justify-content:center;align-items:center;gap:12px 14px;font-size:clamp(1.25rem,2.4vw,1.9rem)}
+.wp-kp{display:inline-block;padding:10px 20px;border-radius:14px;line-height:1.2}
+.wp-kp--build{background:#fff;color:var(--navy)}
+.wp-kp--care{background:rgba(18,174,245,.16);border:2px solid var(--sky);color:#fff;font-size:.72em;font-weight:800}
+.wp-fb-row{margin:18px 0 0}
+.wp-fb{display:inline-flex;align-items:center;gap:8px;color:#bfe9ff;font-weight:700;font-size:15px;text-decoration:underline;text-underline-offset:4px}
+.wp-fb:hover{color:#fff}
+.cta .wp-fb-row--cta{margin-top:16px}
+@media(max-width:620px){
+ .wp-demo-note{margin:-12px auto 26px;font-size:14px}
+ .wp-kicker{flex-direction:column;gap:10px}
+ .wp-kp{width:100%;max-width:340px}
+}

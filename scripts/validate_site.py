@@ -38,6 +38,10 @@ assert '/website-package.html' in (ROOT/'sitemap.xml').read_text()
 # Every page shares the homepage header (only aria-current and For Business's contact ?service= may differ).
 hdr=lambda n:re.sub(r' aria-current="page"|\?service=[^"]*','',re.search(r'<header.*?</header>',(ROOT/n).read_text(),re.S).group())
 for f in ROOT.glob('*.html'):assert hdr(f.name)==hdr('index.html'),('header differs',f.name)
+# Main menu order (desktop nav and mobile slide-out share this markup); current page marked on Website Package.
+nav=re.search(r'<nav class="navlinks".*?</nav>',(ROOT/'index.html').read_text(),re.S).group()
+assert re.findall(r'>([^<>]+)</a>',nav)==['Tech Help','For Business','Website Package','Digital Kits','Rates & FAQ','About Josh','Request a visit ↗'],nav
+assert '<a href="/website-package.html" aria-current="page">Website Package</a>' in (ROOT/'website-package.html').read_text()
 if '--production' in sys.argv:
  assert json.loads((ROOT/'data/site-config.json').read_text())['form_mode']=='cloudflare'
  contact=(ROOT/'contact.html').read_text();script=(ROOT/'assets/site.js').read_text()
