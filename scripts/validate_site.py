@@ -77,7 +77,8 @@ for n in pages:
    assert node['itemListElement'][-1]['item']==final(n),n
   if node['@type']=='FAQPage':
    # FAQ markup only where the same questions are visible on the page.
-   for q in node['mainEntity']:assert unescape(re.sub(r'<[^>]+>','',s)).count(q['name'])>=1,('FAQ not visible',n,q['name'])
+   vis=unescape(re.sub(r'<[^>]+>','',s))
+   for q in node['mainEntity']:assert q['name'] in vis and q['acceptedAnswer']['text'] in vis,('FAQ markup must match visible text',n,q['name'])
  assert (n=='index.html')==(not any(x['@type']=='BreadcrumbList' for x in graph)),n
 cfg=json.loads((ROOT/'data/site-config.json').read_text())
 for k in ['google_business_profile_url','google_review_url']:
@@ -94,6 +95,17 @@ idx=(ROOT/'index.html').read_text()
 assert 'hero-logo.png' not in ''.join((ROOT/n).read_text() for n in pages+['404.html']),'1.48 MB hero-logo.png must not be referenced'
 assert 'image/webp' in idx and 'hero-logo-800.webp' in idx
 for n in ['index.html','services.html']:assert 'href="/tech-help-muscatine"' in (ROOT/n).read_text(),n
+# Homepage hero stays exactly as Josh approved it (only the image is the optimized <picture>, and links are extensionless).
+hero=re.search(r'<section class="hero">.*?</section>',idx,re.S).group()
+assert '<div class="eyebrow">Your local tech guy · Muscatine, Iowa</div><h1>Not very tech savvy?<br><span>I’ll come to you.</span></h1>' in hero and 'eyebrow-h1' not in hero and 'hero-local' not in hero,'home hero changed'
+assert 'In-home computer &amp; tech help in Muscatine, IA' in idx and 'House calls all over' in idx
+# Quad Cities on both sides of the river, plus Iowa City and Coralville, in the business areaServed.
+served=[a['name'] for a in json.loads(re.search(r'<script type="application/ld\+json">(.*?)</script>',idx).group(1))['@graph'][0]['areaServed']]
+for town in ['Davenport, IA','Bettendorf, IA','Moline, IL','Rock Island, IL','East Moline, IL','Iowa City, IA','Coralville, IA']:assert town in served,town
+assert 'Illinois-side customers can ask' not in (ROOT/'tech-help-quad-cities.html').read_text() and 'a couple times a week' in (ROOT/'tech-help-quad-cities.html').read_text()
+# Security cameras/systems are residential (in-home) only: never offered for businesses (not licensed for commercial security in Iowa).
+for n in ['services.html','business.html']:assert 'residential' in (ROOT/n).read_text() and 'commercial or business security' in (ROOT/n).read_text(),n
+assert '<svg class="area-svg"' in (ROOT/'service-area.html').read_text() and 'See me on Google Maps' in (ROOT/'service-area.html').read_text()
 # Never publish the street address (service-area business).
 for n in pages+['404.html']:assert 'Cedar' not in (ROOT/n).read_text() and 'streetAddress' not in (ROOT/n).read_text(),n
 if '--production' in sys.argv:

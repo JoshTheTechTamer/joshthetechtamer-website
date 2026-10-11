@@ -19,6 +19,22 @@
   {
    "q": "Can you help with scams or a hacked account?",
    "a": "Yes. If a pop-up, phone call, or strange email has you worried, or you’re locked out of an account, start with my <a href=\"scam-help.html\">scam and hacked-account help</a> page, then give me a call."
+  },
+  {
+   "q": "Is there a local alternative to Geek Squad?",
+   "a": "Yes. If you’d rather work with one local person, I’m Josh, The Tech Tamer, based right here in Muscatine. I come to your home or office, explain things in plain English, and you deal with me from start to finish. Text or call 563-261-0200 and tell me what’s going on."
+  },
+  {
+   "q": "How much does computer help cost in Muscatine?",
+   "a": "With me, it’s $50 an hour. On-site visits have a one-hour minimum, and the first consultation is free. Bigger projects get an estimate before any work starts, and I’ll confirm any travel charge before your visit."
+  },
+  {
+   "q": "How can I find someone to help me with my computer?",
+   "a": "Look for someone local who will come to you and explain what they’re doing. In Muscatine and nearby towns, that can be me. I come to your home, so there’s nothing to haul anywhere. Text or call 563-261-0200, tell me what’s happening, and we’ll set up a time."
+  },
+  {
+   "q": "Do you look at computers for free?",
+   "a": "The first consultation is free. Call or text, tell me what’s happening, and I’ll help you figure out the next step. Hands-on work at your home is $50 an hour with a one-hour minimum, so you’ll know the cost before I come out."
   }
  ],
  "scam-help.html": [
@@ -45,16 +61,12 @@
  ],
  "tech-help-quad-cities.html": [
   {
-   "q": "Do you come to Davenport and Bettendorf?",
-   "a": "Yes, by appointment. I’m based in Muscatine, so Quad Cities visits get scheduled ahead of time. Text or call and we’ll pick a day."
+   "q": "Which Quad Cities towns do you cover?",
+   "a": "The whole Quad Cities, on both sides of the river: Davenport, Bettendorf, Moline, Rock Island and East Moline. I’m in the Quad Cities a couple times a week, so text to get on the schedule."
   },
   {
    "q": "Is there a travel charge?",
    "a": "Tech help is $50 an hour with a one-hour minimum on-site. Because the Quad Cities are a longer drive, I’ll tell you about any travel charge up front, before we book."
-  },
-  {
-   "q": "What about the Illinois side?",
-   "a": "Ask me. Tell me where you are and what you need, and I’ll let you know honestly whether I can make it out."
   }
  ]
 }
