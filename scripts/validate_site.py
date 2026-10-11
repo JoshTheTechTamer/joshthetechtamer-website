@@ -32,12 +32,22 @@ pkg=(ROOT/'website-package.html').read_text();cfg=json.loads((ROOT/'data/site-co
 for needed in ['$800','$400 deposit','$25','First month free, cancel anytime','billed monthly to your card through Stripe','$120/year','sms:+15632610200','tel:+15632610200','Built by']:assert needed in pkg,needed
 assert ('mvp563.com' in pkg)==bool(cfg.get('show_mvp563_example')),'mvp563 example flag'
 assert '<!--EXAMPLE:' not in pkg
+h1=re.search(r'<h1[^>]*>(.*?)</h1>',pkg,re.S).group(1)
+assert re.sub(r'<svg.*?</svg>|<[^>]+>','',h1,flags=re.S).split()==['See','your','website','built','before','you','spend','a','dime.'],h1
+assert '<span class="wp-gold">built<svg class="wp-swoosh"' in h1 and 'aria-hidden="true"' in h1 and '<em class="wp-italic">dime</em>.' in h1,h1
+pkg_head=pkg[:pkg.index('</head>')]
+assert 'free demo' not in (h1+pkg_head).lower(),'no free demo in headline/title/meta'
+assert 'wp-demo-note' not in pkg and 'Not unlimited redesigns' not in pkg and 'not unlimited redesigns' in pkg,'demo note removed; step 2 keeps it'
 for page in ['rates.html','business.html']:assert '/website-package.html' in (ROOT/page).read_text(),page
 rates=(ROOT/'rates.html').read_text();assert 'one-hour minimum' in rates and 'No subscription required.' not in rates
 assert '/website-package.html' in (ROOT/'sitemap.xml').read_text()
 # Every page shares the homepage header (only aria-current and For Business's contact ?service= may differ).
 hdr=lambda n:re.sub(r' aria-current="page"|\?service=[^"]*','',re.search(r'<header.*?</header>',(ROOT/n).read_text(),re.S).group())
 for f in ROOT.glob('*.html'):assert hdr(f.name)==hdr('index.html'),('header differs',f.name)
+# Main menu order (desktop nav and mobile slide-out share this markup); current page marked on Website Package.
+nav=re.search(r'<nav class="navlinks".*?</nav>',(ROOT/'index.html').read_text(),re.S).group()
+assert re.findall(r'>([^<>]+)</a>',nav)==['Tech Help','For Business','Get a Website','Digital Kits','Rates & FAQ','About Josh','Request a visit ↗'],nav
+assert '<a href="/website-package.html" aria-current="page">Get a Website</a>' in (ROOT/'website-package.html').read_text()
 if '--production' in sys.argv:
  assert json.loads((ROOT/'data/site-config.json').read_text())['form_mode']=='cloudflare'
  contact=(ROOT/'contact.html').read_text();script=(ROOT/'assets/site.js').read_text()
