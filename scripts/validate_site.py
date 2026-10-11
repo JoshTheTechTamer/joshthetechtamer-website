@@ -40,8 +40,8 @@ hdr=lambda n:re.sub(r' aria-current="page"|\?service=[^"]*','',re.search(r'<head
 for f in ROOT.glob('*.html'):assert hdr(f.name)==hdr('index.html'),('header differs',f.name)
 # Main menu order (desktop nav and mobile slide-out share this markup); current page marked on Website Package.
 nav=re.search(r'<nav class="navlinks".*?</nav>',(ROOT/'index.html').read_text(),re.S).group()
-assert re.findall(r'>([^<>]+)</a>',nav)==['Tech Help','For Business','Website Build Package','Digital Kits','Rates & FAQ','About Josh','Request a visit ↗'],nav
-assert '<a href="/website-package.html" aria-current="page">Website Build Package</a>' in (ROOT/'website-package.html').read_text()
+assert re.findall(r'>([^<>]+)</a>',nav)==['Tech Help','For Business','Get a Website','Digital Kits','Rates & FAQ','About Josh','Request a visit ↗'],nav
+assert '<a href="/website-package.html" aria-current="page">Get a Website</a>' in (ROOT/'website-package.html').read_text()
 if '--production' in sys.argv:
  assert json.loads((ROOT/'data/site-config.json').read_text())['form_mode']=='cloudflare'
  contact=(ROOT/'contact.html').read_text();script=(ROOT/'assets/site.js').read_text()
