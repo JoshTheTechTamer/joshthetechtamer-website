@@ -1,5 +1,5 @@
 {
-  "_note": "Hero wording for /website-package. Edit here, then run scripts/build_pages.py. Plain text only. hero_line2 is the bright-blue half of the headline. facebook_url is the same page linked in the site footer.",
+  "_note": "Hero wording for /website-package. Edit here, then run scripts/build_pages.py. Plain text only. hero_line2 is the bright-blue half of the headline. facebook_url is the same page linked in the site footer. hero_gold_word (in hero_line1) is shown in gold with a hand-drawn underline; hero_italic_word (in hero_line2) is shown in italics.",
   "hero_eyebrow": "Local websites · Muscatine, Iowa",
   "hero_line1": "See your website built",
   "hero_line2": "before you spend a dime.",
@@ -10,5 +10,7 @@
   "hero_cta": "Text Josh for your free preview",
   "hero_note": "Or call 563-261-0200 · Muscatine, Iowa City & the Quad Cities",
   "facebook_cta": "or message me on Facebook",
-  "facebook_url": "https://www.facebook.com/profile.php?id=61575951953109"
+  "facebook_url": "https://www.facebook.com/profile.php?id=61575951953109",
+  "hero_gold_word": "built",
+  "hero_italic_word": "dime"
 }

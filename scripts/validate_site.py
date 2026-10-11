@@ -33,7 +33,8 @@ for needed in ['$800','$400 deposit','$25','First month free, cancel anytime','b
 assert ('mvp563.com' in pkg)==bool(cfg.get('show_mvp563_example')),'mvp563 example flag'
 assert '<!--EXAMPLE:' not in pkg
 h1=re.search(r'<h1[^>]*>(.*?)</h1>',pkg,re.S).group(1)
-assert '<span class="wp-h1-a">See your website built</span>' in h1 and '<span class="wp-h1-b">before you spend a dime.</span>' in h1,h1
+assert re.sub(r'<svg.*?</svg>|<[^>]+>','',h1,flags=re.S).split()==['See','your','website','built','before','you','spend','a','dime.'],h1
+assert '<span class="wp-gold">built<svg class="wp-swoosh"' in h1 and 'aria-hidden="true"' in h1 and '<em class="wp-italic">dime</em>.' in h1,h1
 pkg_head=pkg[:pkg.index('</head>')]
 assert 'free demo' not in (h1+pkg_head).lower(),'no free demo in headline/title/meta'
 assert 'wp-demo-note' not in pkg and 'Not unlimited redesigns' not in pkg and 'not unlimited redesigns' in pkg,'demo note removed; step 2 keeps it'

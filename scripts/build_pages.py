@@ -61,6 +61,15 @@ for file in (ROOT/'templates').glob('*.html'):
  if name=='website-package.html':
   # Hero wording lives in data/website-package-copy.json so it is easy to edit.
   copy=json.loads((ROOT/'data/website-package-copy.json').read_text())
+  # Headline accents: one gold word with a hand-drawn swoosh (line 1) and one italic word (line 2); still real text.
+  def accent(text,word,wrap):
+   t=escape(text,quote=False)
+   if not word:return t
+   m=re.search(r'\b'+re.escape(escape(word,quote=False))+r'\b',t);assert m,('accent word not in headline',word)
+   return t[:m.start()]+wrap(m.group())+t[m.end():]
+  swoosh='<svg class="wp-swoosh" viewBox="0 0 200 18" preserveAspectRatio="none" aria-hidden="true" focusable="false"><path d="M3 12.5C40 6.5 92 4.2 140 5.6c20 .6 38 2 55 4.4" fill="none" stroke="currentColor" stroke-width="5" stroke-linecap="round"/><path d="M18 15.5c38-4.6 86-6 150-3.4" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" opacity=".55"/></svg>'
+  s=s.replace('{{hero_line1}}',accent(copy['hero_line1'],copy.get('hero_gold_word'),lambda w:'<span class="wp-gold">'+w+swoosh+'</span>'))
+  s=s.replace('{{hero_line2}}',accent(copy['hero_line2'],copy.get('hero_italic_word'),lambda w:'<em class="wp-italic">'+w+'</em>'))
   for k,v in copy.items():s=s.replace('{{'+k+'}}',escape(v,quote=False))
   assert '{{' not in s,'missing website-package copy key'
   for slot,(flag,card) in examples.items():s=s.replace('<!--EXAMPLE:'+slot+'-->',card if config.get(flag) else '')
