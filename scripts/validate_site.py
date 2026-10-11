@@ -32,6 +32,10 @@ pkg=(ROOT/'website-package.html').read_text();cfg=json.loads((ROOT/'data/site-co
 for needed in ['$800','$400 deposit','$25','First month free, cancel anytime','billed monthly to your card through Stripe','$120/year','sms:+15632610200','tel:+15632610200','Built by']:assert needed in pkg,needed
 assert ('mvp563.com' in pkg)==bool(cfg.get('show_mvp563_example')),'mvp563 example flag'
 assert '<!--EXAMPLE:' not in pkg
+h1=re.search(r'<h1[^>]*>(.*?)</h1>',pkg,re.S).group(1)
+assert '<span class="wp-h1-a">See your website</span>' in h1 and '<span class="wp-h1-b">before you spend a dime.</span>' in h1,h1
+pkg_head=pkg[:pkg.index('</head>')]
+assert 'free demo' not in (h1+pkg_head).lower(),'no free demo in headline/title/meta'
 assert 'wp-demo-note' not in pkg and 'Not unlimited redesigns' not in pkg and 'not unlimited redesigns' in pkg,'demo note removed; step 2 keeps it'
 for page in ['rates.html','business.html']:assert '/website-package.html' in (ROOT/page).read_text(),page
 rates=(ROOT/'rates.html').read_text();assert 'one-hour minimum' in rates and 'No subscription required.' not in rates

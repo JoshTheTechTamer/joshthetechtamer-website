@@ -1,8 +1,8 @@
 {
   "_note": "Hero wording for /website-package. Edit here, then run scripts/build_pages.py. Plain text only. hero_line2 is the bright-blue half of the headline. facebook_url is the same page linked in the site footer.",
   "hero_eyebrow": "Local websites · Muscatine, Iowa",
-  "hero_line1": "A free demo website,",
-  "hero_line2": "made for your business.",
+  "hero_line1": "See your website",
+  "hero_line2": "before you spend a dime.",
   "hero_sub": "Your free personalized preview, no obligation.",
   "hero_kicker_lead": "Like it?",
   "hero_price_build": "$800 to build & launch.",
