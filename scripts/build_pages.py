@@ -12,7 +12,12 @@ meta={
 'digital-kits.html':('DIY Tech Guides: Wi-Fi, Computers & Scam Safety | The Tech Tamer','Practical downloadable guides for home networks, new computers, scam safety and small-business technology. Explore six kits and learn at your own pace.','kits'),
 'rates.html':('Tech Help Rates & FAQ | Muscatine | The Tech Tamer','Tech help and business support at $50/hour. Free initial consultation and estimates for larger projects. Learn how visits, scheduling and project costs work.','rates'),
 'about.html':('Meet Josh Sargent | Muscatine Tech Help | The Tech Tamer','Meet Josh Sargent, your local Tech Tamer. Patient, personal home and office tech help, with electronics and network engineering training.','about'),
-'contact.html':('Request a Tech Help Visit in Muscatine | The Tech Tamer','Request home or office tech help in Muscatine and Eastern Iowa. Call or text 563-261-0200, or send an inquiry. Free initial consultation.','contact')}
+'contact.html':('Request a Tech Help Visit in Muscatine | The Tech Tamer','Request home or office tech help in Muscatine and Eastern Iowa. Call or text 563-261-0200, or send an inquiry. Free initial consultation.','contact'),
+'website-package.html':('Small-Business Website Package | Muscatine | The Tech Tamer','A simple, phone-friendly website for your Muscatine or Quad Cities business: free preview first, then $800 to build and launch. Optional $25/month Care Plan.','website')}
+# Pages without their own share image or a one-word breadcrumb name.
+share_key={'website':'business'};crumb={'website':'Website Package'}
+# Example sites appear only once the client has OK'd it (flags in data/site-config.json, off by default).
+examples={'mvp563':('show_mvp563_example','<article class="service-card"><h2>MVP 563</h2><p>A local business site built and hosted the same way.</p><a class="textlink" href="https://mvp563.com/">Visit mvp563.com</a></article>')}
 # The header uses the readable full lockup; the favicon stays the mascot crop.
 def apply_header_logo(s):
  if 'class="brand brand-lockup header-animation"' in s:return s
@@ -50,7 +55,11 @@ for file in (ROOT/'templates').glob('*.html'):
    card=m.group();h=re.search(r'<h2>(.*?)</h2>',card).group(1)
    return card.replace('href="contact.html"','href="/contact.html?service='+quote(h)+'"')
   s=re.sub(r'<article class="service-card".*?</article>',context,s)
- if name=='business.html':s=s.replace('href="contact.html"','href="/contact.html?service=Startup%20consulting"')
+ if name=='business.html':
+  s=s.replace('href="contact.html"','href="/contact.html?service=Startup%20consulting"')
+  s=s.replace('<li>Computer, printer, and network support</li></ul></article>','<li>Computer, printer, and network support</li></ul><a class="textlink" href="website-package.html">See the Website Package</a></article>',1)
+ if name=='website-package.html':
+  for slot,(flag,card) in examples.items():s=s.replace('<!--EXAMPLE:'+slot+'-->',card if config.get(flag) else '')
  if name=='contact.html':
   s=s.replace('I’ll tame promptly on your schedule','Let’s find a time to tame your tech.')
   s=s.replace('This prepares a message in your email app. Review it and press Send there to get in touch.','Tell me what you need and how you’d like me to get back to you. We’ll arrange the next step together.')
@@ -60,15 +69,20 @@ for file in (ROOT/'templates').glob('*.html'):
   s=s.replace('or prepare an email request on the Contact page','or send an inquiry on the Contact page')
   extra='<details><summary>What should I have ready for a visit?</summary><p>Keep the device and its usual cables available. If signing in is needed, you can enter your password yourself. Share your location and a brief description when arranging the visit.</p></details><details><summary>How are travel and payment details handled?</summary><p>Share your location when you request help. Ask Josh to confirm any travel charges, minimum billing, and payment arrangements before your visit.</p></details>'
   s=s.replace('<details><summary>Do you offer a monthly subscription?',extra+'<details><summary>Do you offer a monthly subscription?')
+  # Website Package: "no subscription" is tech help only; state the on-site minimum; point to the package.
+  s=s.replace('<p>Personal help with your technology or business project. No subscription required.</p><ul class="checklist"><li>Free initial consultation</li>','<p>Personal help with your technology or business project. Tech help never needs a subscription.</p><ul class="checklist"><li>Free initial consultation</li><li>On-site visits have a one-hour minimum ($50)</li>')
+  s=s.replace('Ask Josh to confirm any travel charges, minimum billing, and payment arrangements before your visit.','On-site visits have a one-hour minimum at $50/hour. Ask Josh to confirm any travel charges and payment arrangements before your visit.')
+  s=s.replace('<summary>Do you offer a monthly subscription?</summary><p>No subscription is needed. Book the help you need at $50/hour, or ask for an estimate for a larger project.</p>','<summary>Do you offer a monthly subscription?</summary><p>Not for tech help. Book the help you need at $50/hour, or ask for an estimate for a larger project. The only monthly plan is the optional $25/month Care Plan for websites I build. See the <a href="/website-package.html#care-plan">Website Package</a>.</p>')
+  s=s.replace('</article></div></div></section><section class="section tint">','</article></div><div class="notice"><strong>Need a website for your business?</strong> Tech help is billed by the hour with no subscription. Websites are a separate package: a free preview first, then $800 to build and launch, with an optional $25/month Care Plan. <a href="website-package.html">See the Website Package</a>.</div></div></section><section class="section tint">',1)
  if name in meta:
   title,desc,key=meta[name];s=re.sub(r'<title>.*?</title>','<title>'+escape(title)+'</title>',s)
-  for prop,value in [('name="description"',desc),('property="og:title"',title),('property="og:description"',desc),('property="og:image"',BASE+'/assets/optimized/share-'+key+'.jpg')]:
+  for prop,value in [('name="description"',desc),('property="og:title"',title),('property="og:description"',desc),('property="og:image"',BASE+'/assets/optimized/share-'+share_key.get(key,key)+'.jpg')]:
    s=re.sub(r'<meta '+prop+r' content="[^"]*">','<meta '+prop+' content="'+escape(value,quote=True)+'">',s)
   s=s.replace('</head>','<meta name="twitter:card" content="summary_large_image"><meta property="og:image:width" content="1200"><meta property="og:image:height" content="630"></head>')
   data=json.loads(re.search(r'<script type="application/ld\+json">(.*?)</script>',s).group(1))
   data.update({'@id':BASE+'/#business','logo':BASE+'/assets/logo.png','sameAs':data['sameAs']+['https://www.linkedin.com/in/josh-sargent-adsales'],'openingHoursSpecification':[{'@type':'OpeningHoursSpecification','dayOfWeek':['Sunday','Monday','Tuesday','Thursday','Friday','Saturday'],'opens':'08:00','closes':'20:00'}]})
   graph=[data]
-  if name!='index.html':graph.append({'@type':'BreadcrumbList','itemListElement':[{'@type':'ListItem','position':1,'name':'Home','item':BASE+'/'},{'@type':'ListItem','position':2,'name':key.title(),'item':BASE+'/'+name}]})
+  if name!='index.html':graph.append({'@type':'BreadcrumbList','itemListElement':[{'@type':'ListItem','position':1,'name':'Home','item':BASE+'/'},{'@type':'ListItem','position':2,'name':crumb.get(key,key.title()),'item':BASE+'/'+name}]})
   s=re.sub(r'<script type="application/ld\+json">.*?</script>','<script type="application/ld+json">'+json.dumps({'@context':'https://schema.org','@graph':graph})+'</script>',s)
  else:s=s.replace('</head>','<meta name="robots" content="noindex,follow"></head>')
  s=re.sub(r'<img\b[^>]*>',image_tag,s)
@@ -79,4 +93,4 @@ for file in (ROOT/'templates').glob('*.html'):
  (ROOT/name).write_text(s)
 (ROOT/'robots.txt').write_text('User-agent: *\nAllow: /\n\nSitemap: '+BASE+'/sitemap.xml\n')
 (ROOT/'sitemap.xml').write_text('<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">'+''.join('<url><loc>'+BASE+'/'+('' if n=='index.html' else n)+'</loc></url>' for n in meta)+'</urlset>')
-print('Built seven pages and 404; no publishing performed.')
+print('Built eight pages and 404; no publishing performed.')

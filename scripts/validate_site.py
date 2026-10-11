@@ -27,6 +27,14 @@ assert re.findall(r'https://joshthetechtamer.gumroad.com/l/[^" ]+',kit)==re.find
 assert 'class="review-carousel"' in (ROOT/'index.html').read_text()
 assert [r['rating'] for r in json.loads((ROOT/'data/reviews.json').read_text())].count(5)==2
 assert 'backups' in (ROOT/'_config.yml').read_text()
+# Website Package page: linked from Rates and For Business; unapproved example sites stay hidden.
+pkg=(ROOT/'website-package.html').read_text();cfg=json.loads((ROOT/'data/site-config.json').read_text())
+for needed in ['$800','$400 deposit','$25','First month free, cancel anytime','billed monthly to your card through Stripe','$120/year','sms:+15632610200','tel:+15632610200','Built by']:assert needed in pkg,needed
+assert ('mvp563.com' in pkg)==bool(cfg.get('show_mvp563_example')),'mvp563 example flag'
+assert '<!--EXAMPLE:' not in pkg
+for page in ['rates.html','business.html']:assert '/website-package.html' in (ROOT/page).read_text(),page
+rates=(ROOT/'rates.html').read_text();assert 'one-hour minimum' in rates and 'No subscription required.' not in rates
+assert '/website-package.html' in (ROOT/'sitemap.xml').read_text()
 if '--production' in sys.argv:
  assert json.loads((ROOT/'data/site-config.json').read_text())['form_mode']=='cloudflare'
  contact=(ROOT/'contact.html').read_text();script=(ROOT/'assets/site.js').read_text()
