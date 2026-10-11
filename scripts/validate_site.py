@@ -101,6 +101,8 @@ assert '<div class="eyebrow">Your local tech guy · Muscatine, Iowa</div><h1>Not
 assert 'In-home computer &amp; tech help in Muscatine, IA' in idx and 'House calls all over' in idx
 # Josh's final list (small towns first, then the Quad Cities on both sides of the river), no Iowa City/Coralville.
 served=[a['name'] for a in json.loads(re.search(r'<script type="application/ld\+json">(.*?)</script>',idx).group(1))['@graph'][0]['areaServed']]
+for n in ['services.html','digital-kits.html']:
+ t=(ROOT/n).read_text();assert 'helping a woman' not in t and 'alt="Josh Sargent showing Madonna something on a laptop at a kitchen table"' in t,('josh-helping alt',n)
 FINAL=['Muscatine, IA','Fruitland, IA','Wilton, IA','West Liberty, IA','Durant, IA','Columbus Junction, IA','Letts, IA','Nichols, IA','Atalissa, IA','Buffalo, IA','Blue Grass, IA','Davenport, IA','Bettendorf, IA','Moline, IL','Rock Island, IL','East Moline, IL','Silvis, IL','Milan, IL','Illinois City, IL','Muscatine County, IA']
 assert served==FINAL,('areaServed must be exactly Josh’s list, in his order',served)
 for n in pages+['404.html']:
