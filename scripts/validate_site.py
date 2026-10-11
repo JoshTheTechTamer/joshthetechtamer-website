@@ -35,6 +35,9 @@ assert '<!--EXAMPLE:' not in pkg
 for page in ['rates.html','business.html']:assert '/website-package.html' in (ROOT/page).read_text(),page
 rates=(ROOT/'rates.html').read_text();assert 'one-hour minimum' in rates and 'No subscription required.' not in rates
 assert '/website-package.html' in (ROOT/'sitemap.xml').read_text()
+# Every page shares the homepage header (only aria-current and For Business's contact ?service= may differ).
+hdr=lambda n:re.sub(r' aria-current="page"|\?service=[^"]*','',re.search(r'<header.*?</header>',(ROOT/n).read_text(),re.S).group())
+for f in ROOT.glob('*.html'):assert hdr(f.name)==hdr('index.html'),('header differs',f.name)
 if '--production' in sys.argv:
  assert json.loads((ROOT/'data/site-config.json').read_text())['form_mode']=='cloudflare'
  contact=(ROOT/'contact.html').read_text();script=(ROOT/'assets/site.js').read_text()
