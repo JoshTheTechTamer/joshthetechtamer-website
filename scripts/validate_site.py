@@ -53,6 +53,51 @@ nav=re.search(r'<nav class="navlinks".*?</nav>',(ROOT/'index.html').read_text(),
 assert re.findall(r'>([^<>]+)</a>',nav)==['Tech Help','For Business','Get a Website','Digital Kits','Rates & FAQ','About Josh','Request a visit ↗'],nav
 assert '<a href="/website-package" aria-current="page">Get a Website</a>' in (ROOT/'website-package.html').read_text()
 
+# ---- Website Package showcase (Oct 2026): copy, timeline, slider, features, extras card, motion + weight ----
+css=(ROOT/'assets/website-package.css').read_text();wpjs=(ROOT/'assets/website-package.js').read_text()
+wcopy=json.loads((ROOT/'data/website-package-copy.json').read_text())
+assert wcopy['hero_price_build']=='Only $800 to build & launch.' and wcopy['hero_kicker_lead']=='Like it?'
+kick=re.search(r'<p class="wp-kicker">(.*?)</p>',pkg,re.S).group(1)
+assert re.sub(r'<[^>]+>','',kick).split()==['Like','it?','Only','$800','to','build','&amp;','launch.','$25/month','hosting','&amp;','care,','first','month','free.'],kick
+tl=re.search(r'<ol class="wp-tl" data-wp-timeline>(.*?)</ol>',pkg,re.S).group(1)
+assert tl.count('<li class="wp-tl-step')==5 and tl.count('class="wp-step-num"')==5
+assert re.findall(r'<h3>(.*?)</h3>',tl)==['A short call.','Build a free preview.','A fit check.','$800 to launch.','Go-live.'],'timeline headings'
+assert 'A $400 deposit gets us started. The other $400 is due when your site goes live.' in tl and 'not unlimited redesigns' in tl
+# one slate blue for every step number: a single background rule, no per-step colour overrides
+num_bg=[r for r in re.findall(r'([^{}]*\.wp-step-num[^{}]*)\{([^{}]*)\}',css) if 'background' in r[1]]
+assert len(num_bg)==1 and 'background:var(--slate)' in num_bg[0][1],num_bg
+assert not re.search(r'wp-tl-step--(free|live)[^{]*\.wp-step-num',css) and '.wp-step--free' not in css
+# before/after: accessible native range, generic mock (no real Facebook branding), lazy images
+ba=re.search(r'<div class="wp-ba".*?</div></div><p class="wp-ba-note">',pkg,re.S).group()
+assert 'type="range"' in ba and 'aria-label="Compare:' in ba and ba.count('loading="lazy"')==2
+mock=(ROOT/'assets/website-package/social-page-mock.svg').read_text()
+assert 'facebook' not in mock.lower() and '<image' not in mock and 'not a real business' in mock
+assert 'generic mock-up, not a real business' in pkg
+# What you get: only agreement-backed claims
+feat=re.findall(r'<li class="wp-feat"[^>]*>.*?<h3>(.*?)</h3>',pkg,re.S)
+assert feat==['Looks great on phones and computers','One-tap call &amp; booking buttons','Google Maps &amp; reviews','Your own web address','Hosting for the first year','One round of revisions'],feat
+assert not re.search(r'guarantee|fast[- ]loading|\d+% |#1 ',re.sub(r'<[^>]+>',' ',pkg.split('</head>')[1]),re.I),'no guarantees or invented stats'
+# polished "What costs extra" (wording kept) vs. plain "Without the Care Plan"
+ex=re.search(r'<article class="wp-mini wp-mini--extra".*?</article>',pkg,re.S).group()
+for t in ['Requested changes: $50/hour, with or without the Care Plan. This means new content, new pages, design changes, new services or prices, and new photos.','Website audits: $50/hour','Hosting and domain after year one without the Care Plan: $120/year (included with the Care Plan)']:assert t in ex,t
+assert ex.count('<svg')==4 and 'border-box' in css
+plain=re.search(r'<article class="wp-mini wp-mini--plain".*?</article>',pkg,re.S).group();assert '<svg' not in plain and 'Without the Care Plan' in plain
+# motion: content is never hidden without JS; reduced motion shows everything still; tilt is mouse-only
+for sel,body in re.findall(r'([^{}]*)\{([^{}]*opacity:0[^{}]*)\}',css):
+ if 'data-rv' in sel or 'wp-tl-card' in sel:assert sel.strip().startswith(('.wp-anim','.wp-tl-anim')),sel
+rm=re.search(r'@media\(prefers-reduced-motion:reduce\)\{(.*?)\n\}',css,re.S).group(1)
+for need in ['.wp-phone-tall','[data-rv],.wp-tl-card{opacity:1!important;transform:none!important}','.wp-tl{--fill:1!important}','.wp-price{transform:none!important}','animation:none!important']:assert need in rm,need
+assert "matchMedia('(prefers-reduced-motion: reduce)')" in wpjs and "'(hover: hover) and (pointer: fine)'" in wpjs and "pointerType!=='mouse'" in wpjs
+assert 'src="/assets/website-package.js?v=' in pkg
+# weight: below-the-fold images lazy; eager bytes (images + page CSS/JS) stay small; phone scroll image loads after the page
+main_html=pkg[pkg.index('<main'):]
+after_hero=main_html[main_html.index('</section>'):]
+assert all('loading="lazy"' in t for t in re.findall(r'<img [^>]*>',after_hero)),'below-the-fold images lazy'
+eager=[re.search(r'src="([^"]+)"',t).group(1) for t in re.findall(r'<img [^>]*>',pkg) if 'loading="lazy"' not in t]
+size=lambda u:(ROOT/u.lstrip('/').split('?')[0]).stat().st_size
+eager_bytes=sum(size(u) for u in eager)+len(css)+len(wpjs)
+assert eager_bytes<300_000,('website-package eager weight',eager_bytes)
+assert 'jtt-home-mobile-tall' not in re.sub(r'data-tall-\d+="[^"]+"','',pkg) and max(size('assets/website-package/jtt-home-mobile-tall-%d.webp'%n) for n in (300,450))<160_000
 # ---- Local SEO (Oct 2026 audit): final URLs, sitemap, robots, structured data, no address, no ratings ----
 BASE='https://joshthetechtamer.com'
 pages=sorted(f.name for f in ROOT.glob('*.html') if f.name!='404.html')
