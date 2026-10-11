@@ -1,6 +1,8 @@
 /* Shared design layer (Oct 2026): the Website Package showcase's look on every other page.
    Loaded after site.css. Decorative only: no content is hidden without JS, and reduced motion shows everything still. */
-:root{--ds-deep:#172443;--ds-deep2:#1d2c55;--ds-gold:#f5b731;--ds-gold2:#e39b18;--ds-sky:#12aef5;--ds-sky2:#0a84c9;--ds-head:"Montserrat",Arial,Helvetica,sans-serif;
+/* Montserrat Black (SIL Open Font License), self-hosted + preloaded so hero headlines do not jump when it loads (CLS) */
+@font-face{font-family:"Montserrat DS";font-style:normal;font-weight:900;font-display:swap;src:url(/assets/fonts/montserrat-900-latin.woff2) format("woff2")}
+:root{--ds-deep:#172443;--ds-deep2:#1d2c55;--ds-gold:#f5b731;--ds-gold2:#e39b18;--ds-sky:#12aef5;--ds-sky2:#0a84c9;--ds-head:"Montserrat DS","Montserrat",Arial,Helvetica,sans-serif;
  --ds-border:linear-gradient(135deg,rgba(245,183,49,.9) 0%,rgba(18,174,245,.55) 48%,rgba(66,77,125,.28) 100%)}
 
 /* ---------- 1) Dark navy hero band: dot grids + diagonal blue stripe ---------- */

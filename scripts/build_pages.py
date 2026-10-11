@@ -111,7 +111,7 @@ def normalize_urls(s,name):
 # Shared layer: assets/design.css + assets/design.js. Markup changes are decorative only (aria-hidden), so every
 # page's words, links, images, forms, header, footer, JSON-LD and metadata stay exactly as they were
 # (scripts/content_lock.py + data/content-lock.json, checked by validate_site.py).
-DESIGN_V='20261011-sitewide'
+DESIGN_V='20261011-sitewide2'
 GOLD_WORD={'index.html':'savvy','services.html':'Working','business.html':'work','digital-kits.html':'confidence','rates.html':'pricing',
  'about.html':'local','contact.html':'tame','tech-help-muscatine.html':'Muscatine','service-area.html':'Muscatine','scam-help.html':'Help',
  'tech-help-quad-cities.html':'In-Home','404.html':'wandered'}
@@ -119,7 +119,7 @@ DS_SWOOSH='<svg class="ds-swoosh" viewBox="0 0 200 18" preserveAspectRatio="none
 DS_DECO='<span class="ds-deco" aria-hidden="true"><span class="ds-dots ds-dots--tr"></span><span class="ds-dots ds-dots--bl"></span><span class="ds-stripe"></span></span>'
 def redesign(s,name):
  if name=='website-package.html':return s  # the showcase keeps its own page CSS/JS
- s=s.replace('</head>','<link rel="stylesheet" href="/assets/design.css?v='+DESIGN_V+'"><script src="/assets/design.js?v='+DESIGN_V+'" defer></script></head>',1)
+ s=s.replace('</head>','<link rel="preload" href="/assets/fonts/montserrat-900-latin.woff2" as="font" type="font/woff2" crossorigin><link rel="stylesheet" href="/assets/design.css?v='+DESIGN_V+'"><script src="/assets/design.js?v='+DESIGN_V+'" defer></script></head>',1)
  if 'family=Montserrat' not in s.split('</head>')[0]:  # hero headlines use the showcase's Montserrat Black
   s=s.replace('</head>','<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@900&display=swap" rel="stylesheet"></head>',1)
  # 1) Dark navy hero band with dot grids and the diagonal blue stripe.
