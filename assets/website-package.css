@@ -186,7 +186,7 @@
 .wp-phone{animation:wp-slide-in .9s .45s cubic-bezier(.2,.8,.2,1) backwards}
 .wp-phone-screen{position:relative;aspect-ratio:390/760;container-type:size}
 .wp-phone-screen .wp-phone-shot{width:100%;height:100%;aspect-ratio:auto}
-.wp-phone-tall{position:absolute;top:0;left:0;width:100%;height:auto;max-width:none;opacity:0;transition:opacity .6s ease;will-change:transform}
+.wp-phone-screen .wp-phone-tall{position:absolute;top:0;left:0;width:100%;height:auto;aspect-ratio:auto;object-fit:fill;max-width:none;opacity:0;transition:opacity .6s ease;will-change:transform}
 .is-scrolling .wp-phone-tall{opacity:1;animation:wp-phone-scroll 30s 1s ease-in-out infinite}
 .wp-phone:hover .wp-phone-tall,.is-paused .wp-phone-tall,.is-offscreen .wp-phone-tall{animation-play-state:paused}
 .wp-phone-toggle{position:absolute;right:-16px;bottom:9%;z-index:3;width:38px;height:38px;border-radius:50%;border:2px solid var(--gold);background:var(--deep);color:var(--gold);cursor:pointer;display:grid;place-items:center;padding:0;box-shadow:0 8px 18px rgba(0,0,0,.35)}
