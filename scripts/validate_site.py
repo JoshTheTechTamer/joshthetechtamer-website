@@ -101,7 +101,12 @@ assert '<div class="eyebrow">Your local tech guy · Muscatine, Iowa</div><h1>Not
 assert 'In-home computer &amp; tech help in Muscatine, IA' in idx and 'House calls all over' in idx
 # Quad Cities on both sides of the river, plus Iowa City and Coralville, in the business areaServed.
 served=[a['name'] for a in json.loads(re.search(r'<script type="application/ld\+json">(.*?)</script>',idx).group(1))['@graph'][0]['areaServed']]
-for town in ['Davenport, IA','Bettendorf, IA','Moline, IL','Rock Island, IL','East Moline, IL','Iowa City, IA','Coralville, IA']:assert town in served,town
+FINAL=['Muscatine, IA','Fruitland, IA','Wilton, IA','West Liberty, IA','Durant, IA','Columbus Junction, IA','Atalissa, IA','Buffalo, IA','Blue Grass, IA','Davenport, IA','Bettendorf, IA','Moline, IL','Rock Island, IL','East Moline, IL','Silvis, IL','Milan, IL','Illinois City, IL','Iowa City, IA','Coralville, IA','Letts, IA','Nichols, IA','Muscatine County, IA']
+assert sorted(served)==sorted(FINAL),('areaServed must match Josh’s Google profile list',set(served)^set(FINAL))
+site=''.join((ROOT/n).read_text() for n in pages)
+assert 'New Boston' not in site and 'trucker' not in site and 'Xbox accounts all at once' not in site
+assert '30-mile radius' in (ROOT/'service-area.html').read_text() and 'gas charge' in (ROOT/'service-area.html').read_text()
+assert not re.search(r'about (?!30 )\d+ miles',(ROOT/'service-area.html').read_text(),re.I),'no per-town distances'
 assert 'Illinois-side customers can ask' not in (ROOT/'tech-help-quad-cities.html').read_text() and 'a couple times a week' in (ROOT/'tech-help-quad-cities.html').read_text()
 # Security cameras/systems are residential (in-home) only: never offered for businesses (not licensed for commercial security in Iowa).
 for n in ['services.html','business.html']:assert 'residential' in (ROOT/n).read_text() and 'commercial or business security' in (ROOT/n).read_text(),n

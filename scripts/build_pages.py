@@ -16,11 +16,11 @@ meta={
 'website-package.html':('Small-Business Websites in Muscatine, IA: $800 | Tech Tamer','A simple, phone-friendly website for your Muscatine or Quad Cities business: free preview first, then $800 to build and launch. Optional $25/month Care Plan.','website'),
 # Local SEO pages (Oct 2026 audit, section B4).
 'tech-help-muscatine.html':('Tech Help in Muscatine, IA: I Come to You | The Tech Tamer','Computer, printer, Wi-Fi and phone help at your home in Muscatine, IA. Evenings & weekends, $50/hr, free consultation. Call or text 563-261-0200.','muscatine'),
-'service-area.html':('Service Area: Tech Help Near Muscatine, IA | The Tech Tamer','House-call tech help in Muscatine, Fruitland, Wilton, West Liberty, Durant, Nichols, Letts, Columbus Junction, the Quad Cities, Iowa City & Coralville.','areas'),
+'service-area.html':('Service Area: Tech Help Near Muscatine, IA | The Tech Tamer','House-call tech help about 30 miles around Muscatine: Wilton, West Liberty, Durant, Columbus Junction, the Quad Cities (IA & IL), Iowa City & Coralville.','areas'),
 'scam-help.html':('Scam & Hacked Account Help in Muscatine | The Tech Tamer','Pop-up scams, hacked email and Facebook, locked-out accounts and 2-step verification. Calm in-home help in Muscatine, IA. Call or text 563-261-0200.','scam'),
-'tech-help-quad-cities.html':('In-Home Tech Help in Davenport & the Quad Cities | Tech Tamer','In-home computer, printer, Wi-Fi and scam help in Davenport, Bettendorf, Moline, Rock Island & East Moline. $50/hr. Text 563-261-0200.','qc')}
+'tech-help-quad-cities.html':('In-Home Tech Help in Davenport & the Quad Cities | Tech Tamer','In-home computer, printer, Wi-Fi and scam help in Davenport, Bettendorf, Moline, Rock Island, East Moline & nearby. $50/hr. Text 563-261-0200.','qc')}
 # Pages without their own share image or a one-word breadcrumb name.
-share_key={'website':'business','muscatine':'services','areas':'home','scam':'services','qc':'services'}
+share_key={'website':'business','muscatine':'about','areas':'home','scam':'about','qc':'about'}  # new pages: Josh-only share photo
 crumb={'website':'Website Package','muscatine':'Tech Help in Muscatine','areas':'Areas I Serve','scam':'Scam & Hacked Account Help','qc':'Quad Cities','kits':'Digital Kits','services':'Tech Help'}
 # Final, extensionless public URL for each page (Cloudflare Pages serves /about from about.html and 308s about.html -> /about).
 def url(name):return BASE+'/'+('' if name=='index.html' else name[:-5])
@@ -57,8 +57,8 @@ visit='''<section class="section tint" id="your-visit"><div class="wrap"><div cl
 gbp=config.get('google_business_profile_url','').strip();review_url=config.get('google_review_url','').strip()
 local_faqs=json.loads((ROOT/'data/local-faqs.json').read_text())
 lastmod=json.loads((ROOT/'data/sitemap-lastmod.json').read_text())
-AREAS=['Muscatine, IA','Fruitland, IA','Wilton, IA','West Liberty, IA','Durant, IA','Columbus Junction, IA','Letts, IA','Nichols, IA','Davenport, IA','Bettendorf, IA','Moline, IL','Rock Island, IL','East Moline, IL','Iowa City, IA','Coralville, IA']
-QC=['Davenport, IA','Bettendorf, IA','Moline, IL','Rock Island, IL','East Moline, IL']
+AREAS=['Muscatine, IA','Fruitland, IA','Wilton, IA','Atalissa, IA','West Liberty, IA','Durant, IA','Nichols, IA','Letts, IA','Columbus Junction, IA','Buffalo, IA','Blue Grass, IA','Davenport, IA','Bettendorf, IA','Moline, IL','Rock Island, IL','East Moline, IL','Silvis, IL','Milan, IL','Illinois City, IL','Iowa City, IA','Coralville, IA']
+QC=['Davenport, IA','Bettendorf, IA','Moline, IL','Rock Island, IL','East Moline, IL','Silvis, IL','Milan, IL']
 local_service={'tech-help-muscatine.html':('Computer repair and tech help',['Muscatine, IA','Fruitland, IA']),
  'service-area.html':('In-home computer and tech help',AREAS),
  'scam-help.html':('Scam and hacked account recovery',['Muscatine, IA']+AREAS[1:]),
@@ -126,9 +126,9 @@ for file in (ROOT/'templates').glob('*.html'):
   s=s.replace('<a class="textlink" href="contact.html">Ask Josh about this</a></article></div><div class="notice">','<a class="textlink" href="contact.html">Ask Josh about this</a><a class="textlink" href="scam-help.html">Scam &amp; hacked-account help</a></article></div><div class="notice">',1)
   s=s.replace('Serving Muscatine, Iowa City & the Quad Cities','Serving Muscatine, Wilton, West Liberty, Durant & the Quad Cities',1)
  if name=='contact.html':
-  s=s.replace('<p>Based in Muscatine, Iowa.<br>Serving Iowa City and the Quad Cities.</p>','<p>Based in Muscatine, Iowa. House calls in Muscatine, Fruitland, Wilton, Durant, West Liberty, Nichols, Letts and Columbus Junction, plus the whole Quad Cities (Davenport, Bettendorf, Moline, Rock Island and East Moline), where I’m a couple times a week, and Iowa City and Coralville by appointment.<br><a class="textlink" href="service-area.html">Areas I serve</a></p>',1)
+  s=s.replace('<p>Based in Muscatine, Iowa.<br>Serving Iowa City and the Quad Cities.</p>','<p>Based in Muscatine, Iowa. House calls about 30 miles around Muscatine: Fruitland, Wilton, Atalissa, West Liberty, Durant, Nichols, Letts, Columbus Junction, Buffalo, Blue Grass and Illinois City, plus the whole Quad Cities (Davenport, Bettendorf, Moline, Rock Island, East Moline, Silvis and Milan), where I’m a couple times a week, and Iowa City and Coralville by appointment. Trips farther out may have a small added gas charge.<br><a class="textlink" href="service-area.html">Areas I serve</a></p>',1)
  if name=='rates.html':
-  s=s.replace('Josh is based in Muscatine and serves the Iowa City and Quad Cities areas.','Josh is based in Muscatine and makes house calls in Muscatine, Fruitland, Wilton, West Liberty, Durant and nearby towns, plus the whole Quad Cities on both sides of the river (he’s there a couple times a week) and Iowa City and Coralville by appointment. See <a href="service-area.html">areas I serve</a>.',1)
+  s=s.replace('Josh is based in Muscatine and serves the Iowa City and Quad Cities areas.','Josh is based in Muscatine and makes house calls about 30 miles around town: Fruitland, Wilton, West Liberty, Durant and nearby towns, plus the whole Quad Cities on both sides of the river (he’s there a couple times a week) and Iowa City and Coralville by appointment. Trips farther out may have a small added gas charge on your invoice. See <a href="service-area.html">areas I serve</a>.',1)
  if name=='about.html':
   s=s.replace('Based in Muscatine · Serving Iowa City and the Quad Cities','Based in Muscatine · Serving nearby towns, the Quad Cities, Iowa City and Coralville',1)
  if name=='service-area.html':

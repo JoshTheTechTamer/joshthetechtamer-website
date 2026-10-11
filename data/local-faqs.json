@@ -6,7 +6,7 @@
   },
   {
    "q": "What does it cost?",
-   "a": "Tech help is $50 an hour, and the first conversation is free. On-site visits have a one-hour minimum. Bigger projects get an estimate before any work starts, and I’ll confirm any travel charge before your visit. Details are on <a href=\"rates.html\">Rates &amp; FAQ</a>."
+   "a": "Tech help is $50 an hour, and the first conversation is free. On-site visits have a one-hour minimum. Bigger projects get an estimate before any work starts. If you’re a bit farther out, there may be a small added gas charge on your invoice, and I’ll let you know before we book. Details are on <a href=\"rates.html\">Rates &amp; FAQ</a>."
   },
   {
    "q": "Can you come in the evening or on a weekend?",
@@ -26,7 +26,7 @@
   },
   {
    "q": "How much does computer help cost in Muscatine?",
-   "a": "With me, it’s $50 an hour. On-site visits have a one-hour minimum, and the first consultation is free. Bigger projects get an estimate before any work starts, and I’ll confirm any travel charge before your visit."
+   "a": "With me, it’s $50 an hour. On-site visits have a one-hour minimum, and the first consultation is free. Bigger projects get an estimate before any work starts. If you’re a bit farther out, there may be a small added gas charge on your invoice, and I’ll let you know before we book."
   },
   {
    "q": "How can I find someone to help me with my computer?",
@@ -62,11 +62,11 @@
  "tech-help-quad-cities.html": [
   {
    "q": "Which Quad Cities towns do you cover?",
-   "a": "The whole Quad Cities, on both sides of the river: Davenport, Bettendorf, Moline, Rock Island and East Moline. I’m in the Quad Cities a couple times a week, so text to get on the schedule."
+   "a": "The whole Quad Cities, on both sides of the river: Davenport and Bettendorf in Iowa, and Moline, Rock Island, East Moline, Silvis and Milan in Illinois. I’m in the Quad Cities a couple times a week, so text to get on the schedule."
   },
   {
-   "q": "Is there a travel charge?",
-   "a": "Tech help is $50 an hour with a one-hour minimum on-site. Because the Quad Cities are a longer drive, I’ll tell you about any travel charge up front, before we book."
+   "q": "Is there a gas charge?",
+   "a": "Tech help is $50 an hour with a one-hour minimum on-site. Parts of the Quad Cities are a little past my usual 30-mile radius, so there may be a small added gas charge on your invoice. I’ll let you know before we book."
   }
  ]
 }
