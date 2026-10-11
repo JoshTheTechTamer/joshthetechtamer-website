@@ -89,6 +89,7 @@ rm=re.search(r'@media\(prefers-reduced-motion:reduce\)\{(.*?)\n\}',css,re.S).gro
 for need in ['.wp-phone-tall','[data-rv],.wp-tl-card{opacity:1!important;transform:none!important}','.wp-tl{--fill:1!important}','.wp-price{transform:none!important}','animation:none!important']:assert need in rm,need
 assert "matchMedia('(prefers-reduced-motion: reduce)')" in wpjs and "'(hover: hover) and (pointer: fine)'" in wpjs and "pointerType!=='mouse'" in wpjs
 assert 'src="/assets/website-package.js?v=' in pkg
+assert re.search(r'\.wp-phone-screen \.wp-phone-tall\{[^}]*aspect-ratio:auto',css) and 'translateY(calc(-100% + 100cqh))' in css and 'container-type:size' in css,'phone auto-scroll uses the real image height'
 # weight: below-the-fold images lazy; eager bytes (images + page CSS/JS) stay small; phone scroll image loads after the page
 main_html=pkg[pkg.index('<main'):]
 after_hero=main_html[main_html.index('</section>'):]
