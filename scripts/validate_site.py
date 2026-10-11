@@ -142,8 +142,11 @@ assert 'hero-logo.png' not in ''.join((ROOT/n).read_text() for n in pages+['404.
 assert 'image/webp' in idx and 'hero-logo-800.webp' in idx
 for n in ['index.html','services.html']:assert 'href="/tech-help-muscatine"' in (ROOT/n).read_text(),n
 # Homepage hero stays exactly as Josh approved it (only the image is the optimized <picture>, and links are extensionless).
-hero=re.search(r'<section class="hero">.*?</section>',idx,re.S).group()
-assert '<div class="eyebrow">Your local tech guy · Muscatine, Iowa</div><h1>Not very tech savvy?<br><span>I’ll come to you.</span></h1>' in hero and 'eyebrow-h1' not in hero and 'hero-local' not in hero,'home hero changed'
+# (Sitewide redesign: the band and the gold accent on "savvy" are restyling only; the words, buttons and photo stay.)
+hero=re.search(r'<section class="hero ds-hero">.*?</section>',idx,re.S).group()
+plain=re.sub(r'<span class="ds-deco".*?</span></span></span>|<svg class="ds-swoosh".*?</svg>','',hero,flags=re.S).replace('<span class="ds-gold">savvy</span>','savvy')
+assert '<div class="eyebrow">Your local tech guy · Muscatine, Iowa</div><h1>Not very tech savvy?<br><span>I’ll come to you.</span></h1>' in plain and 'eyebrow-h1' not in hero and 'hero-local' not in hero,'home hero changed'
+assert '<a class="btn " href="sms:+15632610200">Text Josh<span aria-hidden="true">↗</span></a><a class="btn secondary" href="/services">Explore services<span aria-hidden="true">↗</span></a>' in hero and 'hero-logo-800.webp' in hero and '<a class="art-label" href="tel:+15632610200">563-261-0200</a>' in hero,'home hero buttons/photo'
 assert 'In-home computer &amp; tech help in Muscatine, IA' in idx and 'House calls all over' in idx
 # Josh's final list (small towns first, then the Quad Cities on both sides of the river), no Iowa City/Coralville.
 served=[a['name'] for a in json.loads(re.search(r'<script type="application/ld\+json">(.*?)</script>',idx).group(1))['@graph'][0]['areaServed']]
@@ -177,6 +180,50 @@ for r in revs:
  assert (r['rating'] is None)==r['source'].startswith('Facebook'),r
 # Never publish the street address (service-area business).
 for n in pages+['404.html']:assert 'Cedar' not in (ROOT/n).read_text() and 'streetAddress' not in (ROOT/n).read_text(),n
+
+# ---- Sitewide redesign (Oct 2026): shared design layer on every page except the Website Package showcase ----
+sys.path.insert(0,str(ROOT/'scripts'));import content_lock
+# Content lock: words, links, images (src + alt), forms, header, footer, review cards, JSON-LD, title/metas/canonical
+# are exactly what was on main before the restyle (data/content-lock.json).
+locked=json.loads((ROOT/'data/content-lock.json').read_text());now=content_lock.snapshot()
+assert set(locked)==set(now),set(locked)^set(now)
+for n in locked:
+ for k in locked[n]:
+  a,b=locked[n][k],now[n][k]
+  if k=='images':a,b=[list(x) for x in a],[list(x) for x in b]
+  assert a==b,('content changed by the redesign',n,k)
+dcss=(ROOT/'assets/design.css').read_text();djs=(ROOT/'assets/design.js').read_text()
+GOLD={'index.html':'savvy','services.html':'Working','business.html':'work','digital-kits.html':'confidence','rates.html':'pricing','about.html':'local','contact.html':'tame','tech-help-muscatine.html':'Muscatine','service-area.html':'Muscatine','scam-help.html':'Help','tech-help-quad-cities.html':'In-Home','404.html':'wandered'}
+for f in ROOT.glob('*.html'):
+ t=f.read_text();head=t[:t.index('</head>')]
+ if f.name=='website-package.html':assert 'design.css' not in t and 'ds-hero' not in t,'showcase keeps its own layer';continue
+ assert re.search(r'<link rel="stylesheet" href="/assets/design\.css\?v=[^"]+">',head) and re.search(r'<script src="/assets/design\.js\?v=[^"]+" defer></script>',head),('design layer',f.name)
+ assert head.index('site.css')<head.index('design.css'),f.name
+ assert 'family=Montserrat' in head,f.name
+ # one dark hero band (first section), with decorative dots + stripe hidden from assistive tech
+ first=re.search(r'<main[^>]*>\s*<section class="([^"]*)">(<span class="ds-deco" aria-hidden="true">)?',t)
+ assert first and 'ds-hero' in first.group(1).split() and first.group(2),('hero band',f.name)
+ assert t.count('ds-hero')==1 and t.count('class="ds-deco"')==1,f.name
+ # exactly one gold word, inside the H1, aria-hidden swoosh, word itself unchanged
+ h1=re.search(r'<h1\b[^>]*>(.*?)</h1>',t,re.S).group(1)
+ assert t.count('class="ds-gold"')==1 and h1.count('<span class="ds-gold">'+GOLD[f.name]+'<svg class="ds-swoosh"')==1,('gold word',f.name)
+ assert all('aria-hidden="true"' in sv for sv in re.findall(r'<svg class="ds-swoosh"[^>]*>',t))
+ # card icons stay decorative; every shape can draw in
+ for ic in re.findall(r'<div class="icon"[^>]*><svg\b.*?</svg>',t,re.S):
+  assert 'aria-hidden="true"' in ic and not re.search(r'<(path|rect|circle|line|polyline|polygon|ellipse)\b(?![^>]*pathLength="1")',ic),(f.name,ic[:80])
+# timelines wherever there are steps
+for n in ['index.html','services.html','tech-help-muscatine.html','tech-help-quad-cities.html']:
+ t=(ROOT/n).read_text();assert t.count('data-ds-steps')==1 and not re.search(r'<div class="grid3">(?=<(?:article|div) class="step">)',t),n
+# motion: hidden states only behind .ds-anim (JS on, no reduced motion); reduced motion = everything still and visible; tilt mouse-only
+for sel,body in re.findall(r'([^{}]*)\{([^{}]*opacity:0[^{}]*)\}',dcss):
+ if 'ds-rv' in sel:assert sel.strip().startswith('.ds-anim'),sel
+assert '.ds-anim .icon:not(.is-drawn) svg *{stroke-dashoffset:1}' in dcss
+rmd=re.search(r'@media\(prefers-reduced-motion:reduce\)\{(.*?)\n\}',dcss,re.S).group(1)
+for need in ['.ds-rv{opacity:1!important;transform:none!important}','.ds-swoosh path{animation:none!important}','.icon svg *{stroke-dashoffset:0!important}','.ds-tilt{transform:none!important}','.ds-fill{transform:none!important}']:assert need in rmd,need
+assert "matchMedia('(prefers-reduced-motion: reduce)')" in djs.replace('mm(','matchMedia(') and "(hover: hover) and (pointer: fine)" in djs and "pointerType!=='mouse'" in djs
+assert 'review-carousel' in djs and "closest('form')" in djs,'no reveal/tilt inside the carousel or forms'
+# weight: the shared layer stays small
+assert len(dcss)<16_000 and len(djs)<9_000,(len(dcss),len(djs))
 if '--production' in sys.argv:
  assert json.loads((ROOT/'data/site-config.json').read_text())['form_mode']=='cloudflare'
  contact=(ROOT/'contact.html').read_text();script=(ROOT/'assets/site.js').read_text()

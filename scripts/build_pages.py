@@ -106,6 +106,45 @@ def normalize_urls(s,name):
   path='/' if page=='index' else '/'+page
   return f'{attr}="{host}{path}{rest}"'
  return re.sub(r'(href)="(https://joshthetechtamer\.com)?/?([a-z0-9-]+)\.html([?#][^"]*)?"',fix,s)
+
+# ---- Sitewide redesign (Oct 2026): the Website Package showcase's design language on every other page ----
+# Shared layer: assets/design.css + assets/design.js. Markup changes are decorative only (aria-hidden), so every
+# page's words, links, images, forms, header, footer, JSON-LD and metadata stay exactly as they were
+# (scripts/content_lock.py + data/content-lock.json, checked by validate_site.py).
+DESIGN_V='20261011-sitewide'
+GOLD_WORD={'index.html':'savvy','services.html':'Working','business.html':'work','digital-kits.html':'confidence','rates.html':'pricing',
+ 'about.html':'local','contact.html':'tame','tech-help-muscatine.html':'Muscatine','service-area.html':'Muscatine','scam-help.html':'Help',
+ 'tech-help-quad-cities.html':'In-Home','404.html':'wandered'}
+DS_SWOOSH='<svg class="ds-swoosh" viewBox="0 0 200 18" preserveAspectRatio="none" aria-hidden="true" focusable="false"><path pathLength="1" d="M3 12.5C40 6.5 92 4.2 140 5.6c20 .6 38 2 55 4.4" fill="none" stroke="currentColor" stroke-width="5" stroke-linecap="round"/><path pathLength="1" d="M18 15.5c38-4.6 86-6 150-3.4" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" opacity=".55"/></svg>'
+DS_DECO='<span class="ds-deco" aria-hidden="true"><span class="ds-dots ds-dots--tr"></span><span class="ds-dots ds-dots--bl"></span><span class="ds-stripe"></span></span>'
+def redesign(s,name):
+ if name=='website-package.html':return s  # the showcase keeps its own page CSS/JS
+ s=s.replace('</head>','<link rel="stylesheet" href="/assets/design.css?v='+DESIGN_V+'"><script src="/assets/design.js?v='+DESIGN_V+'" defer></script></head>',1)
+ if 'family=Montserrat' not in s.split('</head>')[0]:  # hero headlines use the showcase's Montserrat Black
+  s=s.replace('</head>','<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@900&display=swap" rel="stylesheet"></head>',1)
+ # 1) Dark navy hero band with dot grids and the diagonal blue stripe.
+ n=0
+ def hero(m):
+  nonlocal n;n+=1
+  cls=m.group(1)
+  return '<section class="'+cls+' ds-hero">'+DS_DECO
+ s=re.sub(r'<section class="((?:hero|page-hero[^"]*|notfound))">',hero,s,count=1)
+ assert n==1,('hero band',name)
+ # 2) Gold text-art accent (gold + hand-drawn swoosh) on one key word of the headline; the text itself is unchanged.
+ h=re.search(r'<h1\b[^>]*>(.*?)</h1>',s,re.S);inner=h.group(1);word=GOLD_WORD[name]
+ parts=re.split(r'(<span class="eyebrow[^"]*">.*?</span>|<[^>]+>)',inner)
+ for i,part in enumerate(parts):
+  if part.startswith('<'):continue
+  m=re.search(r'(?<![\w-])'+re.escape(word)+r'(?![\w-])',part)
+  if m:parts[i]=part[:m.start()]+'<span class="ds-gold">'+word+DS_SWOOSH+'</span>'+part[m.end():];break
+ else:raise AssertionError(('gold word not in h1',name,word))
+ s=s[:h.start(1)]+''.join(parts)+s[h.end(1):]
+ # 3) Card icons draw themselves in (gold stroke): pathLength="1" lets CSS animate any shape the same way.
+ def icon(m):return re.sub(r'<(path|rect|circle|line|polyline|polygon|ellipse)\b(?![^>]*pathLength)',r'<\1 pathLength="1"',m.group())
+ s=re.sub(r'<div class="icon" aria-hidden="true"><svg\b.*?</svg>',icon,s,flags=re.S)
+ # 4) Three-step rows become a gold-filling timeline.
+ s=re.sub(r'<div class="grid3">(?=<(?:article|div) class="step">)','<div class="grid3 ds-steps" data-ds-steps>',s)
+ return s
 for file in (ROOT/'templates').glob('*.html'):
  s=apply_header_logo(file.read_text());name=file.name
  s=footer(s)
@@ -206,6 +245,7 @@ for file in (ROOT/'templates').glob('*.html'):
  # Root-relative paths also make custom 404 pages work at nested URLs.
  s=re.sub(r'(href|src)="((?:assets/|images/)[^"]*|[a-z0-9-]+\.html(?:\?[^"]*)?)"',lambda m:m[1]+'="/'+m[2]+'"',s)
  s=normalize_urls(s,name)
+ s=redesign(s,name)
  (ROOT/name).write_text(s)
 (ROOT/'robots.txt').write_text('User-agent: *\nAllow: /\n\nSitemap: '+BASE+'/sitemap.xml\n')
 assert set(lastmod)==set(meta),('data/sitemap-lastmod.json must list every indexed page',set(meta)^set(lastmod))
