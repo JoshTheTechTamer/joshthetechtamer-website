@@ -88,6 +88,7 @@ def local_reviews():
  return '<section class="section reviews-section" aria-labelledby="local-reviews-heading"><div class="wrap"><div class="section-head"><div><div class="eyebrow">A little reassurance</div><h2 id="local-reviews-heading">What folks are saying.</h2></div><p>Feedback shared by customers on Google and Facebook.</p></div><div class="grid3 local-review-grid">'+cards+'</div>'+google_links()+'<p class="small review-note">Names are shortened for privacy. Stars appear only where a five-star Google rating was provided.</p></div></section>'
 SIGNOFF='<p>Muscatine · Iowa City · Quad Cities</p>'  # Josh's sign-off: left exactly as on main (question pending with Josh)
 FOOTER_AREAS=SIGNOFF+'<p>Muscatine · Fruitland · Wilton · West Liberty · Durant · Quad Cities (IA &amp; IL)<br><a class="footer-areas" href="service-area.html">Areas I serve</a></p>'
+NAV_SCAM='<a class="nav-scam" href="scam-help.html"><svg class="nav-scam__icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 3.2 2.3 20h19.4z" fill="#f2a516" stroke="#b45309" stroke-width="1.4" stroke-linejoin="round"/><path d="M12 9.5v5" stroke="#3b1d06" stroke-width="2.2" stroke-linecap="round"/><circle cx="12" cy="17.4" r="1.25" fill="#3b1d06"/></svg>Scam Help</a>'
 def footer(s):
  s=s.replace(SIGNOFF,FOOTER_AREAS,1)
  # Digital Kits leaves the main menu (desktop + mobile share the nav markup); the page stays, linked from the footer.
@@ -97,6 +98,11 @@ def footer(s):
   s=s[:hdr.start()]+h2+s[hdr.end():]
  s=s.replace('<a href="digital-kits.html">Digital kits</a><a href="rates.html">','<a href="rates.html">',1)
  s=s.replace('<a href="about.html">Meet Josh</a></div>','<a href="about.html">Meet Josh</a><a href="tech-help-muscatine.html">Tech help in Muscatine</a><a href="scam-help.html">Scam &amp; hacked accounts</a><a href="service-area.html">Areas I serve</a><a href="digital-kits.html">Digital kits</a></div>',1)
+ # Scam Help in the main menu (desktop + mobile), right after Get a Website, as a soft-red pill.
+ hdr=re.search(r'<header\b.*?</header>',s,re.S)
+ if hdr:
+  h2=re.sub(r'(<a href="website-package\.html"(?: aria-current="page")?>Get a Website</a>)',lambda m:m.group(1)+NAV_SCAM,hdr.group(),count=1);assert h2!=hdr.group(),'nav scam link'
+  s=s[:hdr.start()]+h2+s[hdr.end():]
  # "Built by" badge on joshthetechtamer.com itself points to the Website Package.
  s=s.replace('<a class="ttb" href="contact.html?service=Website%20%26%20business%20tech">','<a class="ttb" href="website-package.html">',1)
  assert '<a class="ttb" href="website-package.html">' in s,'built-by badge link'
@@ -123,7 +129,70 @@ _steps=[('Stop. Don’t pay or send anything more.','If someone is rushing you t
  ('Save screenshots and details.','Write down names, phone numbers, times and amounts, and take screenshots. They help your bank, and they help when you report it.'),
  ('Check for remote-access software.','If you let someone connect to your computer, keep it off the internet until it’s checked for programs they may have left behind. I can check it with you.')]
 SCAM_STEPS=('<section class="section scam-steps-section" aria-labelledby="scam-steps-heading"><div class="wrap"><div class="section-head"><div><div class="eyebrow">Right now, before anything else</div><h2 id="scam-steps-heading">Think you’ve been scammed or hacked? Take a breath. Here’s what to do.</h2></div><p>These steps are safe to do on your own while you wait to hear back from me.</p></div>'
- +HELP_NOW+'<ol class="calm-steps">'+''.join(f'<li><span class="calm-steps__n" aria-hidden="true">{i+1}</span><div><h3>{escape(t,quote=False)}</h3><p>{escape(d,quote=False)}</p></div></li>' for i,(t,d) in enumerate(_steps))+'</ol></div></section>')
+ +'<ol class="calm-steps">'+''.join(f'<li><span class="calm-steps__n" aria-hidden="true">{i+1}</span><div><h3>{escape(t,quote=False)}</h3><p>{escape(d,quote=False)}</p></div></li>' for i,(t,d) in enumerate(_steps))+'</ol></div></section>')
+SCAM_HERO_ART=('<svg class="scam-shield" viewBox="0 0 320 320" focusable="false"><defs>'
+ '<radialGradient id="shGlow" cx="50%" cy="48%" r="50%"><stop offset="0" stop-color="#12aef5" stop-opacity=".34"/><stop offset=".62" stop-color="#12aef5" stop-opacity=".08"/><stop offset="1" stop-color="#12aef5" stop-opacity="0"/></radialGradient>'
+ '<linearGradient id="shFill" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#3a4f8c"/><stop offset="1" stop-color="#23335c"/></linearGradient></defs>'
+ '<circle class="scam-shield__glow" cx="160" cy="160" r="156" fill="url(#shGlow)"/>'
+ '<circle cx="160" cy="160" r="128" fill="none" stroke="#7fd3fb" stroke-opacity=".35" stroke-width="2" stroke-dasharray="3 10" stroke-linecap="round"/>'
+ '<path d="M160 50 246 85v74c0 56-38 95-86 113-48-18-86-57-86-113V85z" fill="url(#shFill)"/>'
+ '<path class="scam-shield__draw" pathLength="1" d="M160 50 246 85v74c0 56-38 95-86 113-48-18-86-57-86-113V85z" fill="none" stroke="#f5b731" stroke-width="7" stroke-linejoin="round"/>'
+ '<path class="scam-shield__draw scam-shield__inner" pathLength="1" d="M160 72 226 99v60c0 43-29 74-66 89-37-15-66-46-66-89V99z" fill="none" stroke="#7fd3fb" stroke-opacity=".7" stroke-width="2.5" stroke-linejoin="round"/>'
+ '<path class="scam-shield__draw scam-shield__check" pathLength="1" d="M119 160l29 29 55-60" fill="none" stroke="#f5b731" stroke-width="15" stroke-linecap="round" stroke-linejoin="round"/>'
+ '<g class="scam-shield__spark" fill="#f5b731"><path d="M262 64l4 10 10 4-10 4-4 10-4-10-10-4 10-4z"/><path d="M52 214l3 7 7 3-7 3-3 7-3-7-7-3 7-3z" opacity=".8"/><circle cx="276" cy="232" r="4" fill="#7fd3fb"/><circle cx="58" cy="96" r="3.5" fill="#7fd3fb"/></g></svg>')
+REACH_OUT=('<div class="reach-out"><div class="reach-out__copy"><h3>Still worried, or need a hand with this? Reach out to me.</h3>'
+ '<p>Text or call 563-261-0200. Tell me what happened in your own words. No judgment, and no rushing.</p></div>'
+ '<div class="actions"><a class="btn" href="sms:+15632610200">Text Josh<span aria-hidden="true">↗</span></a><a class="btn secondary" href="tel:+15632610200">Call 563-261-0200<span aria-hidden="true">↗</span></a></div></div>')
+TOC=[('what-to-do','What to do right now'),('spot-scams','Spot common scams'),('hacked-signs','Signs an account was hacked'),('lock-down','Lock your accounts down'),('family','Protect older family members'),('report','Where to report it'),('faq','Quick answers')]
+def _sec(id_,cls,icon,eyebrow,h2,intro,body):
+ return (f'<section class="section{cls} guide-sec" id="{id_}" aria-labelledby="{id_}-h"><div class="wrap"><div class="guide-head">'+icon_tile(icon)+
+  f'<div><div class="eyebrow">{eyebrow}</div><h2 id="{id_}-h">{h2}</h2><p>{intro}</p></div></div>'+body+'</div></section>')
+def _cards(items,cls='grid3'):
+ return f'<div class="{cls} guide-cards">'+''.join('<article class="service-card guide-card">'+icon_tile(i)+f'<h3>{h}</h3>'+b+'</article>' for i,h,b in items)+'</div>'
+def scam_guide():
+ toc=('<nav class="scam-toc" aria-label="On this page"><p class="scam-toc__title">The free guide: jump to a section</p><ul>'+
+  ''.join(f'<li><a href="#{a}">{t}</a></li>' for a,t in TOC)+'</ul></nav>')
+ steps=SCAM_STEPS.replace('<section class="section scam-steps-section" aria-labelledby="scam-steps-heading">','<section class="section scam-steps-section" id="what-to-do" aria-labelledby="scam-steps-heading">',1)
+ steps=steps.replace('<p>These steps are safe to do on your own while you wait to hear back from me.</p>',
+  '<p>First, it’s not your fault. Scammers are professionals, and they work hard to make things feel urgent. You don’t have to fix everything this minute. Go through these steps in order, at your own pace. They’re safe to do on your own while you wait to hear back from me.</p>',1)
+ steps=steps.replace('</ol></div></section>','</ol>'+REACH_OUT+toc+'</div></section>',1)
+ spot=_sec('spot-scams',' tint','search','How to spot them','Common scams, and what they look like.',
+  'Most scams follow the same few scripts. Once you know them, they get a lot easier to recognize.',
+  _cards([('warning','Fake “virus” pop-ups','<p>A full-screen warning, sometimes with an alarm sound, says your computer is infected and gives a phone number to call. Microsoft, Apple and Google don’t put phone numbers in warnings like that. Close the browser, or hold the power button if it won’t close.</p>'),
+   ('phone','Tech-support calls','<p>Someone calls saying they’re from Microsoft, Apple, Amazon or your internet company, and that your computer has a problem. Real companies don’t call you out of the blue about a virus. Hang up. If you’re unsure, call the company yourself at a number you look up.</p>'),
+   ('chat','Bank, Amazon and delivery texts','<p>“Unusual charge on your account.” “Your package can’t be delivered.” “Your account is locked.” Don’t tap the link. Open the company’s own app, or call the number on the back of your card, and check from there.</p>'),
+   ('gift','Gift cards and odd payments','<p>No real business, utility or government office asks you to pay with gift cards, a wire transfer, cryptocurrency or a payment app to a stranger. If anyone asks you to read off the numbers on the back of a gift card, it’s a scam.</p>'),
+   ('users','Grandparent and family emergencies','<p>“Grandma, it’s me. I’m in trouble. Please don’t tell Mom.” Sometimes a “lawyer” or “officer” gets on the line. Voices can be faked now. Hang up and call your family member at the number you already have for them.</p>'),
+   ('heart','Romance and too-good-to-be-true','<p>A new online friend who can never meet in person and soon has a money problem. A prize you have to pay to collect. An investment that “can’t lose.” Sending money to someone you’ve never met, or paying to win, is your cue to stop.</p>')])+
+  '<div class="notice red-flags"><strong>The four big red flags.</strong> <b>Pressure</b> (act right now), <b>secrecy</b> (don’t tell anyone, stay on the line), <b>strange payment</b> (gift cards, wire, crypto) and <b>access</b> (codes, passwords, remote control of your computer). Any one of them is reason enough to stop and check with someone you trust.</div>')
+ hacked=_sec('hacked-signs','','key','Is it hacked?','Signs an account was hacked.',
+  'Not sure if someone got into your account? These are the usual clues.',
+  '<div class="guide-split"><ul class="checklist guide-list">'+''.join(f'<li>{x}</li>' for x in [
+   'Friends say they got strange messages or friend requests from you.','Your password suddenly stops working.',
+   'You get emails or texts about sign-ins, password changes or new devices that weren’t you.','There are sent emails, posts or purchases you didn’t make.',
+   'Your recovery phone number or backup email has been changed.','Sign-in codes arrive that you didn’t ask for.'])+'</ul>'
+  '<div class="guide-aside"><h3>Seeing one of these?</h3><p>Start with your email, from a phone or computer you trust. Change the password, then turn on 2-step verification. The <a href="#what-to-do">checklist at the top</a> walks through the order. If a sign-in code shows up that you didn’t ask for, don’t share it with anyone. It usually means someone has your password, so change it.</p></div></div>')
+ lock=_sec('lock-down',' tint','lock','Lock it down','Lock your accounts down.',
+  'A few settings make the next scam a lot harder to pull off. Start with your email, then your bank, then everything else.',
+  _cards([('key','Password manager basics','<p>Use a different password for every account, so one leak doesn’t open the rest. A password manager remembers them for you. One is built into iPhones, Android phones and the Chrome browser. A notebook kept safe at home is better than reusing the same password everywhere.</p>'),
+   ('shield','2-step verification','<p>This adds a second check, like a code sent to your phone or a tap on an approval prompt, when someone signs in. A stolen password alone isn’t enough anymore. Turn it on for email first. Never read that code to anyone who calls or texts you.</p>'),
+   ('mail','Recovery info','<p>Make sure each important account has a current recovery phone number and backup email. That’s how you get back in if you’re ever locked out. Check them once a year, and any time you change phone numbers.</p>')]))
+ fam=_sec('family','','users','For the person everyone calls','Protect older family members.',
+  'Scammers often target older adults. A little planning together goes a long way, and it works best without a lecture.',
+  '<ul class="guide-tips">'+''.join(f'<li>{icon_tile(i)}<div><h3>{h}</h3><p>{b}</p></div></li>' for i,h,b in [
+   ('chat','Talk about it, kindly','Share the common scripts above, like the fake pop-up and the “grandchild in trouble” call, so they’re easy to spot. Make it a conversation, not a test.'),
+   ('phone','Make a “call me first” rule','Agree that before anyone sends money, buys gift cards or lets someone onto the computer, they call you (or me) first. A real request can wait five minutes.'),
+   ('lock','Pick a family code word','A word only your family knows. If a caller claims to be a grandchild in trouble and can’t give it, hang up and call that grandchild directly.'),
+   ('smartphone','Save the numbers that matter','Put the bank, family members and a trusted helper in their phone contacts, so they don’t have to search for numbers under pressure.'),
+   ('shield','Turn on call and spam filters','Most phones and carriers can silence unknown callers or flag likely spam. With their permission, help set up 2-step verification and recovery info too.'),
+   ('heart','No shame if it happens','If they get fooled, thank them for telling you. People who feel embarrassed stop asking for help, and that’s exactly what scammers want.')])+'</ul>')
+ report=_sec('report',' tint','flag','Report it','Where to report a scam.',
+  'Reporting helps warn others and creates a record. It doesn’t always get money back, so if money or a card was involved, call your bank first.',
+  _cards([('phone','Your bank or card company','<p>Call the number on the back of your card, not a number from a text, email or caller. Tell them what happened and ask what they can do.</p>'),
+   ('flag','ReportFraud.ftc.gov','<p>The Federal Trade Commission collects reports on scams and fraud. <a href="https://reportfraud.ftc.gov/" target="_blank" rel="noopener noreferrer">ReportFraud.ftc.gov ↗</a></p>'),
+   ('shield','IdentityTheft.gov','<p>If someone used your name, Social Security number or opened accounts as you, this FTC site gives you a step-by-step plan. <a href="https://www.identitytheft.gov/" target="_blank" rel="noopener noreferrer">IdentityTheft.gov ↗</a></p>'),
+   ('laptop','FBI Internet Crime Complaint Center','<p>For scams that happened online, especially if money was lost. <a href="https://www.ic3.gov/" target="_blank" rel="noopener noreferrer">ic3.gov ↗</a></p>')],'grid2 report-grid'))
+ return steps+spot+hacked+lock+fam+report
 HERO_PICTURE='<picture style="display:contents"><source type="image/webp" srcset="/assets/optimized/hero-logo-400.webp 400w, /assets/optimized/hero-logo-800.webp 800w, /assets/optimized/hero-logo-1200.webp 1200w" sizes="(max-width: 620px) 290px, (max-width: 1100px) 380px, 490px"><img src="/assets/optimized/hero-logo-800.png" alt="The Tech Tamer: Josh’s top-hatted technology tamer mascot and wordmark" width="800" height="687" fetchpriority="high" decoding="async"></picture>'
 def normalize_urls(s,name):
  """Canonical, og:url and every internal link use the final extensionless URL (no redirect hops)."""
@@ -140,7 +209,7 @@ def normalize_urls(s,name):
 # Shared layer: assets/design.css + assets/design.js. Markup changes are decorative only (aria-hidden), so every
 # page's words, links, images, forms, header, footer, JSON-LD and metadata stay exactly as they were
 # (scripts/content_lock.py + data/content-lock.json, checked by validate_site.py).
-DESIGN_V='20261011-sitewide3'
+DESIGN_V='20261011-sitewide4'
 GOLD_WORD={'index.html':'you','services.html':'Working','business.html':'work','digital-kits.html':'confidence','rates.html':'pricing',
  'about.html':'local','contact.html':'tame','tech-help-muscatine.html':'Muscatine','service-area.html':'Muscatine','scam-help.html':'Help',
  'tech-help-quad-cities.html':'In-Home','404.html':'wandered'}
@@ -181,7 +250,7 @@ def redesign(s,name):
   for pat,ic in ICON_FOR:
    if re.search(pat,head,re.I):return icon_tile(ic)+m.group(1)
   return m.group(0)
- s=re.sub(r'<div class="icon" aria-hidden="true"><svg\b.*?</svg></div>(<h[23]>.*?</h[23]>)',swap,s,flags=re.S)
+ s=re.sub(r'<div class="icon" aria-hidden="true"><svg\b(?:(?!</svg>).)*</svg></div>(<h[23]>(?:(?!</h[23]>).)*</h[23]>)',swap,s,flags=re.S)
  for h,ic in CONTACT_ICONS.items():
   s=s.replace('<div class="contact-option"><h2>'+h+'</h2>','<div class="contact-option has-icon">'+icon_tile(ic)+'<h2>'+h+'</h2>',1)
  s=s.replace('<article class="price-card featured"><div class="eyebrow">','<article class="price-card featured">'+icon_tile('dollar',' icon--light')+'<div class="eyebrow">',1)
@@ -236,11 +305,11 @@ for file in (ROOT/'templates').glob('*.html'):
   s=s.replace('<!--SERVICE_MAP-->',(ROOT/'data/service-area-map.svg').read_text())
  if name=='tech-help-muscatine.html':s=s.replace('<!--LOCAL_REVIEWS-->',local_reviews())
  if name=='scam-help.html':
-  # Calm, numbered "what to do" checklist at the top, with a call/text block near the top and the bottom.
-  a=s.index('<section class="section"><div class="wrap"><div class="section-head"><div><div class="eyebrow">Right now, before anything else</div>');b=s.index('</section>',a)+len('</section>')
-  s=s[:a]+SCAM_STEPS+s[b:]
-  rep1(s,'<section class="section"><div class="wrap"><div class="notice"><strong>Report it, too.</strong>','<section class="section"><div class="wrap">'+HELP_NOW.replace('help-now"','help-now help-now--bottom"')+'<div class="notice"><strong>Report it, too.</strong>')
-  s=S[0]
+  # Standalone free guide: calm checklist, a reach-out CTA right under it, then short educational sections.
+  s=s.replace('<!--SCAM_HERO_ART-->',SCAM_HERO_ART,1).replace('<!--SCAM_GUIDE-->',scam_guide(),1).replace('<!--HELP_NOW_BOTTOM-->',HELP_NOW.replace('help-now"','help-now help-now--bottom"'),1)
+  # No kit / download links anywhere on this page (scared people shouldn't be sent to a download); footer included.
+  s=s.replace('<a href="digital-kits.html">Digital kits</a>','',1)
+  s=s.replace('<a class="nav-scam" href="scam-help.html">','<a class="nav-scam" href="scam-help.html" aria-current="page">',1)
  assert '<!--' not in s.split('</head>')[1].replace('<!--EXAMPLE:','') or name=='website-package.html',('unfilled slot',name)
  if name=='index.html':
   s=s.replace('From the Wi-Fi that won’t cooperate to the business you’re ready to launch. I’m Josh, and I’ll help you get it working.','Wi-Fi, printers, computers, and everyday tech—without the runaround. I’m Josh, and I come to your home or office in Muscatine and Eastern Iowa to help get it working.')

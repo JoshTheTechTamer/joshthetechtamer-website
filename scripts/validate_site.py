@@ -50,7 +50,7 @@ hdr=lambda n:re.sub(r' aria-current="page"|\?service=[^"]*','',re.search(r'<head
 for f in ROOT.glob('*.html'):assert hdr(f.name)==hdr('index.html'),('header differs',f.name)
 # Main menu order (desktop nav and mobile slide-out share this markup); current page marked on Website Package.
 nav=re.search(r'<nav class="navlinks".*?</nav>',(ROOT/'index.html').read_text(),re.S).group()
-assert re.findall(r'>([^<>]+)</a>',nav)==['Tech Help','For Business','Get a Website','Rates & FAQ','About Josh','Request a visit ↗'],nav
+assert re.findall(r'>([^<>]+)</a>',nav)==['Tech Help','For Business','Get a Website','Scam Help','Rates & FAQ','About Josh','Request a visit ↗'],nav
 assert '<a href="/website-package" aria-current="page">Get a Website</a>' in (ROOT/'website-package.html').read_text()
 
 # ---- Website Package showcase (Oct 2026): copy, timeline, slider, features, extras card, motion + weight ----
@@ -225,14 +225,18 @@ for need in ['.ds-rv{opacity:1!important;transform:none!important}','.ds-swoosh 
 assert "matchMedia('(prefers-reduced-motion: reduce)')" in djs.replace('mm(','matchMedia(') and "(hover: hover) and (pointer: fine)" in djs and "pointerType!=='mouse'" in djs
 assert 'review-carousel' in djs and "closest('form')" in djs,'no reveal/tilt inside the carousel or forms'
 # weight: the shared layer stays small
-assert len(dcss)<22_000 and len(djs)<9_000,(len(dcss),len(djs))
+assert len(dcss)<26_000 and len(djs)<9_000,(len(dcss),len(djs))
 # ---- Round 2 (Josh's feedback) ----
 pages={f.name:f.read_text() for f in ROOT.glob('*.html')}
 for n,t in pages.items():
  # Built-by badge -> Website Package; Digital Kits only in the footer (next to the scam + area links)
  assert re.search(r'<a class="ttb" href="/website-package">',t) and 'service=Website%20%26%20business%20tech"' not in re.search(r'<footer\b.*?</footer>',t,re.S).group(),n
  hdr=re.search(r'<header\b.*?</header>',t,re.S).group();ft=re.search(r'<footer\b.*?</footer>',t,re.S).group()
- assert 'digital-kits' not in hdr and '<a href="/service-area">Areas I serve</a><a href="/digital-kits">Digital kits</a></div>' in ft and ft.count('/digital-kits"')==1,n
+ if n=='scam-help.html':assert 'digital-kits' not in t and '<a href="/service-area">Areas I serve</a></div>' in ft,'no kit links on the scam page, footer included'
+ else:assert 'digital-kits' not in hdr and '<a href="/service-area">Areas I serve</a><a href="/digital-kits">Digital kits</a></div>' in ft and ft.count('/digital-kits"')==1,n
+ # Scam Help pill in the menu (after Get a Website), current on its own page
+ assert re.search(r'Get a Website</a><a class="nav-scam" href="/scam-help"'+(' aria-current="page"' if n=='scam-help.html' else '')+r'><svg class="nav-scam__icon"[^>]*aria-hidden="true"',hdr),n
+ assert '<a href="/scam-help">Scam &amp; hacked accounts</a>' in ft,n
 for sn in ['snippet.html','demo.html','README.md']:
  st=(ROOT/'templates/built-by-footer'/sn).read_text()
  assert 'joshthetechtamer.com/contact?service=' not in st and 'https://joshthetechtamer.com/website-package?ref=client-footer' in st,sn
@@ -252,9 +256,19 @@ assert '.scam-badge:focus-visible' in dcss and 'background:#fff1ec' in dcss and 
 sc=pages['scam-help.html']
 assert '<h2 id="scam-steps-heading">Think you’ve been scammed or hacked? Take a breath. Here’s what to do.</h2>' in sc
 ol=re.search(r'<ol class="calm-steps">(.*?)</ol>',sc,re.S).group(1);assert ol.count('<li>')==8
-hn=[m.start() for m in re.finditer(r'<div class="help-now[ "]',sc)];assert len(hn)==2 and hn[0]<sc.index('<ol class="calm-steps">') and hn[1]>sc.index('id="faq"'),hn
-assert sc.count('Need help right now? Call or text Josh at <a href="tel:+15632610200">563-261-0200</a>.')==2
-for bad in ['guarantee','recover your money','get your money back','100%']:assert bad not in sc.lower(),bad
+hn=[m.start() for m in re.finditer(r'<div class="help-now[ "]',sc)];assert len(hn)==1 and hn[0]>sc.index('id="faq"'),hn
+assert sc.count('Need help right now? Call or text Josh at <a href="tel:+15632610200">563-261-0200</a>.')==1
+# r3: standalone free guide
+assert re.search(r'</ol><div class="reach-out"><div class="reach-out__copy"><h3>Still worried, or need a hand with this\? Reach out to me\.</h3>.*?href="sms:\+15632610200".*?href="tel:\+15632610200"',sc,re.S),'CTA right under the checklist'
+for gid in ['what-to-do','spot-scams','hacked-signs','lock-down','family','report','faq']:assert f'id="{gid}"' in sc and f'href="#{gid}"' in sc,gid
+for topic in ['Fake “virus” pop-ups','Tech-support calls','Bank, Amazon and delivery texts','Gift cards and odd payments','Grandparent and family emergencies','Romance and too-good-to-be-true','Password manager basics','2-step verification','Recovery info']:assert f'<h3>{topic}</h3>' in sc,topic
+ext=set(re.findall(r'href="(https?://[^"]+)"',sc[sc.index('<main'):sc.index('</main>')]))
+assert ext=={'https://reportfraud.ftc.gov/','https://www.identitytheft.gov/','https://www.ic3.gov/'},ext
+assert not re.search(r'(?i)\b(kits?|download\w*|gumroad)\b',sc),'no kit/download mentions on the scam page'
+assert 'If there’s a way back in, we’ll find it together.' in sc
+assert '<div class="scam-hero-art" aria-hidden="true"><svg class="scam-shield"' in sc and '<img' not in re.search(r'<section class="[^"]*ds-hero.*?</section>',sc,re.S).group()
+assert '.scam-shield *{animation:none!important;stroke-dashoffset:0!important}' in dcss
+for bad in ['guarantee','recover your money','get your money back','money back','100%']:assert bad not in sc.lower().replace('doesn’t always get money back',''),bad
 # timelines: twisted rope above the headings (JS-built, decorative), drawn in on view
 assert "rope.className='ds-rope'" in djs and "setAttribute('aria-hidden','true')" in djs and "url(/assets/design/rope-h.svg)" in dcss and "url(/assets/design/rope-v.svg)" in dcss
 assert (ROOT/'assets/design/rope-h.svg').is_file() and (ROOT/'assets/design/rope-v.svg').is_file()

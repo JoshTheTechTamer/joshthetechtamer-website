@@ -191,6 +191,67 @@ a.hero-speech-link:focus-visible{outline:3px solid var(--ds-gold)!important;outl
  .scam-badge--wide{font-size:15px;padding:14px 16px 14px 12px}.scam-badge__go{display:none}
  main .section:not(.tint):not(.ds-hero){background-size:54px 36px}}
 
+
+/* ---------- 10) Scam Help: nav pill, hero shield, free guide ---------- */
+.site-header .navlinks a.nav-scam{display:inline-flex;align-items:center;gap:6px;padding:7px 12px 7px 9px;border:1px solid #f3b8a6;border-bottom:1px solid #f3b8a6;border-radius:999px;background:#fff1ec;color:#8f2a17;font-weight:700;line-height:1.1}
+.nav-scam__icon{width:16px;height:16px;flex:0 0 auto}
+.site-header .navlinks a.nav-scam:hover,.site-header .navlinks a.nav-scam:focus-visible{background:#ffe2d6;color:#7a2213}
+.site-header .navlinks a.nav-scam:focus-visible{outline:3px solid #c2410c;outline-offset:3px}
+.site-header .navlinks a.nav-scam[aria-current=page]{border-color:#e8735a;box-shadow:0 0 0 2px rgba(232,115,90,.25);color:#7a2213}
+@media(min-width:1251px){.site-header .nav-row{gap:12px}.site-header .navlinks{gap:8px}.site-header .navlinks .nav-contact{padding:12px 16px}.site-header .navlinks a.nav-scam{padding:6px 10px 6px 8px;gap:5px}}
+@media(max-width:1250px){.site-header .navlinks a.nav-scam{align-self:flex-start;margin:4px 0;padding:9px 16px 9px 12px}.nav-scam__icon{width:18px;height:18px}}
+.scam-hero-art{display:grid;place-items:center;align-self:center;position:relative}
+.scam-shield{width:min(100%,380px);height:auto;overflow:visible;filter:drop-shadow(0 22px 36px rgba(0,0,0,.35))}
+.scam-shield__draw{stroke-dasharray:1;stroke-dashoffset:0}
+.ds-anim .scam-shield__draw{stroke-dashoffset:1;animation:scamDraw 1.4s .25s cubic-bezier(.55,0,.3,1) forwards}
+.ds-anim .scam-shield__inner{animation-delay:.7s}
+.ds-anim .scam-shield__check{animation-duration:.8s;animation-delay:1.35s}
+.ds-anim .scam-shield__glow{animation:scamBreathe 6s ease-in-out infinite;transform-origin:160px 160px}
+.ds-anim .scam-shield__spark{animation:scamSpark 3.6s ease-in-out infinite}
+@keyframes scamDraw{to{stroke-dashoffset:0}}
+@keyframes scamBreathe{0%,100%{opacity:.75;transform:scale(.96)}50%{opacity:1;transform:scale(1.03)}}
+@keyframes scamSpark{0%,100%{opacity:.55}50%{opacity:1}}
+.reach-out{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:center;gap:18px 28px;margin:30px 0 0;padding:26px 30px;border-radius:22px;color:#fff;position:relative;overflow:hidden;
+ background:var(--ds-dots-w) no-repeat right 18px top 14px/72px 48px,linear-gradient(135deg,#1c2a52,#2d3d70 70%,#424d7d)}
+.reach-out h3{margin:0 0 6px;color:#fff;font-size:24px;letter-spacing:-.02em}
+.reach-out p{margin:0;color:#d7def0}
+.reach-out .actions{margin:0;display:flex;gap:12px;flex-wrap:wrap}
+.reach-out .btn{background:none}
+.reach-out .btn:not(.secondary)::before{background:var(--ds-gold)}
+.reach-out .btn:not(.secondary){color:#1c2a52!important}
+.reach-out .btn.secondary::before{background:rgba(255,255,255,.16)}
+.scam-toc{margin:30px 0 0;padding:20px 24px;border-radius:18px;border:1px solid transparent;background:linear-gradient(#f6f8fc,#f6f8fc) padding-box,var(--ds-border) border-box}
+.scam-toc__title{margin:0 0 10px;font-weight:800;color:var(--navy);font-size:15px;letter-spacing:.02em}
+.scam-toc ul{list-style:none;margin:0;padding:0;display:flex;flex-wrap:wrap;gap:8px 10px}
+.scam-toc a{display:inline-block;padding:7px 14px;border-radius:999px;background:#fff;border:1px solid #d6dcea;font-size:14px;font-weight:600;color:#23335c;text-decoration:none}
+.scam-toc a:hover,.scam-toc a:focus-visible{border-color:var(--ds-gold);background:#fff8e6}
+.guide-sec{scroll-margin-top:20px}
+.guide-head{display:grid;grid-template-columns:auto minmax(0,1fr);gap:20px;align-items:start;margin-bottom:30px;max-width:860px}
+.guide-head .icon{width:60px!important;height:60px!important;border-radius:17px!important}
+.guide-head .icon svg{width:32px!important;height:32px!important}
+.guide-head h2{margin:4px 0 10px}
+.guide-head p{margin:0;color:var(--muted);font-size:17px}
+.guide-card p{margin-bottom:0}
+.guide-card a{font-weight:700}
+.report-grid{gap:22px}
+.red-flags{margin-top:26px}
+.guide-split{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,1fr);gap:28px;align-items:start}
+.guide-list li{font-size:16px}
+.guide-aside{padding:24px 26px;border-radius:18px;border:1px solid transparent;background:linear-gradient(#fff7f1,#fff7f1) padding-box,linear-gradient(135deg,#f2a516,#e8735a 60%,#f3b8a6) border-box}
+.guide-aside h3{margin:0 0 8px;color:#7a2213}
+.guide-aside p{margin:0}
+.guide-tips{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:22px 30px}
+.guide-tips li{display:grid;grid-template-columns:52px minmax(0,1fr);gap:16px;align-items:start}
+.guide-tips h3{margin:2px 0 6px;font-size:18px}
+.guide-tips p{margin:0;color:var(--muted)}
+.scam-more{margin:0;text-align:center}
+#faq{scroll-margin-top:20px}
+@media(max-width:850px){.reach-out{grid-template-columns:1fr}.guide-split,.guide-tips{grid-template-columns:1fr}.report-grid{grid-template-columns:1fr}
+ .scam-hero-art{margin-top:10px}.scam-shield{width:min(78%,300px)}}
+@media(max-width:620px){.reach-out{padding:22px 20px}.reach-out h3{font-size:20px}.reach-out .btn{flex:1 1 auto}
+ .guide-head{grid-template-columns:1fr;gap:12px}.guide-head .icon{width:52px!important;height:52px!important}
+ .scam-shield{width:min(70%,240px)}}
+
 /* ---------- Reduced motion: everything visible and still ---------- */
 @media(prefers-reduced-motion:reduce){
  .ds-rv,.ds-steps .number,.ds-glow,.icon svg *{transition:none!important}
@@ -200,6 +261,7 @@ a.hero-speech-link:focus-visible{outline:3px solid var(--ds-gold)!important;outl
  .ds-tilt{transform:none!important}
  .ds-steps .number{transform:none!important}
  .ds-rope{clip-path:none!important;transition:none!important}
+ .scam-shield *{animation:none!important;stroke-dashoffset:0!important}
  .scam-badge,a.hero-speech-link{transition:none!important;transform:none!important}
 }
 .ds-hero .hero-speech{color:#fff}
