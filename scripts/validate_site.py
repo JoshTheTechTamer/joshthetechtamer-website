@@ -2,6 +2,7 @@ from pathlib import Path
 from html.parser import HTMLParser
 from urllib.parse import urlparse,unquote
 import json,re,sys
+from html import unescape
 ROOT=Path(__file__).resolve().parents[1]
 class Page(HTMLParser):
  def __init__(self,s):super().__init__();self.tags=[];self.stack=[];self.feed(s);assert not self.stack,self.stack
@@ -16,10 +17,14 @@ for f in ROOT.glob('*.html'):
   if not key or key not in a:continue
   u=urlparse(a[key]);
   if u.scheme or u.netloc:continue
-  target=ROOT/unquote(u.path.lstrip('/')) if u.path else f
+  path=unquote(u.path.lstrip('/'))
+  # Internal page links must use the final extensionless URL ("/" for home, "/rates" not "/rates.html").
+  if t=='a' or (t=='link' and a.get('rel')=='canonical'):assert not path.endswith('.html'),('.html link (redirect hop)',f.name,a[key])
+  target=(ROOT/'index.html' if path=='' else ROOT/(path+'.html') if (ROOT/(path+'.html')).is_file() else ROOT/path) if u.path else f
   assert target.is_file(),(f.name,a[key])
   if u.fragment and target.suffix=='.html':assert u.fragment in [x.get('id') for t,x in Page(target.read_text()).tags],(f.name,a[key])
   if t=='img':assert all(k in a for k in ['alt','width','height'])
+  if t=='a' and a.get('href','').strip() in ('','#'):raise AssertionError(('empty link',f.name))
  for schema in re.findall(r'<script type="application/ld\+json">(.*?)</script>',s):json.loads(schema)
 kit=(ROOT/'digital-kits.html').read_text();base=(ROOT/'templates/digital-kits.html').read_text()
 assert kit.count('class="product"')==6
@@ -38,16 +43,59 @@ assert '<span class="wp-gold">built<svg class="wp-swoosh"' in h1 and 'aria-hidde
 pkg_head=pkg[:pkg.index('</head>')]
 assert 'free demo' not in (h1+pkg_head).lower(),'no free demo in headline/title/meta'
 assert 'wp-demo-note' not in pkg and 'Not unlimited redesigns' not in pkg and 'not unlimited redesigns' in pkg,'demo note removed; step 2 keeps it'
-for page in ['rates.html','business.html']:assert '/website-package.html' in (ROOT/page).read_text(),page
+for page in ['rates.html','business.html']:assert 'href="/website-package"' in (ROOT/page).read_text(),page
 rates=(ROOT/'rates.html').read_text();assert 'one-hour minimum' in rates and 'No subscription required.' not in rates
-assert '/website-package.html' in (ROOT/'sitemap.xml').read_text()
 # Every page shares the homepage header (only aria-current and For Business's contact ?service= may differ).
 hdr=lambda n:re.sub(r' aria-current="page"|\?service=[^"]*','',re.search(r'<header.*?</header>',(ROOT/n).read_text(),re.S).group())
 for f in ROOT.glob('*.html'):assert hdr(f.name)==hdr('index.html'),('header differs',f.name)
 # Main menu order (desktop nav and mobile slide-out share this markup); current page marked on Website Package.
 nav=re.search(r'<nav class="navlinks".*?</nav>',(ROOT/'index.html').read_text(),re.S).group()
 assert re.findall(r'>([^<>]+)</a>',nav)==['Tech Help','For Business','Get a Website','Digital Kits','Rates & FAQ','About Josh','Request a visit ↗'],nav
-assert '<a href="/website-package.html" aria-current="page">Get a Website</a>' in (ROOT/'website-package.html').read_text()
+assert '<a href="/website-package" aria-current="page">Get a Website</a>' in (ROOT/'website-package.html').read_text()
+
+# ---- Local SEO (Oct 2026 audit): final URLs, sitemap, robots, structured data, no address, no ratings ----
+BASE='https://joshthetechtamer.com'
+pages=sorted(f.name for f in ROOT.glob('*.html') if f.name!='404.html')
+final=lambda n:BASE+'/'+('' if n=='index.html' else n[:-5])
+for n in pages:
+ s=(ROOT/n).read_text();head=s[:s.index('</head>')]
+ assert re.findall(r'<link rel="canonical" href="([^"]+)">',head)==[final(n)],('canonical',n)
+ assert re.findall(r'<meta property="og:url" content="([^"]+)">',head)==[final(n)],('og:url',n)
+ assert '.html' not in ''.join(re.findall(r'(?:href|content)="(https://joshthetechtamer\.com[^"]*)"',s)),('absolute .html URL',n)
+ title=re.search(r'<title>(.*?)</title>',head).group(1);desc=re.search(r'<meta name="description" content="([^"]*)">',head).group(1)
+ assert len(unescape(desc))<=160,('meta description too long',n,len(unescape(desc)))
+ blocks=[json.loads(b) for b in re.findall(r'<script type="application/ld\+json">(.*?)</script>',s)];assert len(blocks)==1,n
+ graph=blocks[0]['@graph'];biz=graph[0]
+ assert blocks[0]['@context']=='https://schema.org' and biz['@type']==['ProfessionalService','LocalBusiness'] and biz['@id']==BASE+'/#business',n
+ assert biz['telephone']=='+1-563-261-0200' and 'streetAddress' not in biz['address'],n
+ dump=json.dumps(blocks[0])
+ assert 'aggregateRating' not in dump and 'reviewRating' not in dump and '"Review"' not in dump,('no review/rating markup',n)
+ for node in graph:
+  assert node['@type'] in (['ProfessionalService','LocalBusiness'],'BreadcrumbList','Service','FAQPage'),node['@type']
+  if node['@type']=='BreadcrumbList':
+   assert all(i['item'].startswith(BASE) and not i['item'].endswith('.html') for i in node['itemListElement']),n
+   assert node['itemListElement'][-1]['item']==final(n),n
+  if node['@type']=='FAQPage':
+   # FAQ markup only where the same questions are visible on the page.
+   for q in node['mainEntity']:assert unescape(re.sub(r'<[^>]+>','',s)).count(q['name'])>=1,('FAQ not visible',n,q['name'])
+ assert (n=='index.html')==(not any(x['@type']=='BreadcrumbList' for x in graph)),n
+cfg=json.loads((ROOT/'data/site-config.json').read_text())
+for k in ['google_business_profile_url','google_review_url']:
+ v=cfg.get(k,'')
+ for n in pages:
+  if v:assert v in (ROOT/n).read_text(),(k,n)
+assert cfg.get('google_business_profile_url','')=='' or cfg['google_business_profile_url'] in json.dumps(json.loads(re.search(r'<script type="application/ld\+json">(.*?)</script>',(ROOT/'index.html').read_text()).group(1)))
+nf=(ROOT/'404.html').read_text();assert 'rel="canonical"' not in nf and 'noindex' in nf
+sm=(ROOT/'sitemap.xml').read_text();locs=re.findall(r'<url><loc>([^<]+)</loc><lastmod>(\d{4}-\d{2}-\d{2})</lastmod></url>',sm)
+assert sorted(l for l,_ in locs)==sorted(final(n) for n in pages) and sm.count('<url>')==len(pages),'sitemap: every page, final URLs, with lastmod'
+assert (ROOT/'robots.txt').read_text()=='User-agent: *\nAllow: /\n\nSitemap: '+BASE+'/sitemap.xml\n'
+for n in ['tech-help-muscatine.html','service-area.html','scam-help.html','tech-help-quad-cities.html']:assert n in pages and 'Built by' in (ROOT/n).read_text(),n
+idx=(ROOT/'index.html').read_text()
+assert 'hero-logo.png' not in ''.join((ROOT/n).read_text() for n in pages+['404.html']),'1.48 MB hero-logo.png must not be referenced'
+assert 'image/webp' in idx and 'hero-logo-800.webp' in idx
+for n in ['index.html','services.html']:assert 'href="/tech-help-muscatine"' in (ROOT/n).read_text(),n
+# Never publish the street address (service-area business).
+for n in pages+['404.html']:assert 'Cedar' not in (ROOT/n).read_text() and 'streetAddress' not in (ROOT/n).read_text(),n
 if '--production' in sys.argv:
  assert json.loads((ROOT/'data/site-config.json').read_text())['form_mode']=='cloudflare'
  contact=(ROOT/'contact.html').read_text();script=(ROOT/'assets/site.js').read_text()

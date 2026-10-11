@@ -25,5 +25,11 @@ for size,name in [(116,'logo-nav'),(32,'favicon-32'),(180,'apple-touch-icon')]:
 for page,src in {'home':'assets/home-cta-housecall.png','services':'assets/josh-helping.jpg','business':'assets/josh-business.jpg','kits':'assets/kits-hero.webp','rates':'assets/rates-hero.png','about':'assets/josh.jpg','contact':'assets/contact-hero.png'}.items():
  im=ImageOps.exif_transpose(Image.open(ROOT/src)).convert('RGB');im.thumbnail((1200,630),Image.Resampling.LANCZOS)
  canvas=Image.new('RGB',(1200,630),'#f2f4f9');canvas.paste(im,((1200-im.width)//2,(630-im.height)//2));canvas.save(assets/('share-'+page+'.jpg'),quality=87,optimize=True)
+# Homepage hero logo (was a 1.48 MB PNG): responsive WebP with alpha, plus a palette PNG fallback and a small header-canvas fallback.
+hero=Image.open(ROOT/'assets/hero-logo.png');hero.load()
+for w in (400,800,1200):
+ o=hero.copy();o.thumbnail((w,10000),Image.Resampling.LANCZOS);o.save(assets/f'hero-logo-{w}.webp','WEBP',quality=88,method=6,alpha_quality=95)
+for w in (800,256):
+ o=hero.copy();o.thumbnail((w,10000),Image.Resampling.LANCZOS);o.quantize(256,method=Image.Quantize.FASTOCTREE,dither=Image.Dither.FLOYDSTEINBERG).save(assets/f'hero-logo-{w}.png',optimize=True)
 (ROOT/'data/image-manifest.json').write_text(json.dumps(manifest,indent=2))
 print(json.dumps({'original_unique_image_bytes':before,'optimized_largest_variant_bytes':after,'reduction_percent':round(100*(1-after/before))}))
