@@ -42,6 +42,7 @@
 .ds-hero .textlink{color:#fff!important}
 
 /* gold text-art accent with a hand-drawn swoosh (same as the showcase's "built") */
+.ds-gold-dot{color:var(--ds-gold)!important}
 .ds-gold{position:relative;display:inline-block;color:var(--ds-gold)!important;white-space:nowrap}
 .ds-swoosh{position:absolute;left:-3%;bottom:-.17em;width:106%;height:.3em;color:var(--ds-gold);overflow:visible;pointer-events:none}
 .ds-swoosh path{stroke-dasharray:1;stroke-dashoffset:0;animation:ds-draw 1s cubic-bezier(.6,0,.3,1) .45s backwards}

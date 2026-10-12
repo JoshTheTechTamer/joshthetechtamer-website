@@ -144,9 +144,10 @@ for n in ['index.html','services.html']:assert 'href="/tech-help-muscatine"' in 
 # Homepage hero stays exactly as Josh approved it (only the image is the optimized <picture>, and links are extensionless).
 # (Sitewide redesign: the band and the gold accent on "savvy" are restyling only; the words, buttons and photo stay.)
 hero=re.search(r'<section class="hero ds-hero">.*?</section>',idx,re.S).group()
-plain=re.sub(r'<span class="ds-deco".*?</span></span></span>|<svg class="ds-swoosh".*?</svg>','',hero,flags=re.S).replace('<span class="ds-gold">you</span>','you')
+plain=re.sub(r'<span class="ds-deco".*?</span></span></span>|<svg class="ds-swoosh".*?</svg>','',hero,flags=re.S).replace('<span class="ds-gold">you</span>','you').replace('<span class="ds-gold-dot">.</span>','.')
 assert '<div class="eyebrow">Your local tech guy · Muscatine, Iowa</div><h1>Not very tech savvy?<br><span>I’ll come to you.</span></h1>' in plain and 'eyebrow-h1' not in hero and 'hero-local' not in hero,'home hero changed'
 assert '<a class="btn " href="sms:+15632610200">Text Josh<span aria-hidden="true">↗</span></a><a class="btn secondary" href="/services">Explore services<span aria-hidden="true">↗</span></a>' in hero and 'hero-logo-800.webp' in hero and '<a class="art-label" href="tel:+15632610200">563-261-0200</a>' in hero,'home hero buttons/photo'
+assert '</span><span class="ds-gold-dot">.</span></span></h1>' in hero and '.ds-gold-dot{color:var(--ds-gold)' in (ROOT/'assets/design.css').read_text()
 assert 'In-home computer &amp; tech help in Muscatine, IA' in idx and 'House calls all over' in idx
 # Josh's final list (small towns first, then the Quad Cities on both sides of the river), no Iowa City/Coralville.
 served=[a['name'] for a in json.loads(re.search(r'<script type="application/ld\+json">(.*?)</script>',idx).group(1))['@graph'][0]['areaServed']]
