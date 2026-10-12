@@ -97,7 +97,7 @@ def footer(s):
   h2=re.sub(r'<a href="digital-kits\.html"(?: aria-current="page")?>Digital Kits</a>','',hdr.group(),count=1);assert h2!=hdr.group(),'nav kits link'
   s=s[:hdr.start()]+h2+s[hdr.end():]
  s=s.replace('<a href="digital-kits.html">Digital kits</a><a href="rates.html">','<a href="rates.html">',1)
- s=s.replace('<a href="about.html">Meet Josh</a></div>','<a href="about.html">Meet Josh</a><a href="tech-help-muscatine.html">Tech help in Muscatine</a><a href="scam-help.html">Scam &amp; hacked accounts</a><a href="service-area.html">Areas I serve</a><a href="digital-kits.html">Digital kits</a></div>',1)
+ s=s.replace('<a href="about.html">Meet Josh</a></div>','<a href="about.html">Meet Josh</a><a href="tech-help-muscatine.html">Tech help in Muscatine</a><a href="tech-help-quad-cities.html">Tech help in the Quad Cities</a><a href="scam-help.html">Scam &amp; hacked accounts</a><a href="service-area.html">Areas I serve</a><a href="digital-kits.html">Digital kits</a></div>',1)
  # Scam Help in the main menu (desktop + mobile), first item, as a soft-red pill.
  hdr=re.search(r'<header\b.*?</header>',s,re.S)
  if hdr:
@@ -108,7 +108,7 @@ def footer(s):
  assert '<a class="ttb" href="website-package.html">' in s,'built-by badge link'
  g=(f'<a href="{escape(gbp)}" target="_blank" rel="noopener noreferrer">Find us on Google ↗</a>' if gbp else '')+(f'<a href="{escape(review_url)}" target="_blank" rel="noopener noreferrer">Leave a Google review ↗</a>' if review_url else '')
  s=s.replace('LinkedIn ↗</a></div>','LinkedIn ↗</a>'+g+'</div>',1)
- assert FOOTER_AREAS in s and 'tech-help-muscatine.html">Tech help in Muscatine' in s and 'service-area.html">Areas I serve</a><a href="digital-kits.html">Digital kits</a>' in s,'footer markup changed'
+ assert FOOTER_AREAS in s and 'tech-help-muscatine.html">Tech help in Muscatine' in s and 'tech-help-quad-cities.html">Tech help in the Quad Cities' in s and 'service-area.html">Areas I serve</a><a href="digital-kits.html">Digital kits</a>' in s,'footer markup changed'
  return s
 
 # ---- Round 2 of the redesign (Josh's feedback, Oct 11) ----
@@ -280,7 +280,7 @@ for file in (ROOT/'templates').glob('*.html'):
   s=s.replace('<img src="assets/hero-logo.png" alt="The Tech Tamer: Josh’s top-hatted technology tamer mascot and wordmark" width="1353" height="1162">',HERO_PICTURE,1)
   # Hero stays exactly as on main (Josh's call); the local keyword line sits in the "Getting help should be easy" section instead.
   a='<div class="eyebrow">No jargon. No runaround.</div><h2>Getting help should be easy.</h2></div>'
-  assert a in s;s=s.replace(a,a+'<p class="home-local"><strong>In-home computer &amp; tech help in Muscatine, IA.</strong> House calls all over <a href="tech-help-muscatine.html">Muscatine</a> and <a href="service-area.html">nearby towns</a>, evenings &amp; weekends.</p>',1)
+  assert a in s;s=s.replace(a,a+'<p class="home-local"><strong>In-home computer &amp; tech help in Muscatine, IA.</strong> House calls all over <a href="tech-help-muscatine.html">Muscatine</a>, <a href="service-area.html">nearby towns</a>, and the <a href="tech-help-quad-cities.html">Quad Cities</a>, evenings &amp; weekends.</p>',1)
   s=s.replace('<a class="textlink" href="services.html">Find your tech fix</a>','<a class="textlink" href="tech-help-muscatine.html">Tech help in Muscatine</a>',1)
   # Speech bubble = link to the Website Package (same words).
   rep1(s,'<p class="hero-speech">If you like my website,<br><strong>I can build you one!</strong></p>','<a class="hero-speech hero-speech-link" href="website-package.html">If you like my website,<br><strong>I can build you one!</strong></a>')

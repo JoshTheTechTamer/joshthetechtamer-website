@@ -141,6 +141,8 @@ idx=(ROOT/'index.html').read_text()
 assert 'hero-logo.png' not in ''.join((ROOT/n).read_text() for n in pages+['404.html']),'1.48 MB hero-logo.png must not be referenced'
 assert 'image/webp' in idx and 'hero-logo-800.webp' in idx
 for n in ['index.html','services.html']:assert 'href="/tech-help-muscatine"' in (ROOT/n).read_text(),n
+assert all(f'href="/{p}"' in (ROOT/'index.html').read_text() for p in ['tech-help-muscatine','service-area','tech-help-quad-cities','scam-help']),'homepage must link the four local SEO pages'
+assert 'Tech help in the Quad Cities' in (ROOT/'index.html').read_text()
 # Homepage hero stays exactly as Josh approved it (only the image is the optimized <picture>, and links are extensionless).
 # (Sitewide redesign: the band and the gold accent on "savvy" are restyling only; the words, buttons and photo stay.)
 hero=re.search(r'<section class="hero ds-hero">.*?</section>',idx,re.S).group()
