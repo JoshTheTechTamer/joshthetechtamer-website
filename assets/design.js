@@ -35,28 +35,37 @@
     var steps=all('.step',tl),nums=steps.map(function(s){return s.querySelector('.number');});
     if(steps.length<2||nums.indexOf(null)>-1)return;
     var rope=d.createElement('span');rope.className='ds-rope';rope.setAttribute('aria-hidden','true');
-    tl.insertBefore(rope,tl.firstChild);
-    var dur=1600,drawn=false;
+    tl.insertBefore(rope,tl.firstChild);tl.classList.add('has-rope');
+    /* layout from offsets (not getBoundingClientRect) so reveal/scale transforms can't shift the rope off the circles */
+    function at(el){var x=el.offsetWidth/2,y=el.offsetHeight/2;while(el&&el!==tl){x+=el.offsetLeft;y+=el.offsetTop;el=el.offsetParent;}return[x,y];}
+    var pts=[];
     function layout(){
-      var b=tl.getBoundingClientRect(),a=nums[0].getBoundingClientRect(),z=nums[nums.length-1].getBoundingClientRect();
-      var ax=a.left+a.width/2-b.left,ay=a.top+a.height/2-b.top,zx=z.left+z.width/2-b.left,zy=z.top+z.height/2-b.top;
-      var vertical=Math.abs(zy-ay)>Math.abs(zx-ax),t=parseFloat(getComputedStyle(tl).getPropertyValue('--ds-rope'))||10;
+      pts=nums.map(at);var a=pts[0],z=pts[pts.length-1];
+      var vertical=Math.abs(z[1]-a[1])>Math.abs(z[0]-a[0]),t=parseFloat(getComputedStyle(tl).getPropertyValue('--ds-rope'))||10;
       tl.classList.toggle('is-vertical',vertical);
-      if(vertical){tl.style.setProperty('--l',(ax-t/2)+'px');tl.style.setProperty('--t',ay+'px');tl.style.setProperty('--w',t+'px');tl.style.setProperty('--h',(zy-ay)+'px');}
-      else{tl.style.setProperty('--l',ax+'px');tl.style.setProperty('--t',(ay-t/2)+'px');tl.style.setProperty('--w',(zx-ax)+'px');tl.style.setProperty('--h',t+'px');}
-    }
-    function draw(){
-      if(drawn)return;drawn=true;tl.classList.add('is-drawn');
-      steps.forEach(function(s,i){
-        if(reduce){s.classList.add('is-on');return;}
-        setTimeout(function(){s.classList.add('is-on');},Math.round(dur*.9*i/(steps.length-1)));
-      });
+      if(vertical){tl.style.setProperty('--l',(a[0]-t/2)+'px');tl.style.setProperty('--t',a[1]+'px');tl.style.setProperty('--w',t+'px');tl.style.setProperty('--h',(z[1]-a[1])+'px');}
+      else{tl.style.setProperty('--l',a[0]+'px');tl.style.setProperty('--t',(a[1]-t/2)+'px');tl.style.setProperty('--w',(z[0]-a[0])+'px');tl.style.setProperty('--h',t+'px');}
+      tl._v=vertical;
     }
     layout();
-    w.addEventListener('resize',layout);w.addEventListener('load',layout);
-    if(reduce||!hasIO){draw();return;}
-    var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){requestAnimationFrame(function(){requestAnimationFrame(draw);});io.disconnect();}});},{rootMargin:'0px 0px -18% 0px',threshold:.35});
-    io.observe(tl);
+    w.addEventListener('load',layout);
+    if(reduce||!hasIO){tl.style.setProperty('--fill','1');steps.forEach(function(s){s.classList.add('is-on');});w.addEventListener('resize',layout);return;}
+    /* same behaviour as the Get a Website timeline: the rope draws through the numbers as you scroll,
+       and each number lights up as the rope reaches it */
+    tl.classList.add('ds-scroll');
+    var ticking=false,active=false;
+    function update(){
+      ticking=false;
+      var b=tl.getBoundingClientRect(),mid=w.innerHeight*.62,a=pts[0],z=pts[pts.length-1],ax=tl._v?a[1]:a[0],zx=tl._v?z[1]:z[0];
+      var base=tl._v?b.top:b.left,pos=tl._v?mid-base:(mid-(b.top+a[1]))/(w.innerHeight*.35)*(zx-ax)+ax;
+      var f=Math.max(0,Math.min(1,(pos-ax)/(zx-ax)));
+      tl.style.setProperty('--fill',f.toFixed(4));
+      steps.forEach(function(s,i){var p=tl._v?pts[i][1]:pts[i][0];s.classList.toggle('is-on',ax+f*(zx-ax)>=p-1);});
+    }
+    function onScroll(){if(active&&!ticking){ticking=true;w.requestAnimationFrame(update);}}
+    new IntersectionObserver(function(es){active=es[0].isIntersecting;if(active)update();},{rootMargin:'200px 0px'}).observe(tl);
+    w.addEventListener('scroll',onScroll,{passive:true});
+    w.addEventListener('resize',function(){layout();onScroll();},{passive:true});
   });
 
   /* 4) Cards: subtle tilt + glow for mouse users only (no tilt on touch, none with reduced motion). */

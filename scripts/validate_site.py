@@ -274,7 +274,7 @@ for bad in ['guarantee','recover your money','get your money back','money back',
 # timelines: twisted rope above the headings (JS-built, decorative), drawn in on view
 assert "rope.className='ds-rope'" in djs and "setAttribute('aria-hidden','true')" in djs and "url(/assets/design/rope-h.svg)" in dcss and "url(/assets/design/rope-v.svg)" in dcss
 assert (ROOT/'assets/design/rope-h.svg').is_file() and (ROOT/'assets/design/rope-v.svg').is_file()
-assert '.ds-anim .ds-steps.is-drawn .ds-rope{clip-path:inset(0 0 0 0' in dcss and 'url(/assets/design/rope-v.svg)' in (ROOT/'assets/website-package.css').read_text()
+assert '.ds-steps.ds-scroll .ds-rope{clip-path:inset(0 calc((1 - var(--fill,0))*100%)' in dcss and '.ds-steps:not(.has-rope)::before' in dcss and 'offsetTop' in djs and 'url(/assets/design/rope-v.svg)' in (ROOT/'assets/website-package.css').read_text()
 # shared gold icon set: contact methods + rate cards get icons
 icons=json.loads((ROOT/'data/icons.json').read_text());assert {'devices','phone','map-star','globe','cloud-check','pencil'}<=set(icons)
 assert pages['contact.html'].count('<div class="contact-option has-icon"><div class="icon" aria-hidden="true">')==4
@@ -296,7 +296,7 @@ for f in sorted(ROOT.glob('*.html')):
  t=f.read_text();hd=re.search(r'<header\b.*?</header>',t,re.S).group()
  assert '<canvas' not in t,('old canvas header',f.name)
  assert hd.count('<a href="/" class="brand brand-lockup header-animation" aria-label="The Tech Tamer home — House calls. Office visits. Tech tamed.">'+STAGE+'</a>')==1,('header stage',f.name)
- assert t.count('/assets/header-animation.js?v=20261011-ha10" defer')==1,('header script',f.name)
+ assert t.count('/assets/header-animation.js?v=20261012-ha11" defer')==1,('header script',f.name)
  assert 'assets/site.css?v=20261011-headeranim6' in t,f.name
 # the slogan is real text, hidden from screen readers (the link's aria-label reads it once); printer is decorative
 assert '<span class="ha-slogan" aria-hidden="true">' in STAGE and '<span class="ha-printer is-grumpy" aria-hidden="true">' in STAGE and 'alt="The Tech Tamer"' in STAGE

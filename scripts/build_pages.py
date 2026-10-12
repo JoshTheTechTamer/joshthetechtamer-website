@@ -209,7 +209,7 @@ def normalize_urls(s,name):
 # Shared layer: assets/design.css + assets/design.js. Markup changes are decorative only (aria-hidden), so every
 # page's words, links, images, forms, header, footer, JSON-LD and metadata stay exactly as they were
 # (scripts/content_lock.py + data/content-lock.json, checked by validate_site.py).
-DESIGN_V='20261011-sitewide4'
+DESIGN_V='20261012-steps1'
 GOLD_WORD={'index.html':'you','services.html':'Working','business.html':'work','digital-kits.html':'confidence','rates.html':'pricing',
  'about.html':'local','contact.html':'tame','tech-help-muscatine.html':'Muscatine','service-area.html':'Muscatine','scam-help.html':'Help',
  'tech-help-quad-cities.html':'In-Home','404.html':'wandered'}
@@ -262,7 +262,7 @@ def redesign(s,name):
  s=re.sub(r'<div class="grid3">(?=<(?:article|div) class="step">)','<div class="grid3 ds-steps" data-ds-steps>',s)
  return s
 HEADER_STAGE=(ROOT/'source-art/header/stage.html').read_text().strip()
-HEADER_V='20261011-ha10'
+HEADER_V='20261012-ha11'
 for file in (ROOT/'templates').glob('*.html'):
  s=apply_header_logo(file.read_text());name=file.name
  s=footer(s)

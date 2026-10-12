@@ -108,10 +108,15 @@
  background:linear-gradient(180deg,rgba(255,255,255,.3),rgba(255,255,255,0) 42%,rgba(70,40,0,.3)),url(/assets/design/rope-h.svg) repeat-x 0 0/14px 100%;
  box-shadow:0 3px 8px rgba(120,80,10,.28);clip-path:inset(0 0 0 0 round var(--ds-rope))}
 .ds-steps.is-vertical .ds-rope{background:linear-gradient(90deg,rgba(255,255,255,.3),rgba(255,255,255,0) 42%,rgba(70,40,0,.3)),url(/assets/design/rope-v.svg) repeat-y 0 0/100% 14px}
-.ds-anim .ds-rope{clip-path:inset(0 100% 0 0 round var(--ds-rope));transition:clip-path 1.6s cubic-bezier(.55,0,.3,1)}
-.ds-anim .ds-steps.is-vertical .ds-rope{clip-path:inset(0 0 100% 0 round var(--ds-rope))}
-.ds-anim .ds-steps.is-drawn .ds-rope{clip-path:inset(0 0 0 0 round var(--ds-rope))}
+.ds-steps.ds-scroll .ds-rope{clip-path:inset(0 calc((1 - var(--fill,0))*100%) 0 0 round var(--ds-rope))}
+.ds-steps.ds-scroll.is-vertical .ds-rope{clip-path:inset(0 0 calc((1 - var(--fill,0))*100%) 0 round var(--ds-rope))}
+/* no-JS: a full static rope through the circle centres (equal-width columns) */
+.ds-steps:not(.has-rope)::before{content:"";position:absolute;z-index:0;left:16.67%;right:16.67%;top:calc(var(--ds-n)/2 - var(--ds-rope)/2);height:var(--ds-rope);border-radius:var(--ds-rope);background:url(/assets/design/rope-h.svg) repeat-x 0 0/14px 100%;box-shadow:0 3px 8px rgba(120,80,10,.28)}
 @media(max-width:620px){
+ .ds-steps{--g:16px;row-gap:var(--g)}
+ .ds-steps:not(.has-rope)::before{content:none}
+ .ds-steps:not(.has-rope) .step:not(:last-child)::before{content:"";position:absolute;z-index:0;left:calc(var(--ds-n)/2 - var(--ds-rope)/2);width:var(--ds-rope);top:calc(var(--ds-n)/2);height:calc(100% + var(--g));border-radius:var(--ds-rope);background:url(/assets/design/rope-v.svg) repeat-y 0 0/100% 14px}
+ .ds-steps:not(.has-rope) .step .number{z-index:2}
  .ds-dots{width:88px;height:88px}.ds-dots--tr{top:12px;right:8px}.ds-dots--bl{display:none}
  .ds-stripe{clip-path:polygon(72% 100%,84% 100%,100% 88%,100% 74%)}
  .ds-hero .hero-logo-stack{padding:4px 12px 14px;border-radius:20px}
@@ -266,3 +271,14 @@ a.hero-speech-link:focus-visible{outline:3px solid var(--ds-gold)!important;outl
 }
 .ds-hero .hero-speech{color:#fff}
 .ds-tilt{position:relative}
+
+/* Home hero CTAs (Oct 12): one row beside each other on wider screens; on phones the CTA block sits under the mascot card */
+@media(min-width:621px){.ds-hero .hero-copy .actions{flex-wrap:nowrap}.ds-hero .hero-copy .actions .btn{white-space:nowrap;flex:0 0 auto}}
+@media(max-width:620px){
+ .ds-hero .hero-grid{display:flex!important;flex-direction:column}
+ .ds-hero .hero-copy{display:contents}
+ .ds-hero .hero-copy>*{order:0}
+ .ds-hero .hero-art{order:1;padding-bottom:18px!important}
+ .ds-hero .hero-copy .actions{order:2;margin-top:4px}
+ .ds-hero .hero-copy .hero-facts{order:3;margin-bottom:22px}
+}

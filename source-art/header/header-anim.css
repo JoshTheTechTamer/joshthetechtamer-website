@@ -10,7 +10,7 @@
 .header-animation .ha .ha-rig img,.header-animation .ha .ha-rig span,.header-animation .ha .ha-top img,.header-animation .ha .ha-top span{position:absolute;inset:0;width:100%;height:100%;max-width:none;object-fit:fill}
 .header-animation .ha .ha-move{transform-origin:51% 78.3%}
 .header-animation .ha.is-live .ha-still{visibility:hidden}
-.header-animation .ha .ha-slogan{--fe:calc(36*100cqw/var(--W));left:calc(288%/var(--W)*100);top:19%;padding:.1em .3em .55em 0;color:#23335c;font:900 calc(25*100cqw/var(--W))/1.18 "Montserrat DS","Montserrat",Arial,Helvetica,sans-serif;letter-spacing:-.005em;white-space:nowrap;-webkit-mask-image:linear-gradient(90deg,transparent calc(var(--rv) - var(--fe)),#000 calc(var(--rv) + var(--fe)));mask-image:linear-gradient(90deg,transparent calc(var(--rv) - var(--fe)),#000 calc(var(--rv) + var(--fe)))}
+.header-animation .ha .ha-slogan{--fe:calc(36*100cqw/var(--W));left:calc(288%/var(--W)*100);top:30.3%;padding:.1em .3em .55em 0;color:#23335c;font:900 calc(25*100cqw/var(--W))/1.18 "Montserrat DS","Montserrat",Arial,Helvetica,sans-serif;letter-spacing:-.005em;white-space:nowrap;-webkit-mask-image:linear-gradient(90deg,transparent calc(var(--rv) - var(--fe)),#000 calc(var(--rv) + var(--fe)));mask-image:linear-gradient(90deg,transparent calc(var(--rv) - var(--fe)),#000 calc(var(--rv) + var(--fe)))}
 .header-animation .ha .ha-line{display:inline}
 .header-animation .ha .ha-tamed{display:block;width:max-content;margin-top:.14em;font-size:1.62em;line-height:1}
 .header-animation .ha .ha-tech{color:#00a3ed}
@@ -43,7 +43,7 @@
 .ha-rope .k{stroke:#071426;stroke-width:3.9}.ha-rope .g{stroke:#fcc443;stroke-width:2.6}.ha-rope .t{stroke:#7a4f0c;stroke-width:2.6;stroke-dasharray:.34 1.56}.ha-rope .h{stroke:#ffe9a8;stroke-width:.7;stroke-dasharray:.9 1;stroke-dashoffset:-.5;opacity:.75}
 @media(max-width:620px){
  .header-animation .ha{--W:540;--PR:212;--PE:470;aspect-ratio:2.7}
- .header-animation .ha .ha-slogan{left:calc(258%/var(--W)*100);top:9%;font-size:calc(29*100cqw/var(--W))}
+ .header-animation .ha .ha-slogan{left:calc(258%/var(--W)*100);top:21.8%;font-size:calc(29*100cqw/var(--W))}
  .header-animation .ha .ha-line{display:block}
  .header-animation .ha .ha-twinkle{right:-.2em;bottom:-.7em}
  .header-animation .ha .ha-tamed{font-size:1.24em;margin-top:.08em}
