@@ -77,10 +77,10 @@ def business():
  if gbp:b['sameAs'].append(gbp);b['hasMap']=gbp
  return b
 def google_links(cls=''):
- """'Read our Google reviews' / 'Leave a review' buttons. Empty config values render nothing (no broken links)."""
+ """'Read our Google reviews' / 'Leave a review' buttons. Empty config values render nothing (no broken links). Decorative stars sit above 'Leave'."""
  out=[]
- if gbp:out.append(f'<span class="review-gbp"><span class="review-link-stars" aria-hidden="true">★★★★★</span><a class="btn secondary review-gbp-btn" href="{escape(gbp)}" target="_blank" rel="noopener noreferrer">Read our Google reviews<span aria-hidden="true">↗</span></a></span>')
- if review_url:out.append(f'<a class="btn" href="{escape(review_url)}" target="_blank" rel="noopener noreferrer">Leave a Google review<span aria-hidden="true">↗</span></a>')
+ if gbp:out.append(f'<a class="btn secondary review-gbp-btn" href="{escape(gbp)}" target="_blank" rel="noopener noreferrer">Read our Google reviews<span aria-hidden="true">↗</span></a>')
+ if review_url:out.append(f'<span class="review-gbp"><span class="review-link-stars" aria-hidden="true">★★★★★</span><a class="btn" href="{escape(review_url)}" target="_blank" rel="noopener noreferrer">Leave a Google review<span aria-hidden="true">↗</span></a></span>')
  return f'<div class="actions review-links{cls}">'+''.join(out)+'</div>' if out else ''
 def local_reviews():
  picks=[next(r for r in reviews if r['name']==n) for n in ('Peggy S.','Bob','Arlene S.')]  # first card per name
@@ -211,7 +211,7 @@ def normalize_urls(s,name):
 # (scripts/content_lock.py + data/content-lock.json, checked by validate_site.py).
 DESIGN_V='20261012-steps2'
 GOLD_WORD={'index.html':'you','services.html':'Working','business.html':'work','digital-kits.html':'confidence','rates.html':'pricing',
- 'about.html':'local','contact.html':'tame','tech-help-muscatine.html':'Muscatine','service-area.html':'Muscatine','scam-help.html':'Help',
+ 'about.html':'local','contact.html':'tame','tech-help-muscatine.html':'Muscatine','service-area.html':'Muscatine','scam-help.html':None,
  'tech-help-quad-cities.html':'In-Home','404.html':'wandered'}
 # Shared gold line-icon set (data/icons.json): the Website Package "essentials" icons plus matching ones for every icon spot.
 ICONS=json.loads((ROOT/'data/icons.json').read_text())
@@ -237,7 +237,7 @@ def redesign(s,name):
  assert n==1,('hero band',name)
  # 2) Gold text-art accent (gold + hand-drawn swoosh) on one key word of the headline; the text itself is unchanged.
  h=re.search(r'<h1\b[^>]*>(.*?)</h1>',s,re.S);inner=h.group(1);word=GOLD_WORD[name]
- parts=re.split(r'(<span class="eyebrow[^"]*">.*?</span>|<[^>]+>)',inner)
+ parts=[] if word is None else re.split(r'(<span class="eyebrow[^"]*">.*?</span>|<[^>]+>)',inner)
  for i,part in enumerate(parts):
   if part.startswith('<'):continue
   m=re.search(r'(?<![\w-])'+re.escape(word)+r'(?![\w-])',part)
@@ -245,8 +245,9 @@ def redesign(s,name):
    rest=part[m.end():]
    if word=='you' and rest.startswith('.'):rest='<span class="ds-gold-dot">.</span>'+rest[1:]   # home hero: gold period, no underline
    parts[i]=part[:m.start()]+'<span class="ds-gold">'+word+DS_SWOOSH+'</span>'+rest;break
- else:raise AssertionError(('gold word not in h1',name,word))
- s=s[:h.start(1)]+''.join(parts)+s[h.end(1):]
+ else:
+  if word is not None:raise AssertionError(('gold word not in h1',name,word))
+ if word is not None:s=s[:h.start(1)]+''.join(parts)+s[h.end(1):]
  # 2b) Shared icon set: card icons by topic, plus icons for contact methods and rate cards.
  def swap(m):
   head=unescape(re.sub(r'<[^>]+>','',m.group(1)))
@@ -277,7 +278,7 @@ for file in (ROOT/'templates').glob('*.html'):
  a='<canvas width="1400" height="400" aria-hidden="true"><img src="/assets/hero-logo.png" alt="The Tech Tamer" width="128" height="110"></canvas>'
  assert a in s,('header canvas markup',file.name);s=s.replace(a,HEADER_STAGE,1)
  s=re.sub(r'/assets/header-animation\.js\?v=[^"]+','/assets/header-animation.js?v='+HEADER_V,s)
- s=re.sub(r'assets/site\.css\?v=[^"]+','assets/site.css?v=20261012-polish1',s)
+ s=re.sub(r'assets/site\.css\?v=[^"]+','assets/site.css?v=20261012-polish2',s)
  if name=='index.html':
   # H1 keyword line (audit B2): visible headline unchanged, eyebrow promoted into the H1.
   s=s.replace('<img src="assets/hero-logo.png" alt="The Tech Tamer: Josh’s top-hatted technology tamer mascot and wordmark" width="1353" height="1162">',HERO_PICTURE,1)
@@ -324,7 +325,7 @@ for file in (ROOT/'templates').glob('*.html'):
  assert '<!--' not in s.split('</head>')[1].replace('<!--EXAMPLE:','') or name=='website-package.html',('unfilled slot',name)
  if name=='index.html':
   s=s.replace('From the Wi-Fi that won’t cooperate to the business you’re ready to launch. I’m Josh, and I’ll help you get it working.','Wi-Fi, printers, computers, and everyday tech—without the runaround. I’m Josh, and I come to your home or office in Muscatine and Eastern Iowa to help get it working.')
-  s=s.replace('<section class="cta cta-photo">',carousel().replace('<p class="small review-note">',google_links()+'<p class="small review-note">',1)+'<section class="cta cta-photo">',1)
+  s=s.replace('<section class="cta cta-photo">',carousel().replace('<div class="review-controls" hidden>',google_links(' review-links--card')+'<div class="review-controls" hidden>',1)+'<section class="cta cta-photo">',1)
  if name=='services.html':
   s=s.replace('Patient, practical help for your home and everyday technology.','Patient, practical help at your home or office in Muscatine and Eastern Iowa.')
   s=s.replace('<section class="cta cta-photo">',visit+'<section class="cta cta-photo">',1)

@@ -415,23 +415,18 @@ button:disabled{opacity:.65;cursor:wait}
 
 /* Site polish 1 (Oct 12): carousel controls inside the card, star-trimmed Google reviews link, compact Scam Help hero, callout beside the steps heading. */
 .review-carousel{position:relative}
-.review-carousel.is-enhanced .review-card{padding-bottom:calc(clamp(24px,4vw,48px) + 30px)}
 .review-carousel.is-enhanced .review-card::after{display:none}
 .review-carousel .review-controls{position:absolute;right:14px;bottom:12px;margin:0;gap:6px;flex-wrap:nowrap;z-index:3}
 .review-ctl,.review-ctl.review-pause{font:inherit;font-size:11px;font-weight:600;line-height:1;min-height:24px;width:auto;padding:4px 8px;cursor:pointer;color:#23335c;background:#fff;border:1px solid #c5cede;border-radius:5px}
 .review-ctl:hover{border-color:#23335c}
 .review-ctl:focus-visible{outline:3px solid #0074aa;outline-offset:3px}
 .review-carousel .review-count{font-size:11px;min-width:34px;color:var(--muted)}
-.review-links{align-items:flex-end}
 .review-gbp{display:inline-flex;flex-direction:column;align-items:center;gap:7px}
 .review-link-stars{color:#f5b731;font-size:19px;letter-spacing:4px;line-height:1;text-shadow:0 1px 0 rgba(35,51,92,.25)}
-.review-gbp-btn::before{background:linear-gradient(100deg,#23335c,#424d7d)!important}
-.review-gbp-btn>span{color:#f5b731}
 .scam-steps-section .section-head{align-items:center}
 .scam-steps-section .section-head>p{max-width:470px;background:#fff;border:1px solid #d9e1ef;border-left:5px solid #f5b731;border-radius:12px;padding:18px 22px;color:var(--ink);font-size:15.5px;line-height:1.6;box-shadow:0 8px 22px rgba(35,51,92,.08)}
 .scam-hero .help-hero-copy>p:not(.small){max-width:34em}
 @media(max-width:620px){
- .review-carousel .review-controls{right:10px;bottom:10px;gap:5px}
  .scam-hero{padding-top:22px;padding-bottom:30px}
  .scam-hero .help-hero-grid{gap:14px}
  .scam-hero .eyebrow{margin-bottom:10px}
@@ -444,3 +439,27 @@ button:disabled{opacity:.65;cursor:wait}
  .scam-hero .scam-shield{width:min(40%,150px)}
  .scam-steps-section .section-head>p{max-width:none;padding:16px 18px}
 }
+
+/* Site polish 1 r2: Google review links live inside the review card, lower left, on the controls row. */
+.review-carousel .review-card{padding-bottom:calc(clamp(24px,4vw,48px) + 52px)}
+.review-carousel .review-controls{bottom:16px;right:16px}
+.review-links--card{position:absolute;left:16px;bottom:14px;margin:0;z-index:3;display:flex;flex-wrap:nowrap;align-items:flex-end;gap:10px}
+.review-links--card .btn{padding:8px 20px;min-height:32px;font-size:12.5px;gap:8px}
+.review-links--card .review-gbp{gap:4px}
+.review-links--card .review-link-stars{font-size:14px;letter-spacing:3px}
+.review-gbp{display:inline-flex;flex-direction:column;align-items:center;gap:6px}
+.review-links>.review-gbp-btn{align-self:flex-end}
+.review-links:not(.review-links--card){align-items:flex-end}
+/* Scam Help hero CTAs: side by side at every width. */
+.scam-hero .actions{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;max-width:520px;flex-wrap:nowrap}
+.scam-hero .actions .btn{width:100%;min-width:0;white-space:nowrap;padding-left:14px;padding-right:14px}
+@media(max-width:1100px){.scam-hero .actions .btn{font-size:14px}}
+@media(max-width:760px){
+ .review-carousel .review-card{padding-bottom:calc(28px + 128px)}
+ .review-links--card{left:14px;right:14px;bottom:48px;flex-direction:column;align-items:stretch;gap:6px}
+ .review-links--card .btn{width:100%}
+ .review-links--card .review-gbp{align-items:center}
+ .review-links--card .review-gbp .btn{align-self:stretch}
+ .review-carousel .review-controls{right:14px;bottom:12px;gap:5px}
+}
+@media(max-width:620px){.scam-hero .actions{gap:8px}.scam-hero .actions .btn{font-size:13px;padding-left:8px;padding-right:8px}}

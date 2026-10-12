@@ -198,7 +198,7 @@ for n in locked:
   if k=='images':a,b=[list(x) for x in a],[list(x) for x in b]
   assert a==b,('content changed by the redesign',n,k)
 dcss=(ROOT/'assets/design.css').read_text();djs=(ROOT/'assets/design.js').read_text()
-GOLD={'index.html':'you','services.html':'Working','business.html':'work','digital-kits.html':'confidence','rates.html':'pricing','about.html':'local','contact.html':'tame','tech-help-muscatine.html':'Muscatine','service-area.html':'Muscatine','scam-help.html':'Help','tech-help-quad-cities.html':'In-Home','404.html':'wandered'}
+GOLD={'index.html':'you','services.html':'Working','business.html':'work','digital-kits.html':'confidence','rates.html':'pricing','about.html':'local','contact.html':'tame','tech-help-muscatine.html':'Muscatine','service-area.html':'Muscatine','scam-help.html':None,'tech-help-quad-cities.html':'In-Home','404.html':'wandered'}
 for f in ROOT.glob('*.html'):
  t=f.read_text();head=t[:t.index('</head>')]
  if f.name=='website-package.html':assert 'design.css' not in t and 'ds-hero' not in t,'showcase keeps its own layer';continue
@@ -211,7 +211,8 @@ for f in ROOT.glob('*.html'):
  assert t.count('ds-hero')==1 and t.count('class="ds-deco"')==1,f.name
  # exactly one gold word, inside the H1, aria-hidden swoosh, word itself unchanged
  h1=re.search(r'<h1\b[^>]*>(.*?)</h1>',t,re.S).group(1)
- assert t.count('class="ds-gold"')==1 and h1.count('<span class="ds-gold">'+GOLD[f.name]+'<svg class="ds-swoosh"')==1,('gold word',f.name)
+ if GOLD[f.name] is None:assert 'class="ds-gold"' not in t,('no gold word',f.name)
+ else:assert t.count('class="ds-gold"')==1 and h1.count('<span class="ds-gold">'+GOLD[f.name]+'<svg class="ds-swoosh"')==1,('gold word',f.name)
  assert all('aria-hidden="true"' in sv for sv in re.findall(r'<svg class="ds-swoosh"[^>]*>',t))
  # card icons stay decorative; every shape can draw in
  for ic in re.findall(r'<div class="icon[ "][^>]*><svg\b.*?</svg>',t,re.S):
@@ -300,7 +301,7 @@ for f in sorted(ROOT.glob('*.html')):
  assert '<canvas' not in t,('old canvas header',f.name)
  assert hd.count('<a href="/" class="brand brand-lockup header-animation" aria-label="The Tech Tamer home — House calls. Office visits. Tech tamed.">'+STAGE+'</a>')==1,('header stage',f.name)
  assert t.count('/assets/header-animation.js?v=20261012-ha13" defer')==1,('header script',f.name)
- assert 'assets/site.css?v=20261012-polish1' in t,f.name
+ assert 'assets/site.css?v=20261012-polish2' in t,f.name
 # the slogan is real text, hidden from screen readers (the link's aria-label reads it once); printer is decorative
 assert '<span class="ha-slogan" aria-hidden="true">' in STAGE and '<span class="ha-printer is-grumpy" aria-hidden="true">' in STAGE and 'alt="The Tech Tamer"' in STAGE
 assert 'House calls.' in STAGE and 'Office visits.' in STAGE and 'TECH</span> <span class="ha-gold">TAMED.' in STAGE and '#f7c948' in ha_css.lower()
