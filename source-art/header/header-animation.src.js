@@ -7,7 +7,7 @@ const ha=document.querySelector('.header-animation .ha');if(!ha)return;
 const RM=matchMedia('(prefers-reduced-motion: reduce)');if(RM.matches)return;
 const SMALL=matchMedia('(max-width:620px)'),slogan=ha.querySelector('.ha-slogan'),printer=ha.querySelector('.ha-printer'),
  pr=printer.querySelector('.ha-pr'),page=printer.querySelector('.ha-page'),thumb=printer.querySelector('.ha-thumb'),swoosh=[...slogan.querySelectorAll('.ha-swoosh path')],gold=slogan.querySelector('.ha-gold'),stars=[...slogan.querySelectorAll('.ha-twinkle svg')];
-const V='?v=20261011-ha8',NS='http://www.w3.org/2000/svg',PI=Math.PI;
+const V='?v=20261011-ha9',NS='http://www.w3.org/2000/svg',PI=Math.PI;
 const clamp=x=>x<0?0:x>1?1:x,ease=x=>(x=clamp(x),x*x*(3-2*x)),mix=(a,b,t)=>a+(b-a)*t,seg=(t,a,b)=>ease((t-a)/(b-a));
 const back=x=>{x=clamp(x);const s=1.9;return 1+(s+1)*Math.pow(x-1,3)+s*Math.pow(x-1,2)};   // ease-out with overshoot
 const trk=(k,t)=>{if(t<=k[0][0])return k[0][1];for(let i=1;i<k.length;i++)if(t<=k[i][0])return mix(k[i-1][1],k[i][1],ease((t-k[i-1][0])/(k[i][0]-k[i-1][0])));return k[k.length-1][1]};
@@ -20,7 +20,7 @@ const HOPS=[[.4,.72,0,45,14],[.95,1.22,45,90,10],[1.62,1.88,90,62,6],[2.05,2.33,
 // broken bits: [spawn time = a landing, rest position left of parking spot, rotation]
 // exactly one chunk per hop landing, dropped behind the printer: [landing time, landing offset, side behind (+1 = right), spin]
 const SH=HOPS.map((h,i)=>[h[1],h[3],h[3]>h[2]?1:-1,[20,-35,60,-15,30,10][i]]);
-const SHAPE=['M-4-3l5-1 3 4-6 2z','M-3-2l6-2-1 5-4 0z','M-4 0l3-3 4 1-2 3z'];
+const PAPER=['M-4-1l2-3 3 0 2 2 0 3-2 2-3 1-2-2zM-2-2l2 2 2-1M0 0l-1 2','M-3-3l3-1 3 2 1 3-2 3-3 0-3-2zM-2-1l3 1 1-2M1 0l0 3'],SHAPE=['M-4-3l5-1 3 4-6 2z','M-3-2l6-2-1 5-4 0z','M-4 0l3-3 4 1-2 3z'];
 const U=166/1353,P0=[8+690*U,24+910*U],THUMB=[1176,690],PINKY=[1150,752],COIL=[1182,881],CR=[14.4,11.8],NP=6,BLOB=["M7.8 -0.9A6.1 6.1 0 0 1 4.6 7.6A5.2 5.2 0 0 1 -3.7 6.8A5.5 5.5 0 0 1 -8.3 -0.4A4.9 4.9 0 0 1 -4.4 -8.1A4.6 4.6 0 0 1 2.7 -7.6A5.7 5.7 0 0 1 7.8 -0.9z", "M8.9 -0.2A5.0 5.0 0 0 1 5.5 6.6A5.3 5.3 0 0 1 -4.0 7.8A3.8 3.8 0 0 1 -7.2 3.2A4.6 4.6 0 0 1 -7.6 -3.3A4.7 4.7 0 0 1 -1.4 -7.1A4.0 4.0 0 0 1 4.7 -7.5A4.8 4.8 0 0 1 8.9 -0.2z", "M10.0 0.8A6.5 6.5 0 0 1 1.4 7.5A5.1 5.1 0 0 1 -6.6 4.2A4.9 4.9 0 0 1 -6.7 -4.5A5.6 5.6 0 0 1 2.2 -7.3A6.7 6.7 0 0 1 10.0 0.8z"];
 const lp=q=>[8+q[0]*U,24+q[1]*U];
 let deb,smog,puffs=[],shards=[],frozen=false,moveEls=[],coil,ropeB,ropeF,rig,top,ready=false,run=false,raf=0,clock=0,last=0,vis=true,L,k,state='';
@@ -35,7 +35,7 @@ function build(){
  mb.append(im.body,im.coil);rig.append(im.circle,mb,im.ringf);mt.append(im.fist);top.append(mt,im.word);
  ropeB=ropeSvg('ha-rope--back');ropeF=ropeSvg('ha-rope--front');
  deb=document.createElementNS(NS,'svg');deb.setAttribute('class','ha-debris');deb.setAttribute('aria-hidden','true');deb.style.display='none';
- shards=SH.map((s,i)=>{const p=document.createElementNS(NS,'path');p.setAttribute('d',SHAPE[i%3]);p.setAttribute('fill',i%2?'#dce8f4':'#b9c8da');deb.appendChild(p);return p});
+ shards=SH.map((s,i)=>{const p=document.createElementNS(NS,'path'),pa=i%2;p.setAttribute('d',pa?PAPER[i%4>>1]:SHAPE[i%3]);p.setAttribute('fill',pa?'#fbf8ef':i%4?'#dce8f4':'#b9c8da');deb.appendChild(p);return p});
  smog=document.createElementNS(NS,'svg');smog.setAttribute('class','ha-smog');smog.setAttribute('aria-hidden','true');smog.style.display='none';
  // a few irregular puffs in the printer's own smoke style (light fill, navy outline), just bigger
  puffs=Array.from({length:NP},(_,i)=>{const g=document.createElementNS(NS,'path');g.setAttribute('d',BLOB[i%3]);g.setAttribute('fill','#f2f5f9');g.setAttribute('stroke','#23335c');g.setAttribute('stroke-linejoin','round');smog.appendChild(g);g.style.display='none';return g});
@@ -122,12 +122,15 @@ function render(t){
  // broken plastic bits: knocked loose on each stomp, swept up as he drags the printer back over them
  const FLP=72+89*L.S+1.5;let anyD=false;
  SH.forEach((s,i)=>{const[ts,vv,sd,rot]=s,e=shards[i];let v='',sc=1,x=L.PE-vv+sd*(49*L.S+5),y=FLP;
-  const tl=ts+.3;
-  if(t>=ts&&t<6.2){const gone=px<=x+6&&t>4.25?1:0;
-   if(t<tl){const q=(t-ts)/.3,sx0=L.PE-vv;x=mix(sx0,x,q);y=FLP-14*4*q*(1-q)-4*(1-q)}
+  const tl=ts+.3,RL=sd*9,xf=x+RL,sx0=L.PE-vv;let sp=0;
+  if(t>=ts&&t<6.2){const gone=px<=xf+6&&t>4.25?1:0;
+   // falls off as he lands, then 2 small bounces and a short roll; spin follows the roll
+   if(t<tl){const q=(t-ts)/.3;x=mix(sx0,x,q);y=FLP-14*4*q*(1-q)-4*(1-q)}
+   else{const r=clamp((t-tl)/.45),rq=1-(1-r)*(1-r);x+=RL*rq;y=FLP-(r<.45?4*Math.sin(r/.45*PI):r<.75?1.4*Math.sin((r-.45)/.3*PI):0)}
+   sp=(x-sx0)/(3*L.S)*57.3;
    if(gone){e._g=e._g||t;const q=(t-e._g)/.22;sc=1+.8*q;if(q>=1)v='hidden';e.style.opacity=(1-clamp(q)).toFixed(2)}else{e._g=0;e.style.opacity=''}
    anyD=anyD||v!=='hidden';
-   e.setAttribute('transform','translate('+f1(x)+' '+f1(y)+') rotate('+(rot+(t<tl?(t-ts)*900:0)).toFixed(0)+') scale('+(sc*2*L.S/.85).toFixed(2)+')')}else v='hidden';
+   e.setAttribute('transform','translate('+f1(x)+' '+f1(y)+') rotate('+(rot+sp).toFixed(0)+') scale('+(sc*2*L.S/.85).toFixed(2)+')')}else v='hidden';
   if(e._v!==v){e._v=v;e.style.visibility=v}});
  css(deb,'display',anyD?'':'none');
  // the smokescreen: cartoon clouds billow off the printer's leading edge and the words fade in through them
