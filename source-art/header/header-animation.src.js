@@ -6,21 +6,26 @@
 const ha=document.querySelector('.header-animation .ha');if(!ha)return;
 const RM=matchMedia('(prefers-reduced-motion: reduce)');if(RM.matches)return;
 const SMALL=matchMedia('(max-width:620px)'),slogan=ha.querySelector('.ha-slogan'),printer=ha.querySelector('.ha-printer'),
- pr=printer.querySelector('.ha-pr'),page=printer.querySelector('.ha-page'),thumb=printer.querySelector('.ha-thumb'),swoosh=[...slogan.querySelectorAll('.ha-swoosh path')];
-const V='?v=20261011-ha5',NS='http://www.w3.org/2000/svg',PI=Math.PI;
+ pr=printer.querySelector('.ha-pr'),page=printer.querySelector('.ha-page'),thumb=printer.querySelector('.ha-thumb'),swoosh=[...slogan.querySelectorAll('.ha-swoosh path')],gold=slogan.querySelector('.ha-gold'),sparks=[...ha.querySelectorAll('.ha-spark')];
+const V='?v=20261011-ha6',NS='http://www.w3.org/2000/svg',PI=Math.PI;
 const clamp=x=>x<0?0:x>1?1:x,ease=x=>(x=clamp(x),x*x*(3-2*x)),mix=(a,b,t)=>a+(b-a)*t,seg=(t,a,b)=>ease((t-a)/(b-a));
 const back=x=>{x=clamp(x);const s=1.9;return 1+(s+1)*Math.pow(x-1,3)+s*Math.pow(x-1,2)};   // ease-out with overshoot
 const trk=(k,t)=>{if(t<=k[0][0])return k[0][1];for(let i=1;i<k.length;i++)if(t<=k[i][0])return mix(k[i-1][1],k[i][1],ease((t-k[i-1][0])/(k[i][0]-k[i-1][0])));return k[k.length-1][1]};
 // ---- the cycle (seconds) ----
-const LIVE0=.6,LIVE1=8.7,END=13.5,BROKE0=.25,FIXED=6.05,ESC0=12,ESC1=12.9;
+const FE=36,LIVE0=.6,LIVE1=8.7,END=13.5,BROKE0=.25,FIXED=6.05,ESC0=12,ESC1=12.9;
 // banner units: desktop 700 x 200, phone 540 x 200; logo box at (8,24), 166 units wide
 const LAY={d:{W:700,PR:230,PE:612,PY:117.9,S:.85,TX:288,FL:160},m:{W:540,PR:212,PE:470,PY:110.9,S:.72,TX:258,FL:150}};
+ // printer hops in the opening: [start, land, from, to, height] (distances left of its parking spot)
+const HOPS=[[.4,.72,0,45,14],[.95,1.22,45,90,10],[1.62,1.88,90,62,6],[2.05,2.33,62,102,12],[2.6,2.95,102,36,16],[3.0,3.28,36,0,9]];
+// broken bits: [spawn time = a landing, rest position left of parking spot, rotation]
+const SH=[[.72,59,20],[.72,32,-35],[1.22,76,60],[1.88,82,-15],[2.33,120,30],[2.33,92,-60],[2.95,54,10]];
+const SHAPE=['M-4-3l5-1 3 4-6 2z','M-3-2l6-2-1 5-4 0z','M-4 0l3-3 4 1-2 3z'];
 const U=166/1353,P0=[8+690*U,24+910*U],FIST=[1166,738],COIL=[1182,881],CR=[14.4,11.8];
 const lp=q=>[8+q[0]*U,24+q[1]*U];
-let frozen=false,moveEls=[],coil,ropeB,ropeF,rig,top,ready=false,run=false,raf=0,clock=0,last=0,vis=true,L,k,state='';
+let deb,shards=[],frozen=false,moveEls=[],coil,ropeB,ropeF,rig,top,ready=false,run=false,raf=0,clock=0,last=0,vis=true,L,k,state='';
 const el=(t,c,a)=>{const e=document.createElement(t);e.className=c;if(a)for(const n in a)e.setAttribute(n,a[n]);return e};
 function ropeSvg(c){const s=document.createElementNS(NS,'svg');s.setAttribute('class','ha-rope '+c);s.setAttribute('aria-hidden','true');s.setAttribute('focusable','false');s.style.display='none';
- s._p=['k','g','t'].map(n=>{const p=document.createElementNS(NS,'path');p.setAttribute('class',n);s.appendChild(p);return p});return s}
+ s._p=['k','g','t','h'].map(n=>{const p=document.createElementNS(NS,'path');p.setAttribute('class',n);s.appendChild(p);return p});return s}
 function build(){
  const img=n=>el('img','ha-'+n,{src:'/assets/header/'+n+'.png'+V,alt:'',width:300,height:258,decoding:'async'});
  rig=el('span','ha-rig',{'aria-hidden':'true'});rig.hidden=true;top=el('span','ha-top',{'aria-hidden':'true'});top.hidden=true;
@@ -28,15 +33,17 @@ function build(){
  const im={};for(const n of ['circle','body','ringf','coil','fist','word'])im[n]=img(n);coil=im.coil;
  mb.append(im.body,im.coil);rig.append(im.circle,mb,im.ringf);mt.append(im.fist);top.append(mt,im.word);
  ropeB=ropeSvg('ha-rope--back');ropeF=ropeSvg('ha-rope--front');
- ha.insertBefore(rig,slogan);ha.insertBefore(ropeB,printer);ha.append(ropeF,top);
+ deb=document.createElementNS(NS,'svg');deb.setAttribute('class','ha-debris');deb.setAttribute('aria-hidden','true');deb.style.display='none';
+ shards=SH.map((s,i)=>{const p=document.createElementNS(NS,'path');p.setAttribute('d',SHAPE[i%3]);p.setAttribute('fill',i%2?'#dce8f4':'#b9c8da');deb.appendChild(p);return p});
+ ha.insertBefore(rig,slogan);ha.insertBefore(deb,printer);ha.insertBefore(ropeB,printer);ha.append(ropeF,top);
  return Promise.all(Object.values(im).map(i=>i.decode()))
 }
-function layout(){L=SMALL.matches?LAY.m:LAY.d;k=ha.clientWidth/L.W;for(const s of [ropeB,ropeF])s.setAttribute('viewBox','0 0 '+L.W+' 200')}
+function layout(){L=SMALL.matches?LAY.m:LAY.d;k=ha.clientWidth/L.W;for(const s of [ropeB,ropeF,deb])s.setAttribute('viewBox','0 0 '+L.W+' 200')}
 const f1=n=>Math.round(n*10)/10,P=(q)=>f1(q[0])+' '+f1(q[1]);
 const setD=(s,d)=>{if(s._d!==d){s._d=d;for(const p of s._p)p.setAttribute('d',d)}};
 const CC=new WeakMap(),css=(e,p,v)=>{let c=CC.get(e);if(!c)CC.set(e,c={});if(c[p]!==v){c[p]=v;e.style[p]=v}};
 function reset(){ // back to the markup's own state = the loop's first frame
- for(const e of [...moveEls,printer,pr,page,thumb,slogan,coil,...swoosh]){e.removeAttribute('style');CC.delete(e)}
+ deb.style.display='none';for(const e of [...moveEls,printer,pr,page,thumb,slogan,coil,gold,...swoosh]){e.removeAttribute('style');CC.delete(e)}for(const e of sparks){e.style.transform='';CC.delete(e)}
  slogan.style.removeProperty('--rv');printer.className='ha-printer is-grumpy';ropeB.style.display=ropeF.style.display='none';
  ha.classList.remove('is-live');rig.hidden=top.hidden=true;state='rest'}
 // elliptical loop, rotated by `rot` degrees; returns point at angle a
@@ -59,7 +66,16 @@ function render(t){
  const fist=mv(FIST),coilC=mv(COIL);
  // ---- printer ----
  let px=L.PE,py=0,pa=0,sx=1,sy=1;const hw=49*L.S;
- if(t<4.25){if(t<3.8){pa=Math.sin(t*21)*2.4;py=-Math.abs(Math.sin(t*9))*1.8}else{const q=seg(t,3.8,4.25);sx=1-.08*Math.sin(q*PI);sy=1+.05*Math.sin(q*PI)}}
+ if(t<4.25){
+  if(t<3.3){ // capers and stomps around, angry: hops with squash & stretch, little shakes between
+   let h=null;for(const q of HOPS)if(t>=q[0]-.08&&t<q[1]+.16){h=q;break}
+   const at=x=>{let v=0;for(const q of HOPS){if(t>=q[1])v=q[3]}return v};px=L.PE-at();
+   if(h){const[a0,a1,f,to,ht]=h;
+    if(t<a0){const q=(t-(a0-.08))/.08;sx=1+.1*q;sy=1-.12*q}                                   // crouch
+    else if(t<a1){const q=(t-a0)/(a1-a0);px=L.PE-mix(f,to,ease(q));py=-ht*4*q*(1-q);const st=Math.sin(q*PI);sx=1-.1*st;sy=1+.12*st;pa=(to>f?-1:1)*7*Math.sin(q*PI*2)}
+    else{const q=(t-a1)/.16,b=Math.sin(q*PI)*(1-q*.5);sx=1+.16*b;sy=1-.2*b;pa=Math.sin(q*PI*3)*2*(1-q)}}  // stomp!
+   else{pa=Math.sin(t*38)*2.2;px+=Math.sin(t*45)*.8}}
+  else if(t<3.8){pa=Math.sin(t*21)*2.4;py=-Math.abs(Math.sin(t*9))*1.8}else{const q=seg(t,3.8,4.25);sx=1-.08*Math.sin(q*PI);sy=1+.05*Math.sin(q*PI)}}
  else if(t<6){const q=seg(t,4.25,6);px=mix(L.PE,L.PR,q);pa=-4*Math.sin(q*PI)+Math.sin(t*22)*1.2*(1-q);py=-Math.abs(Math.sin(q*PI*5))*1.5}
  else if(t<ESC0){px=L.PR;const q=clamp((t-6)/.45);pa=Math.sin(q*PI*2)*2.5*(1-q);py=-Math.sin(q*PI)*3}
  else{const q=seg(t,ESC0+.1,ESC1-.05);px=mix(L.PR,L.PE,q);py=-Math.abs(Math.sin(q*PI*3))*7*(1-q*.4);pa=Math.sin(q*PI*6)*5*(1-q)}
@@ -72,7 +88,26 @@ function render(t){
  if(t>=FIXED&&t<7.1){const q=(t-FIXED)/1.05,s=q<.2?back(q/.2)*1:1;css(thumb,'display','inline');css(thumb,'transform','translate(0px,'+(-10*ease(q)).toFixed(2)+'px) scale('+s.toFixed(3)+')');css(thumb,'opacity',(1-seg(t,6.65,7.1)).toFixed(3))}
  else css(thumb,'display','');
  // slogan: shows only where the printer has cleared, with a soft feathered edge
- const edge=px+hw+4;slogan.style.setProperty('--rv',((edge-L.TX)*k).toFixed(1)+'px');
+ // broken plastic bits: knocked loose on each stomp, swept up as he drags the printer back over them
+ const FLP=72+89*L.S+1.5;let anyD=false;
+ SH.forEach((s,i)=>{const[ts,dxs,rot]=s,e=shards[i];let v='',sc=1,x=L.PE-dxs,y=FLP;
+  const tl=ts+.3;
+  if(t>=ts&&t<6.2){const gone=px<=x+6&&t>4.25?1:0;
+   if(t<tl){const q=(t-ts)/.3,sx0=L.PE-HOPS.find(h=>Math.abs(h[1]-ts)<.01)[3];x=mix(sx0,x,q);y=FLP-14*4*q*(1-q)-4*(1-q)}
+   if(gone){e._g=e._g||t;const q=(t-e._g)/.22;sc=1+.8*q;if(q>=1)v='hidden';e.style.opacity=(1-clamp(q)).toFixed(2)}else{e._g=0;e.style.opacity=''}
+   anyD=anyD||v!=='hidden';
+   e.setAttribute('transform','translate('+f1(x)+' '+f1(y)+') rotate('+(rot+(t<tl?(t-ts)*900:0)).toFixed(0)+') scale('+(sc*2*L.S/.85).toFixed(2)+')')}else v='hidden';
+  if(e._v!==v){e._v=v;e.style.visibility=v}});
+ css(deb,'display',anyD?'':'none');
+ // sparkles: a gentle twinkle on the cycle clock (so the loop seam stays exact), and a pop when the printer is fixed
+ const env=seg(t,.3,1.2)*(1-seg(t,12.2,12.9));
+ sparks.forEach((e,i)=>{const ph=i*1.7,q=(t-FIXED-.06*i)/.5,pop=q>0&&q<1?Math.sin(q*PI)*(1-q*.35):0;
+  const s=1+env*.13*Math.sin(t*(2.6+i*.37)+ph)+.55*pop,rr=env*7*Math.sin(t*(1.9+i*.23)+ph)+40*pop;
+  css(e,'transform','translate(-50%,-50%) rotate('+rr.toFixed(1)+'deg) scale('+s.toFixed(3)+')')});
+ // 'tamed.' swells once its underline has drawn in
+ const sw=t>=LIVE1+.7&&t<LIVE1+1.35?trk([[0,1],[.22,1.08],[.38,.97],[.52,1.02],[.65,1]],t-LIVE1-.7):1;
+ css(gold,'transform',sw===1?'':'scale('+sw.toFixed(3)+')');
+ const OPEN=L.TX-2*FE,ed=px+hw+FE*.7,edge=t<4.25?1e4:t<6?ed:t<ESC0?mix(ed,OPEN,seg(t,6,6.5)):mix(OPEN,ed,seg(t,ESC0,ESC0+.2));slogan.style.setProperty('--rv',((edge-L.TX)*k).toFixed(1)+'px');
  const dr=t<LIVE1?1:1-seg(t,LIVE1,LIVE1+.7);for(const p of swoosh){css(p,'strokeDashoffset',dr.toFixed(3));css(p,'visibility',dr>.995?'hidden':'')}
  // ---- the lasso: one rope from the fist, drawn under his fingers ----
  const rope=t>=.75&&t<8.4;css(coil,'visibility',live&&rope?'hidden':'');

@@ -60,12 +60,19 @@ ring=op&(d>RI-2)&(d<RO+2)
 # 3) ownership at full resolution
 word=op&(((yy>=912)&inDisc)|(yy>=1018))
 box=(xx>1055)&(xx<1300)&(yy>630)&(yy<805)
-fist=ndi.binary_dilation(skin&box,disk(7))&op&box&~word
-coil=op&~inDisc&(xx>1000)&(yy>775)&(yy<1018)&~fist&~word
-ringf=ring&(ang>22)&(ang<158)&~word&~fist&~coil
+hl,hn=ndi.label(ndi.binary_closing(skin&box,disk(8)))
+hand=hl==(1+np.argmax(ndi.sum(np.ones_like(hl),hl,range(1,hn+1))))
+hand=ndi.binary_fill_holes(ndi.binary_closing(hand,disk(6)))
+goldish=(r>150)&(g>95)&(b<150)&(r-b>45)
+ropeAll=ndi.binary_dilation(goldish,disk(3))&~skin
+# the fist is the hand only: rope that is not pressed between his fingers stays with the rope art
+fist=ndi.binary_dilation(hand,disk(6))&op&box&(yy<772)&~word&~(ropeAll&~ndi.binary_dilation(hand,disk(2)))
+coil=op&~fist&~word&(yy<1018)&((~inDisc&(xx>1000)&(yy>775))|((xx>1195)&(yy>650))|((xx>1050)&(yy>742)&~blue))
+coil&=~((xx<1075)&ndi.binary_dilation(blue,disk(3)))
+ringf=ring&(ang>30)&(ang<138)&~word&~fist&~coil&~ndi.binary_dilation(goldish,disk(14))   # rope crossing the ring moves with him
 rope=ndi.binary_dilation(gold&inDisc&~actor,disk(7))&~blue&op&inDisc
 halo=ndi.binary_dilation(actor|rope,disk(22))&white&inDisc&~ring
-body=op&~word&~coil&~fist&~ringf&((~inDisc)|((actor|rope|halo)&~(ring&~actor0)))
+body=op&~word&~coil&~fist&~ringf&((~inDisc)|((actor|rope|halo|(ropeAll&inDisc))&~(ring&~actor0&~ropeAll)))
 circle=op&inDisc&~word&~coil&~fist&~ringf&~body
 # 4) the rebuilt medallion (only shows where the mascot moves away)
 known=circle&(blue|(ring&dark))
