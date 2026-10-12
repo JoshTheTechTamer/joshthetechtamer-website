@@ -86,7 +86,7 @@ def local_reviews():
  picks=[next(r for r in reviews if r['name']==n) for n in ('Peggy S.','Bob','Arlene S.')]  # first card per name
  cards=''.join(f'<article class="review-card">'+('<span class="review-stars" aria-label="5 out of 5 stars">★★★★★</span>' if r['rating']==5 else '<span class="review-kind">'+escape(r['source'])+'</span>')+f'<blockquote><p>“{escape(r["quote"])}”</p></blockquote><p class="review-credit"><strong>{escape(r["name"])}</strong><span>{escape(r["source"])}</span></p></article>' for r in picks)
  return '<section class="section reviews-section" aria-labelledby="local-reviews-heading"><div class="wrap"><div class="section-head"><div><div class="eyebrow">A little reassurance</div><h2 id="local-reviews-heading">What folks are saying.</h2></div><p>Feedback shared by customers on Google and Facebook.</p></div><div class="grid3 local-review-grid">'+cards+'</div>'+google_links()+'<p class="small review-note">Names are shortened for privacy. Stars appear only where a five-star Google rating was provided.</p></div></section>'
-SIGNOFF='<p>Muscatine · Iowa City · Quad Cities</p>'  # Josh's sign-off: left exactly as on main (question pending with Josh)
+SIGNOFF='<p>Muscatine · Nearby towns · Quad Cities</p>'  # Josh's sign-off: left exactly as on main (question pending with Josh)
 FOOTER_AREAS=SIGNOFF+'<p>Muscatine · Fruitland · Wilton · West Liberty · Durant · Quad Cities (IA &amp; IL)<br><a class="footer-areas" href="service-area.html">Areas I serve</a></p>'
 NAV_SCAM='<a class="nav-scam" href="scam-help.html"><svg class="nav-scam__icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 3.2 2.3 20h19.4z" fill="#f2a516" stroke="#b45309" stroke-width="1.4" stroke-linejoin="round"/><path d="M12 9.5v5" stroke="#3b1d06" stroke-width="2.2" stroke-linecap="round"/><circle cx="12" cy="17.4" r="1.25" fill="#3b1d06"/></svg>Scam Help</a>'
 def footer(s):
@@ -265,7 +265,7 @@ def redesign(s,name):
  s=re.sub(r'<div class="grid3">(?=<(?:article|div) class="step">)','<div class="grid3 ds-steps" data-ds-steps>',s)
  return s
 HEADER_STAGE=(ROOT/'source-art/header/stage.html').read_text().strip()
-HEADER_V='20261012-ha11'
+HEADER_V='20261012-ha12'
 # Cloudflare Web Analytics: Pages custom domains do not get auto JS injection reliably,
 # so every page ships the deferred beacon (token from account Web Analytics site).
 CF_BEACON="<!-- Cloudflare Web Analytics --><script defer src=\"https://static.cloudflareinsights.com/beacon.min.js\" data-cf-beacon='{\"token\": \"a5008ae940f94281862ffbab9ef72546\"}'></script><!-- End Cloudflare Web Analytics -->"
@@ -277,7 +277,7 @@ for file in (ROOT/'templates').glob('*.html'):
  a='<canvas width="1400" height="400" aria-hidden="true"><img src="/assets/hero-logo.png" alt="The Tech Tamer" width="128" height="110"></canvas>'
  assert a in s,('header canvas markup',file.name);s=s.replace(a,HEADER_STAGE,1)
  s=re.sub(r'/assets/header-animation\.js\?v=[^"]+','/assets/header-animation.js?v='+HEADER_V,s)
- s=re.sub(r'assets/site\.css\?v=[^"]+','assets/site.css?v=20261011-headeranim6',s)
+ s=re.sub(r'assets/site\.css\?v=[^"]+','assets/site.css?v=20261012-audit2',s)
  if name=='index.html':
   # H1 keyword line (audit B2): visible headline unchanged, eyebrow promoted into the H1.
   s=s.replace('<img src="assets/hero-logo.png" alt="The Tech Tamer: Josh’s top-hatted technology tamer mascot and wordmark" width="1353" height="1162">',HERO_PICTURE,1)

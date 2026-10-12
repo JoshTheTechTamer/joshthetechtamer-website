@@ -404,3 +404,11 @@ button:disabled{opacity:.65;cursor:wait}
  .header-animation .ha{--rv:-200px}.header-animation .ha .ha-printer{transform:none}
  .ha-printer.is-grumpy .ha-grumpy,.ha-printer .ha-anger,.ha-printer .ha-smoke{display:none}.ha-printer.is-grumpy .ha-happy,.ha-printer.is-grumpy .ha-page{display:inline}.ha-printer.is-grumpy .ha-led{fill:#00a3ed}
 }
+
+/* Audit fixes r2: header scrolls away; small pause control for the header animation. */
+.site-header{position:relative;top:auto}
+.header-motion{position:absolute;right:max(40px,calc((100% - 1160px)/2));bottom:4px;z-index:2;display:flex}
+.motion-toggle{font:inherit;font-size:10px;line-height:1;min-height:24px;padding:3px 6px;cursor:pointer;color:#23335c;background:#fff;border:1px solid #c5cede;border-radius:5px}
+.motion-toggle:hover{border-color:#23335c}
+.motion-toggle:focus-visible{outline:3px solid #0074aa;outline-offset:3px}
+@media(max-width:620px){.header-motion{right:12px;bottom:2px}}

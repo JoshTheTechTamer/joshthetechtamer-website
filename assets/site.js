@@ -62,3 +62,12 @@ if(!preview&&(location.hostname==='joshthetechtamer.com'||location.hostname==='w
  document.addEventListener('click',e=>{const a=e.target.closest('a');if(!a)return;const href=a.getAttribute('href')||'';const event=href.startsWith('sms:')?'sms_click':href.startsWith('tel:')?'call_click':href.startsWith('mailto:')?'email_click':href.includes('gumroad.com')?'kit_click':null;
  if(event){const region=a.closest('header,footer,section,.mobile-contact,.ribbon');track(event,{page:location.pathname,cta:a.textContent.trim(),placement:region?(region.id||region.className||region.tagName.toLowerCase()):'other',kit:href.includes('gumroad.com')?href.split('/l/')[1]?.split('?')[0]:undefined})}});
 }
+
+/* Header animation pause control (audit fixes r2). Hidden for reduced motion, where the header is still. */
+(()=>{const h=document.querySelector(".site-header");if(!h||!document.querySelector(".header-animation .ha")||matchMedia("(prefers-reduced-motion: reduce)").matches)return;
+ let p=false;try{p=localStorage.getItem("tt-header-paused")==="true"}catch(_){}window.__haPaused=p;
+ const w=document.createElement("div");w.className="header-motion";const b=document.createElement("button");b.type="button";b.className="motion-toggle";
+ const L=()=>{b.textContent=window.__haPaused?"Play animation":"Pause animation";b.setAttribute("aria-pressed",String(window.__haPaused))};L();
+ b.addEventListener("click",()=>{window.__haPaused=!window.__haPaused;try{localStorage.setItem("tt-header-paused",String(window.__haPaused))}catch(_){}
+  const c=window.__haCtl;if(c)window.__haPaused?c.p():c.f();L()});
+ w.append(b);h.append(w)})();
