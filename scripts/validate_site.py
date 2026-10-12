@@ -322,7 +322,7 @@ assert "'ha-smog'" in ha_js or '"ha-smog"' in ha_js
 _sm=re.search(r'<g class="ha-smoke">(.*?)</g>',STAGE).group(1)
 assert '<circle' not in _sm and _sm.count('<path')==3 and '.ha-smoke path{' in ha_css
 ha_src=(ROOT/'source-art/header/header-animation.src.js').read_text()
-assert 'const SH=HOPS.map(' in ha_src and 'ESC0+.05' not in ha_src
+assert 'const SH=HOPS.map(' in ha_src and 'PAPER' in ha_src and '#fbf8ef' in ha_src and 'ESC0+.05' not in ha_src
 assert "'ha-debris'" in ha_js or '"ha-debris"' in ha_js
 for n in LAYERS:assert f'"/assets/header/"' in ha_js or '/assets/header/' in ha_js
 from PIL import Image
