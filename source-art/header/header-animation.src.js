@@ -7,7 +7,7 @@ const ha=document.querySelector('.header-animation .ha');if(!ha)return;
 const RM=matchMedia('(prefers-reduced-motion: reduce)');if(RM.matches)return;
 const SMALL=matchMedia('(max-width:620px)'),slogan=ha.querySelector('.ha-slogan'),printer=ha.querySelector('.ha-printer'),
  pr=printer.querySelector('.ha-pr'),page=printer.querySelector('.ha-page'),thumb=printer.querySelector('.ha-thumb'),swoosh=[...slogan.querySelectorAll('.ha-swoosh path')];
-const V='?v=20261011-ha3',NS='http://www.w3.org/2000/svg',PI=Math.PI;
+const V='?v=20261011-ha4',NS='http://www.w3.org/2000/svg',PI=Math.PI;
 const clamp=x=>x<0?0:x>1?1:x,ease=x=>(x=clamp(x),x*x*(3-2*x)),mix=(a,b,t)=>a+(b-a)*t,seg=(t,a,b)=>ease((t-a)/(b-a));
 const back=x=>{x=clamp(x);const s=1.9;return 1+(s+1)*Math.pow(x-1,3)+s*Math.pow(x-1,2)};   // ease-out with overshoot
 const trk=(k,t)=>{if(t<=k[0][0])return k[0][1];for(let i=1;i<k.length;i++)if(t<=k[i][0])return mix(k[i-1][1],k[i][1],ease((t-k[i-1][0])/(k[i][0]-k[i-1][0])));return k[k.length-1][1]};
@@ -82,7 +82,7 @@ function render(t){
  if(t<1.05){const q=seg(t,.75,1.05);c=[mix(coilC[0],T0[0]+4,q),mix(coilC[1],T0[1],q)];rx=mix(CR[0],30,q);ry=mix(CR[1],7,q);a=mix(-PI/2,PI/2,q)}
  else if(t<2.65){c=[T0[0]+4*Math.cos(spin),T0[1]+2.5*Math.sin(spin)];rx=30;ry=7+4*Math.sin(spin);a=PI/2+spin;rot=6*Math.sin(spin)}
  else if(t<3.4){ // high arc with squash & stretch and a whipping rope
-  const q=seg(t,2.65,3.4),A=[T0[0]+4,T0[1]],B=[L.PE+10,L.PY-60],C=[(A[0]+B[0])/2,-26],u=1-q;
+  const q=seg(t,2.65,3.4),A=[T0[0]+4,T0[1]],B=[L.PE+10,L.PY-60],C=[(A[0]+B[0])/2,-12],u=1-q;
   c=[u*u*A[0]+2*u*q*C[0]+q*q*B[0],u*u*A[1]+2*u*q*C[1]+q*q*B[1]];
   const w=Math.sin((t-2.65)*20)*(1-q*.5);rx=mix(30,66,q)*(1+.16*w);ry=mix(7,11,q)*(1-.3*w);rot=mix(0,-8,q)+9*Math.sin((t-2.65)*13);a=mix(PI/2,PI,q);
   const j=ept(c,rx,ry,rot,a),vx=(B[0]-A[0]),sag=24*Math.sin(q*PI);
