@@ -209,7 +209,7 @@ def normalize_urls(s,name):
 # Shared layer: assets/design.css + assets/design.js. Markup changes are decorative only (aria-hidden), so every
 # page's words, links, images, forms, header, footer, JSON-LD and metadata stay exactly as they were
 # (scripts/content_lock.py + data/content-lock.json, checked by validate_site.py).
-DESIGN_V='20261012-steps1'
+DESIGN_V='20261012-steps2'
 GOLD_WORD={'index.html':'you','services.html':'Working','business.html':'work','digital-kits.html':'confidence','rates.html':'pricing',
  'about.html':'local','contact.html':'tame','tech-help-muscatine.html':'Muscatine','service-area.html':'Muscatine','scam-help.html':'Help',
  'tech-help-quad-cities.html':'In-Home','404.html':'wandered'}
@@ -241,7 +241,10 @@ def redesign(s,name):
  for i,part in enumerate(parts):
   if part.startswith('<'):continue
   m=re.search(r'(?<![\w-])'+re.escape(word)+r'(?![\w-])',part)
-  if m:parts[i]=part[:m.start()]+'<span class="ds-gold">'+word+DS_SWOOSH+'</span>'+part[m.end():];break
+  if m:
+   rest=part[m.end():]
+   if word=='you' and rest.startswith('.'):rest='<span class="ds-gold-dot">.</span>'+rest[1:]   # home hero: gold period, no underline
+   parts[i]=part[:m.start()]+'<span class="ds-gold">'+word+DS_SWOOSH+'</span>'+rest;break
  else:raise AssertionError(('gold word not in h1',name,word))
  s=s[:h.start(1)]+''.join(parts)+s[h.end(1):]
  # 2b) Shared icon set: card icons by topic, plus icons for contact methods and rate cards.
