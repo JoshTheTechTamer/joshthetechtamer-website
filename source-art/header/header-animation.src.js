@@ -6,8 +6,8 @@
 const ha=document.querySelector('.header-animation .ha');if(!ha)return;
 const RM=matchMedia('(prefers-reduced-motion: reduce)');if(RM.matches)return;
 const SMALL=matchMedia('(max-width:620px)'),slogan=ha.querySelector('.ha-slogan'),printer=ha.querySelector('.ha-printer'),
- pr=printer.querySelector('.ha-pr'),page=printer.querySelector('.ha-page'),thumb=printer.querySelector('.ha-thumb'),swoosh=[...slogan.querySelectorAll('.ha-swoosh path')],gold=slogan.querySelector('.ha-gold'),stars=[...slogan.querySelectorAll('.ha-twinkle svg')];
-const V='?v=20261011-ha9',NS='http://www.w3.org/2000/svg',PI=Math.PI;
+ pr=printer.querySelector('.ha-pr'),page=printer.querySelector('.ha-page'),thumb=printer.querySelector('.ha-thumb'),led=printer.querySelector('.ha-led'),swoosh=[...slogan.querySelectorAll('.ha-swoosh path')],gold=slogan.querySelector('.ha-gold'),stars=[...slogan.querySelectorAll('.ha-twinkle svg')];
+const V='?v=20261011-ha10',NS='http://www.w3.org/2000/svg',PI=Math.PI;
 const clamp=x=>x<0?0:x>1?1:x,ease=x=>(x=clamp(x),x*x*(3-2*x)),mix=(a,b,t)=>a+(b-a)*t,seg=(t,a,b)=>ease((t-a)/(b-a));
 const back=x=>{x=clamp(x);const s=1.9;return 1+(s+1)*Math.pow(x-1,3)+s*Math.pow(x-1,2)};   // ease-out with overshoot
 const trk=(k,t)=>{if(t<=k[0][0])return k[0][1];for(let i=1;i<k.length;i++)if(t<=k[i][0])return mix(k[i-1][1],k[i][1],ease((t-k[i-1][0])/(k[i][0]-k[i-1][0])));return k[k.length-1][1]};
@@ -35,7 +35,7 @@ function build(){
  mb.append(im.body,im.coil);rig.append(im.circle,mb,im.ringf);mt.append(im.fist);top.append(mt,im.word);
  ropeB=ropeSvg('ha-rope--back');ropeF=ropeSvg('ha-rope--front');
  deb=document.createElementNS(NS,'svg');deb.setAttribute('class','ha-debris');deb.setAttribute('aria-hidden','true');deb.style.display='none';
- shards=SH.map((s,i)=>{const p=document.createElementNS(NS,'path'),pa=i%2;p.setAttribute('d',pa?PAPER[i%4>>1]:SHAPE[i%3]);p.setAttribute('fill',pa?'#fbf8ef':i%4?'#dce8f4':'#b9c8da');deb.appendChild(p);return p});
+ shards=SH.map((s,i)=>{const p=document.createElementNS(NS,'path'),pa=[0,1,1,0,1,0][i];p.setAttribute('d',pa?PAPER[i*7%2]:SHAPE[i*5%3]);p.setAttribute('fill',pa?'#fbf8ef':i%3?'#dce8f4':'#b9c8da');deb.appendChild(p);return p});
  smog=document.createElementNS(NS,'svg');smog.setAttribute('class','ha-smog');smog.setAttribute('aria-hidden','true');smog.style.display='none';
  // a few irregular puffs in the printer's own smoke style (light fill, navy outline), just bigger
  puffs=Array.from({length:NP},(_,i)=>{const g=document.createElementNS(NS,'path');g.setAttribute('d',BLOB[i%3]);g.setAttribute('fill','#f2f5f9');g.setAttribute('stroke','#23335c');g.setAttribute('stroke-linejoin','round');smog.appendChild(g);g.style.display='none';return g});
@@ -47,17 +47,18 @@ const f1=n=>Math.round(n*10)/10,P=(q)=>f1(q[0])+' '+f1(q[1]);
 const setD=(s,d)=>{if(s._d!==d){s._d=d;for(const p of s._p)p.setAttribute('d',d)}};
 const CC=new WeakMap(),css=(e,p,v)=>{let c=CC.get(e);if(!c)CC.set(e,c={});if(c[p]!==v){c[p]=v;e.style[p]=v}};
 function reset(){ // back to the markup's own state = the loop's first frame
- deb.style.display=smog.style.display='none';for(const e of [...moveEls,printer,pr,page,thumb,slogan,coil,gold,...stars,...swoosh]){e.removeAttribute('style');CC.delete(e)}
+ deb.style.display=smog.style.display='none';for(const e of [...moveEls,printer,pr,page,thumb,led,slogan,coil,gold,...stars,...swoosh]){e.removeAttribute('style');CC.delete(e)}
  slogan.style.removeProperty('--rv');printer.className='ha-printer is-grumpy';ropeB.style.display=ropeF.style.display='none';
  ha.classList.remove('is-live');rig.hidden=top.hidden=true;state='rest'}
 // ---- mascot pose (one rigid cut-out; small moves so the medallion never shows a seam) ----
+const sm=x=>x*x*x*(x*(6*x-15)+10);   // smoothstep: the whirl winds up and settles with weight
 function pose(t){
- const spin=-4*PI*seg(t,1.05,2.45);
- let th=trk([[LIVE0,0],[1,-2],[1.05,-1],[2.45,-1],[2.75,-3.2],[3.2,4.5],[3.8,2],[4.15,-3.6],[6,-3],[6.4,-1],[7.4,0],[7.6,-1.6],[8.4,-1.2],[8.65,0]],t);
+ const spin=-4*PI*sm(clamp((t-1.05)/1.4));
+ let th=trk([[LIVE0,0],[1,-2],[1.05,-1],[2.45,-1],[2.75,-4.5],[3.2,4.5],[3.8,2],[4.15,-3.6],[6,-3],[6.4,-1],[7.4,0],[7.6,-1.6],[8.4,-1.2],[8.65,0]],t);
  if(t>1.05&&t<2.45)th+=1.4*Math.sin(spin-.5);
  if(t>4.2&&t<6)th+=.6*Math.sin((t-4.2)*15)*(1-seg(t,5.6,6));
  if(t>7.5&&t<8.3)th+=.5*Math.sin((t-7.5)*20);
- const dx=trk([[LIVE0,0],[2.45,0],[2.75,-2],[3.2,3.5],[3.8,1.5],[4.15,-2],[6,-1.6],[6.6,0]],t),dy=trk([[LIVE0,0],[1,-2],[1.1,-3.5],[2.45,-3.5],[2.75,-4.5],[3.3,-1.5],[6,-1],[8.4,-1],[8.65,0]],t);
+ const dx=trk([[LIVE0,0],[2.45,0],[2.75,-3],[3.2,3.5],[3.8,1.5],[4.15,-2],[6,-1.6],[6.6,0]],t),dy=trk([[LIVE0,0],[1,-2],[1.1,-3.5],[2.45,-3.5],[2.75,-4.5],[3.3,-1.5],[6,-1],[8.4,-1],[8.65,0]],t);
  const r=th*PI/180,co=Math.cos(r),si=Math.sin(r);
  return{th,dx,dy,spin,mv:q=>{q=lp(q);const x=q[0]-P0[0],y=q[1]-P0[1];return[P0[0]+x*co-y*si+dx,P0[1]+x*si+y*co+dy]}}}
 // ---- printer ----
@@ -80,16 +81,16 @@ function prn(t){
 const revEdge=(t,px)=>{const OPEN=L.TX-2*FE,ed=px+49*L.S+FE*.7;return t<4.25?1e4:t<6?ed:t<ESC0?mix(ed,OPEN,seg(t,6,6.5)):mix(OPEN,ed,seg(t,ESC0,ESC0+.2))};
 // ---- the lasso loop: centre, radii, tilt, the knot angle; slack (0 taut .. 1 slack) drives the rope's droop ----
 const T0=()=>[lp(THUMB)[0]-10,25];
-function twirl(t,spin){const T=T0(),w=Math.sin(t*7.3),w2=Math.sin(t*11.1+1);
- return{c:[T[0]+6*Math.cos(spin),T[1]+3*Math.sin(spin)],rx:42*(1+.12*w),ry:10+4*Math.sin(spin)+2.2*w2,rot:5*Math.sin(spin)+3*w2,a:PI/2+spin,sl:.2}}
-const WIND=()=>{const T=T0();return{c:[T[0]-14,8],rx:48,ry:8,rot:-10}};
+function twirl(t,spin){const T=T0(),w=Math.sin(t*4.2),w2=Math.sin(t*5.6+1),lg=spin+.75;
+ return{c:[T[0]+9*Math.cos(lg),T[1]+3.5*Math.sin(lg)],rx:43*(1+.1*w),ry:10+4*Math.sin(lg)+1.8*w2,rot:6*Math.sin(lg)+2.5*w2,a:PI/2+spin-.35,sl:.35}}
+const WIND=()=>{const T=T0();return{c:[T[0]-38,6],rx:46,ry:8,rot:-16}};
 function loop(t,P,pp){
  const coilC=P.mv(COIL),hw=49*L.S;let g;
  if(t<1.05){const q=seg(t,.75,1.05),e=twirl(1.05,0);g={c:[mix(coilC[0],e.c[0],q),mix(coilC[1],e.c[1],q)-10*Math.sin(q*PI)],rx:mix(CR[0],e.rx,q),ry:mix(CR[1],e.ry,q),rot:mix(0,e.rot,q),a:mix(-PI/2,PI/2,q),sl:.7}}
  else if(t<2.45)g=twirl(t,P.spin);
  else if(t<2.75){ // wind-up: the loop whips back up over his hat for a beat
-  const q=seg(t,2.45,2.62),e=twirl(2.45,-4*PI),W=WIND(),h=t>2.62?Math.sin((t-2.62)*24)*(1-(t-2.62)/.13):0;
-  g={c:[mix(e.c[0],W.c[0],q),mix(e.c[1],W.c[1],q)],rx:mix(e.rx,W.rx,q)*(1+.05*h),ry:mix(e.ry,W.ry,q)*(1-.15*h),rot:mix(e.rot,W.rot,q),a:mix(PI/2,PI*.85,q),sl:mix(.2,.3,q)}}
+  const q=seg(t,2.45,2.66),e=twirl(2.45,-4*PI),W=WIND(),h=t>2.66?Math.sin((t-2.66)*30)*(1-(t-2.66)/.09):0;
+  g={c:[mix(e.c[0],W.c[0],q),mix(e.c[1],W.c[1],q)],rx:mix(e.rx,W.rx,q)*(1+.05*h),ry:mix(e.ry,W.ry,q)*(1-.15*h),rot:mix(e.rot,W.rot,q),a:mix(PI/2-.35,PI*.85,q),sl:mix(.2,.3,q)}}
  else if(t<3.4){ // high arc; the loop squashes, stretches and wobbles, lagging a beat behind his arm
   const q=seg(t,2.75,3.4),e=WIND(),A=e.c,B=[L.PE+10,L.PY-60],C=[(A[0]+B[0])/2,-12],u=1-q;
   const c=[u*u*A[0]+2*u*q*C[0]+q*q*B[0],u*u*A[1]+2*u*q*C[1]+q*q*B[1]],w=Math.sin((t-2.75)*17)*(1-q*.5);
@@ -116,8 +117,9 @@ function render(t){
  css(pr,'transform',pp.sx===1?'':'scale('+pp.sx.toFixed(3)+','+pp.sy.toFixed(3)+')');
  const grumpy=t<FIXED||t>=ESC0,broken=t>=BROKE0&&t<FIXED;
  const cls='ha-printer'+(grumpy?' is-grumpy':'')+(broken?' is-broken':'');if(printer.className!==cls)printer.className=cls;
+ if(grumpy){css(led,'fill',Math.floor(t*5)%2?'#fff3a6':'#f5c400');css(led,'transform','')}else{const q=clamp((t-FIXED)/.3);css(led,'fill','#00a3ed');css(led,'transform',q<1?'scale('+(1+.6*Math.sin(q*PI)).toFixed(3)+')':'')}
  const pg=t<FIXED?0:t<ESC0?seg(t,FIXED+.05,FIXED+.45):1-seg(t,ESC0,ESC0+.15);css(page,'transform','scaleY('+pg.toFixed(3)+')');
- if(t>=FIXED&&t<7.1){const q=(t-FIXED)/1.05,s=q<.2?back(q/.2):1;css(thumb,'display','inline');css(thumb,'transform','translate(0px,'+(-10*ease(q)).toFixed(2)+'px) scale('+s.toFixed(3)+')');css(thumb,'opacity',(1-seg(t,6.65,7.1)).toFixed(3))}
+ if(t>=FIXED&&t<8.3){const q=Math.min(1,(t-FIXED)/1.05),s=q<.2?back(q/.2):1;css(thumb,'display','inline');css(thumb,'transform','translate(0px,'+(-10*ease(q)).toFixed(2)+'px) scale('+s.toFixed(3)+')');css(thumb,'opacity',(1-seg(t,7.3,8.3)).toFixed(3))}
  else css(thumb,'display','');
  // broken plastic bits: knocked loose on each stomp, swept up as he drags the printer back over them
  const FLP=72+89*L.S+1.5;let anyD=false;
@@ -128,7 +130,7 @@ function render(t){
    if(t<tl){const q=(t-ts)/.3;x=mix(sx0,x,q);y=FLP-14*4*q*(1-q)-4*(1-q)}
    else{const r=clamp((t-tl)/.45),rq=1-(1-r)*(1-r);x+=RL*rq;y=FLP-(r<.45?4*Math.sin(r/.45*PI):r<.75?1.4*Math.sin((r-.45)/.3*PI):0)}
    sp=(x-sx0)/(3*L.S)*57.3;
-   if(gone){e._g=e._g||t;const q=(t-e._g)/.22;sc=1+.8*q;if(q>=1)v='hidden';e.style.opacity=(1-clamp(q)).toFixed(2)}else{e._g=0;e.style.opacity=''}
+   if(gone){let lo=4.25,hi=6;for(let n=0;n<14;n++){const m=(lo+hi)/2;prn(m).px<=xf+6?hi=m:lo=m}const q=(t-hi)/.22;sc=1+.8*q;if(q>=1)v='hidden';e.style.opacity=(1-clamp(q)).toFixed(2)}else e.style.opacity='';
    anyD=anyD||v!=='hidden';
    e.setAttribute('transform','translate('+f1(x)+' '+f1(y)+') rotate('+(rot+sp).toFixed(0)+') scale('+(sc*2*L.S/.85).toFixed(2)+')')}else v='hidden';
   if(e._v!==v){e._v=v;e.style.visibility=v}});

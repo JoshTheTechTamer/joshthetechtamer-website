@@ -22,18 +22,18 @@
 .ha-printer svg{display:block;width:100%;height:100%;overflow:visible}
 .ha-pr rect{stroke:#071426;stroke-width:3;stroke-linejoin:round}
 .ha-smoke path{fill:#f2f5f9;stroke:#23335c;stroke-width:2;stroke-linejoin:round}
-.ha-pr,.ha-page,.ha-thumb,.ha-anger,.ha-smoke path{transform-box:fill-box;transform-origin:50% 50%}
+.ha-pr,.ha-page,.ha-thumb,.ha-anger,.ha-led,.ha-smoke path{transform-box:fill-box;transform-origin:50% 50%}
 .ha-pr{transform-origin:50% 100%}.ha-page{transform-origin:50% 0}
 .ha-led{fill:#00a3ed;stroke:#071426;stroke-width:2}
 .ha-grumpy,.ha-anger,.ha-smoke,.ha-thumb{display:none}
-.ha-printer.is-grumpy .ha-grumpy{display:inline}.ha-printer.is-grumpy .ha-happy,.ha-printer.is-grumpy .ha-page{display:none}.ha-printer.is-grumpy .ha-led{fill:#e58b42}
+.ha-printer.is-grumpy .ha-grumpy{display:inline}.ha-printer.is-grumpy .ha-happy,.ha-printer.is-grumpy .ha-page{display:none}.ha-printer.is-grumpy .ha-led{fill:#f5c400}
 .ha-printer.is-broken .ha-anger,.ha-printer.is-broken .ha-smoke{display:inline}
 .ha-printer.is-broken .ha-anger{animation:ha-vein .55s ease-in-out infinite alternate}
 .ha-printer.is-broken .ha-smoke path{opacity:0;animation:ha-puff 1.5s ease-out infinite}
 .ha-printer.is-broken .ha-smoke path:nth-child(2){animation-delay:.5s}.ha-printer.is-broken .ha-smoke path:nth-child(3){animation-delay:1s}
 @keyframes ha-vein{from{transform:scale(1.05)}to{transform:scale(1.5)}}
 @keyframes ha-puff{0%{opacity:0;transform:translate(0,6px) scale(.6)}20%{opacity:.95}100%{opacity:0;transform:translate(10px,-30px) scale(1.9)}}
-.header-animation .ha .ha-twinkle{position:absolute;right:-.5em;top:-.5em;width:.75em;height:.75em;pointer-events:none}
+.header-animation .ha .ha-twinkle{position:absolute;right:-.48em;bottom:-.62em;width:.75em;height:.75em;pointer-events:none}
 .header-animation .ha .ha-twinkle svg{position:absolute;left:0;top:0;width:100%;height:100%;overflow:visible;transform:scale(0);fill:#f7c948;stroke:#c8901a;stroke-width:1.6;stroke-linejoin:round}
 .header-animation .ha .ha-smog{inset:0;width:100%;height:100%;overflow:visible;pointer-events:none}
 .header-animation .ha .ha-debris{inset:0;width:100%;height:100%;overflow:visible;pointer-events:none}
@@ -45,7 +45,7 @@
  .header-animation .ha{--W:540;--PR:212;--PE:470;aspect-ratio:2.7}
  .header-animation .ha .ha-slogan{left:calc(258%/var(--W)*100);top:9%;font-size:calc(29*100cqw/var(--W))}
  .header-animation .ha .ha-line{display:block}
- .header-animation .ha .ha-twinkle{right:.1em;top:-.62em}
+ .header-animation .ha .ha-twinkle{right:-.2em;bottom:-.7em}
  .header-animation .ha .ha-tamed{font-size:1.24em;margin-top:.08em}
  .header-animation .ha .ha-printer{left:calc((var(--PR) - 37.4)*100%/var(--W));top:36%;width:calc(74.8%/var(--W)*100)}
 }
