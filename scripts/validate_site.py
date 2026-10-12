@@ -176,13 +176,13 @@ assert '<svg class="area-svg"' in (ROOT/'service-area.html').read_text() and 'Se
 # Review carousel: every entry in data/reviews.json renders verbatim; stars only for the two Google 5-star reviews; Facebook items carry no rating.
 revs=json.loads((ROOT/'data/reviews.json').read_text())
 assert idx.count('class="review-card"')==len(revs) and idx.count('class="review-stars"')==3 and f'1 / {len(revs)}' in idx
-assert len(revs)==14 and '1 / 14' in idx,'14 carousel cards (Barb Google review added Oct 11)'
+assert len(revs)==15 and '1 / 15' in idx,'15 carousel cards (Brandie Google website review added Oct 12)'
 assert revs[2]=={'name':'Barb','source':'Google review','quote':'Josh is very knowledgeable and friendly. He helped me 2 times in home and a few times on line. Rates are very reasonable. If you need help contact him.','rating':5},'Barb Google card is card 3'
 assert [x['name'] for x in revs].count('Barbara M.')==3,'her Facebook cards stay Barbara M.'
 assert {'name':'Barbara M.','source':'Facebook comment','quote':'JOSH is very helpful explains things so you understand.','rating':None} in revs
 for r in revs:
  assert escape(r['quote'],quote=True) in idx,('review not verbatim',r['name'])
- assert (r['rating'] is None)==r['source'].startswith('Facebook'),r
+ assert (r['rating'] is None) if r['source'].startswith('Facebook') else (r['rating'] in (5,None)),r  # Google cards: stars only when a 5-star rating is confirmed (Brandie: rating not yet confirmed)
 # Never publish the street address (service-area business).
 for n in pages+['404.html']:assert 'Cedar' not in (ROOT/n).read_text() and 'streetAddress' not in (ROOT/n).read_text(),n
 
