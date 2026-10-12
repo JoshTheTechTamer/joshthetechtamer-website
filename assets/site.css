@@ -412,3 +412,35 @@ button:disabled{opacity:.65;cursor:wait}
 .motion-toggle:hover{border-color:#23335c}
 .motion-toggle:focus-visible{outline:3px solid #0074aa;outline-offset:3px}
 @media(max-width:620px){.header-motion{right:12px;bottom:2px}}
+
+/* Site polish 1 (Oct 12): carousel controls inside the card, star-trimmed Google reviews link, compact Scam Help hero, callout beside the steps heading. */
+.review-carousel{position:relative}
+.review-carousel.is-enhanced .review-card{padding-bottom:calc(clamp(24px,4vw,48px) + 30px)}
+.review-carousel.is-enhanced .review-card::after{display:none}
+.review-carousel .review-controls{position:absolute;right:14px;bottom:12px;margin:0;gap:6px;flex-wrap:nowrap;z-index:3}
+.review-ctl,.review-ctl.review-pause{font:inherit;font-size:11px;font-weight:600;line-height:1;min-height:24px;width:auto;padding:4px 8px;cursor:pointer;color:#23335c;background:#fff;border:1px solid #c5cede;border-radius:5px}
+.review-ctl:hover{border-color:#23335c}
+.review-ctl:focus-visible{outline:3px solid #0074aa;outline-offset:3px}
+.review-carousel .review-count{font-size:11px;min-width:34px;color:var(--muted)}
+.review-links{align-items:flex-end}
+.review-gbp{display:inline-flex;flex-direction:column;align-items:center;gap:7px}
+.review-link-stars{color:#f5b731;font-size:19px;letter-spacing:4px;line-height:1;text-shadow:0 1px 0 rgba(35,51,92,.25)}
+.review-gbp-btn::before{background:linear-gradient(100deg,#23335c,#424d7d)!important}
+.review-gbp-btn>span{color:#f5b731}
+.scam-steps-section .section-head{align-items:center}
+.scam-steps-section .section-head>p{max-width:470px;background:#fff;border:1px solid #d9e1ef;border-left:5px solid #f5b731;border-radius:12px;padding:18px 22px;color:var(--ink);font-size:15.5px;line-height:1.6;box-shadow:0 8px 22px rgba(35,51,92,.08)}
+.scam-hero .help-hero-copy>p:not(.small){max-width:34em}
+@media(max-width:620px){
+ .review-carousel .review-controls{right:10px;bottom:10px;gap:5px}
+ .scam-hero{padding-top:22px;padding-bottom:30px}
+ .scam-hero .help-hero-grid{gap:14px}
+ .scam-hero .eyebrow{margin-bottom:10px}
+ .scam-hero h1{margin-bottom:12px}
+ .scam-hero .help-hero-copy>p:not(.small){font-size:16px;line-height:1.55;margin:0 0 16px}
+ .scam-hero .actions{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:0 0 12px}
+ .scam-hero .actions .btn{padding:12px 8px;font-size:13px;min-width:0;width:100%}
+ .scam-hero .local-hours{font-size:13px;line-height:1.5}
+ .scam-hero .scam-hero-art{margin-top:0}
+ .scam-hero .scam-shield{width:min(40%,150px)}
+ .scam-steps-section .section-head>p{max-width:none;padding:16px 18px}
+}
