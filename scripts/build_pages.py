@@ -26,7 +26,7 @@ crumb={'website':'Website Package','muscatine':'Tech Help in Muscatine','areas':
 def url(name):return BASE+'/'+('' if name=='index.html' else name[:-5])
 parent={'tech-help-quad-cities.html':'service-area.html'}
 # Example sites appear only once the client has OK'd it (flags in data/site-config.json, off by default).
-examples={'mvp563':('show_mvp563_example','<article class="wp-example"><div class="wp-example-body"><h3>MVP 563</h3><p>A local business site built and hosted the same way.</p><a class="btn wp-btn-blue" href="https://mvp563.com/">Visit mvp563.com<span aria-hidden="true">↗</span></a></div></article>')}
+examples={'mvp563':('show_mvp563_example','<article class="wp-example" data-rv><div class="wp-example-shot"><div class="wp-browser" aria-hidden="true"><span></span><span></span><span></span><em>mvp563.com</em></div><img src="/assets/website-package/mvp563-home-desktop-800.webp?v=20261012" srcset="/assets/website-package/mvp563-home-desktop-800.webp?v=20261012 800w, /assets/website-package/mvp563-home-desktop-1440.webp?v=20261012 1440w" sizes="(max-width: 620px) 90vw, 500px" alt="The MVP Logistics homepage" width="800" height="500" loading="lazy" decoding="async"></div><div class="wp-example-body"><h3>MVP Logistics</h3><p>A local moving, packing and hauling company in Eastern Iowa. Built and hosted the same way as my own site.</p><a class="btn wp-btn-blue" href="https://mvp563.com/" target="_blank" rel="noopener noreferrer">Visit mvp563.com<span aria-hidden="true">↗</span></a></div></article>')}
 # The header uses the readable full lockup; the favicon stays the mascot crop.
 def apply_header_logo(s):
  if 'class="brand brand-lockup header-animation"' in s:return s
@@ -40,7 +40,7 @@ def carousel():
  for i,r in enumerate(reviews):
   badge='<span class="review-stars" aria-label="5 out of 5 stars">★★★★★</span>' if r['rating']==5 else '<span class="review-kind">'+escape(r['source'])+'</span>'
   cards.append(f'<article class="review-card" role="group" aria-roledescription="slide" aria-label="{i+1} of {len(reviews)}">{badge}<blockquote><p>“{escape(r["quote"])}”</p></blockquote><p class="review-credit"><strong>{escape(r["name"])}</strong><span>{escape(r["source"])}</span></p></article>')
- return '<section class="section reviews-section" aria-labelledby="reviews-heading"><div class="wrap"><div class="section-head"><div><div class="eyebrow">A little reassurance</div><h2 id="reviews-heading">Good help. In their words.</h2></div><p>Feedback shared by customers on Google and Facebook.</p></div><div class="review-carousel" role="region" aria-roledescription="carousel" aria-label="Customer feedback"><div class="review-track">'+''.join(cards)+'</div><div class="review-controls" hidden><button type="button" class="btn secondary" data-review="prev" aria-label="Previous review">← Previous</button><span class="review-count" aria-live="polite" aria-atomic="true">1 / '+str(len(reviews))+'</span><button type="button" class="btn secondary" data-review="next" aria-label="Next review">Next →</button><button type="button" class="review-pause" data-review="pause">Pause rotation</button></div></div><p class="small review-note">Names are shortened for privacy. Stars appear only where a five-star Google rating was provided. Facebook feedback is shown as originally shared.</p></div></section>'
+ return '<section class="section reviews-section" aria-labelledby="reviews-heading"><div class="wrap"><div class="section-head"><div><div class="eyebrow">A little reassurance</div><h2 id="reviews-heading">Good help. In their words.</h2></div><p>Feedback shared by customers on Google and Facebook.</p></div><div class="review-carousel" role="region" aria-roledescription="carousel" aria-label="Customer feedback"><div class="review-track">'+''.join(cards)+'</div><div class="review-controls" hidden><button type="button" class="review-ctl" data-review="prev" aria-label="Previous review">← Previous</button><span class="review-count" aria-live="polite" aria-atomic="true">1 / '+str(len(reviews))+'</span><button type="button" class="review-ctl" data-review="next" aria-label="Next review">Next →</button><button type="button" class="review-ctl review-pause" data-review="pause">Pause rotation</button></div></div><p class="small review-note">Names are shortened for privacy. Stars appear only where a five-star Google rating was provided. Facebook feedback is shown as originally shared.</p></div></section>'
 def image_tag(m):
  tag=m.group();src=re.search(r'src="([^"]+)"',tag).group(1)
  if src not in manifest:return tag
@@ -77,10 +77,10 @@ def business():
  if gbp:b['sameAs'].append(gbp);b['hasMap']=gbp
  return b
 def google_links(cls=''):
- """'Read our Google reviews' / 'Leave a review' buttons. Empty config values render nothing (no broken links)."""
+ """'Read our Google reviews' / 'Leave a review' buttons. Empty config values render nothing (no broken links). Decorative stars sit above 'Leave'."""
  out=[]
- if gbp:out.append(f'<a class="btn secondary" href="{escape(gbp)}" target="_blank" rel="noopener noreferrer">Read our Google reviews<span aria-hidden="true">↗</span></a>')
- if review_url:out.append(f'<a class="btn" href="{escape(review_url)}" target="_blank" rel="noopener noreferrer">Leave a Google review<span aria-hidden="true">↗</span></a>')
+ if gbp:out.append(f'<a class="btn secondary review-gbp-btn" href="{escape(gbp)}" target="_blank" rel="noopener noreferrer">Read our Google reviews<span aria-hidden="true">↗</span></a>')
+ if review_url:out.append(f'<span class="review-gbp"><span class="review-link-stars" aria-hidden="true">★★★★★</span><a class="btn" href="{escape(review_url)}" target="_blank" rel="noopener noreferrer">Leave a Google review<span aria-hidden="true">↗</span></a></span>')
  return f'<div class="actions review-links{cls}">'+''.join(out)+'</div>' if out else ''
 def local_reviews():
  picks=[next(r for r in reviews if r['name']==n) for n in ('Peggy S.','Bob','Arlene S.')]  # first card per name
@@ -211,7 +211,7 @@ def normalize_urls(s,name):
 # (scripts/content_lock.py + data/content-lock.json, checked by validate_site.py).
 DESIGN_V='20261012-steps2'
 GOLD_WORD={'index.html':'you','services.html':'Working','business.html':'work','digital-kits.html':'confidence','rates.html':'pricing',
- 'about.html':'local','contact.html':'tame','tech-help-muscatine.html':'Muscatine','service-area.html':'Muscatine','scam-help.html':'Help',
+ 'about.html':'local','contact.html':'tame','tech-help-muscatine.html':'Muscatine','service-area.html':'Muscatine','scam-help.html':None,
  'tech-help-quad-cities.html':'In-Home','404.html':'wandered'}
 # Shared gold line-icon set (data/icons.json): the Website Package "essentials" icons plus matching ones for every icon spot.
 ICONS=json.loads((ROOT/'data/icons.json').read_text())
@@ -237,7 +237,7 @@ def redesign(s,name):
  assert n==1,('hero band',name)
  # 2) Gold text-art accent (gold + hand-drawn swoosh) on one key word of the headline; the text itself is unchanged.
  h=re.search(r'<h1\b[^>]*>(.*?)</h1>',s,re.S);inner=h.group(1);word=GOLD_WORD[name]
- parts=re.split(r'(<span class="eyebrow[^"]*">.*?</span>|<[^>]+>)',inner)
+ parts=[] if word is None else re.split(r'(<span class="eyebrow[^"]*">.*?</span>|<[^>]+>)',inner)
  for i,part in enumerate(parts):
   if part.startswith('<'):continue
   m=re.search(r'(?<![\w-])'+re.escape(word)+r'(?![\w-])',part)
@@ -245,8 +245,9 @@ def redesign(s,name):
    rest=part[m.end():]
    if word=='you' and rest.startswith('.'):rest='<span class="ds-gold-dot">.</span>'+rest[1:]   # home hero: gold period, no underline
    parts[i]=part[:m.start()]+'<span class="ds-gold">'+word+DS_SWOOSH+'</span>'+rest;break
- else:raise AssertionError(('gold word not in h1',name,word))
- s=s[:h.start(1)]+''.join(parts)+s[h.end(1):]
+ else:
+  if word is not None:raise AssertionError(('gold word not in h1',name,word))
+ if word is not None:s=s[:h.start(1)]+''.join(parts)+s[h.end(1):]
  # 2b) Shared icon set: card icons by topic, plus icons for contact methods and rate cards.
  def swap(m):
   head=unescape(re.sub(r'<[^>]+>','',m.group(1)))
@@ -277,7 +278,7 @@ for file in (ROOT/'templates').glob('*.html'):
  a='<canvas width="1400" height="400" aria-hidden="true"><img src="/assets/hero-logo.png" alt="The Tech Tamer" width="128" height="110"></canvas>'
  assert a in s,('header canvas markup',file.name);s=s.replace(a,HEADER_STAGE,1)
  s=re.sub(r'/assets/header-animation\.js\?v=[^"]+','/assets/header-animation.js?v='+HEADER_V,s)
- s=re.sub(r'assets/site\.css\?v=[^"]+','assets/site.css?v=20261012-audit2',s)
+ s=re.sub(r'assets/site\.css\?v=[^"]+','assets/site.css?v=20261012-polish3b',s)
  if name=='index.html':
   # H1 keyword line (audit B2): visible headline unchanged, eyebrow promoted into the H1.
   s=s.replace('<img src="assets/hero-logo.png" alt="The Tech Tamer: Josh’s top-hatted technology tamer mascot and wordmark" width="1353" height="1162">',HERO_PICTURE,1)
@@ -324,7 +325,7 @@ for file in (ROOT/'templates').glob('*.html'):
  assert '<!--' not in s.split('</head>')[1].replace('<!--EXAMPLE:','') or name=='website-package.html',('unfilled slot',name)
  if name=='index.html':
   s=s.replace('From the Wi-Fi that won’t cooperate to the business you’re ready to launch. I’m Josh, and I’ll help you get it working.','Wi-Fi, printers, computers, and everyday tech—without the runaround. I’m Josh, and I come to your home or office in Muscatine and Eastern Iowa to help get it working.')
-  s=s.replace('<section class="cta cta-photo">',carousel().replace('<p class="small review-note">',google_links()+'<p class="small review-note">',1)+'<section class="cta cta-photo">',1)
+  s=s.replace('<section class="cta cta-photo">',carousel().replace('<div class="review-controls" hidden>',google_links(' review-links--card')+'<div class="review-controls" hidden>',1)+'<section class="cta cta-photo">',1)
  if name=='services.html':
   s=s.replace('Patient, practical help for your home and everyday technology.','Patient, practical help at your home or office in Muscatine and Eastern Iowa.')
   s=s.replace('<section class="cta cta-photo">',visit+'<section class="cta cta-photo">',1)
