@@ -463,3 +463,20 @@ button:disabled{opacity:.65;cursor:wait}
  .review-carousel .review-controls{right:14px;bottom:12px;gap:5px}
 }
 @media(max-width:620px){.scam-hero .actions{gap:8px}.scam-hero .actions .btn{font-size:13px;padding-left:8px;padding-right:8px}}
+
+/* Site polish 1 r3: review links side by side at every width; roomier Call button. */
+.review-links--card{flex-direction:row!important;align-items:flex-end!important;flex-wrap:nowrap;right:auto!important;gap:8px}
+.review-links--card .btn,.review-links--card .review-gbp .btn{width:auto!important;align-self:auto!important;white-space:nowrap}
+.review-carousel .review-card{padding-bottom:calc(clamp(24px,4vw,48px) + 52px)}
+@media(max-width:760px){
+ .review-carousel .review-card{padding-bottom:calc(28px + 96px)}
+ .review-links--card{left:12px;bottom:46px}
+ .review-links--card .btn{padding:7px 14px;font-size:11.5px;min-height:30px;gap:6px}
+ .review-links--card .review-link-stars{font-size:12px}
+ .review-carousel .review-controls{right:12px;bottom:12px}
+}
+@media(min-width:761px) and (max-width:900px){.review-carousel .review-card{padding-bottom:calc(28px + 96px)}.review-links--card{bottom:50px}}
+.scam-hero .actions{grid-template-columns:minmax(0,.8fr) minmax(0,1.25fr);max-width:580px}
+.scam-hero .actions .btn[href^="tel:"]{padding-left:30px;padding-right:30px}
+@media(max-width:620px){.scam-hero .actions{grid-template-columns:minmax(0,.75fr) minmax(0,1.3fr)}.scam-hero .actions .btn[href^="tel:"]{padding-left:22px;padding-right:22px}}
+@media(max-width:480px){.review-links--card{left:10px;gap:5px}.review-links--card .btn{padding:6px 13px;font-size:10.5px}.review-links--card .btn>span[aria-hidden]{display:none}}
