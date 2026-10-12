@@ -56,9 +56,7 @@ if(carousel){
 }
 if(!preview&&(location.pathname.endsWith('/')||location.pathname.endsWith('index.html'))){const old={services:'/services',kits:'/digital-kits',rates:'/rates',about:'/about',booking:'/contact'};const dest=old[location.hash.slice(1)];if(dest)location.replace(dest)}
 if(!preview&&(location.hostname==='joshthetechtamer.com'||location.hostname==='www.joshthetechtamer.com')){
- window.dataLayer=window.dataLayer||[];window.gtag=function(){window.dataLayer.push(arguments)};
- window.gtag('js',new Date());window.gtag('config','G-MTSTNDKSQH');
- const analytics=document.createElement('script');analytics.async=true;analytics.src='https://www.googletagmanager.com/gtag/js?id=G-MTSTNDKSQH';document.head.append(analytics);
+ // Optional analytics is initialized only after consent by privacy.js.
  document.addEventListener('click',e=>{const a=e.target.closest('a');if(!a)return;const href=a.getAttribute('href')||'';const event=href.startsWith('sms:')?'sms_click':href.startsWith('tel:')?'call_click':href.startsWith('mailto:')?'email_click':href.includes('gumroad.com')?'kit_click':null;
  if(event){const region=a.closest('header,footer,section,.mobile-contact,.ribbon');track(event,{page:location.pathname,cta:a.textContent.trim(),placement:region?(region.id||region.className||region.tagName.toLowerCase()):'other',kit:href.includes('gumroad.com')?href.split('/l/')[1]?.split('?')[0]:undefined})}});
 }

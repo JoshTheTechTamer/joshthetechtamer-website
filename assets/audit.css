@@ -1,0 +1,13 @@
+/* Local font alias replaces the external Google Fonts stylesheet. */
+@font-face{font-family:Montserrat;font-style:normal;font-weight:900;font-display:swap;src:url(/assets/fonts/montserrat-900-latin.woff2) format("woff2")}
+.header-motion{padding-top:0;padding-bottom:8px;display:flex;justify-content:flex-start}
+.header-motion[hidden],.privacy-choice[hidden]{display:none!important}
+.motion-toggle,.privacy-settings{font:inherit;cursor:pointer;color:#23335c;background:transparent;border:1px solid #c5cede;border-radius:5px;padding:7px 12px;min-height:36px}
+.motion-toggle{font-size:12px}.motion-toggle:focus-visible,.privacy-settings:focus-visible,.privacy-actions button:focus-visible{outline:3px solid #0074aa;outline-offset:3px}
+.policy-links{display:flex;gap:20px;align-items:center;flex-wrap:wrap;padding-top:16px;padding-bottom:20px}
+.footer .policy-links a{display:inline;margin:0;text-decoration:underline;font-size:14px}.privacy-settings{font-size:14px}
+.policy-copy{max-width:850px}.policy-copy h2{margin-top:32px}.policy-copy p{line-height:1.8}.policy-copy a{text-decoration:underline}
+.privacy-choice{background:#edf2fa;color:#172443;border-top:2px solid #bcc8dd;padding:18px 0}
+.privacy-choice-inner{display:flex;gap:22px;align-items:center;justify-content:space-between}.privacy-choice p{margin:0;max-width:760px;font-size:15px}.privacy-choice a{color:#23335c;text-decoration:underline}
+.privacy-actions{display:flex;gap:10px;flex-wrap:wrap;flex-shrink:0}.privacy-actions button{font:inherit;font-weight:700;min-height:44px;padding:10px 16px;cursor:pointer;background:white;border:2px solid #23335c;border-radius:5px;color:#23335c}
+@media(max-width:700px){.privacy-choice-inner{display:block}.privacy-actions{margin-top:14px}.privacy-actions button{flex:1}.privacy-choice{padding-bottom:90px}.policy-links{gap:14px}.policy-copy{overflow-wrap:anywhere}}

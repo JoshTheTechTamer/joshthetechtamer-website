@@ -5,6 +5,12 @@
 (()=>{
 const ha=document.querySelector('.header-animation .ha');if(!ha)return;
 const RM=matchMedia('(prefers-reduced-motion: reduce)');if(RM.matches)return;
+let userPaused=false;try{userPaused=localStorage.getItem('tt-header-paused')==='true'}catch{}
+const motionWrap=document.querySelector('.header-motion'),motionButton=document.querySelector('.motion-toggle');
+function motionLabel(){if(motionWrap)motionWrap.hidden=RM.matches;if(motionButton){motionButton.textContent=userPaused?'Play animation':'Pause animation';motionButton.setAttribute('aria-pressed',String(userPaused))}}
+if(motionButton){motionLabel();motionButton.addEventListener('click',()=>{userPaused=!userPaused;try{localStorage.setItem('tt-header-paused',String(userPaused))}catch{};userPaused?stop():go();motionLabel()})}
+RM.addEventListener('change',motionLabel);
+
 const SMALL=matchMedia('(max-width:620px)'),slogan=ha.querySelector('.ha-slogan'),printer=ha.querySelector('.ha-printer'),
  pr=printer.querySelector('.ha-pr'),page=printer.querySelector('.ha-page'),thumb=printer.querySelector('.ha-thumb'),led=printer.querySelector('.ha-led'),swoosh=[...slogan.querySelectorAll('.ha-swoosh path')],gold=slogan.querySelector('.ha-gold'),stars=[...slogan.querySelectorAll('.ha-twinkle svg')];
 const V='?v=20261012-ha11',NS='http://www.w3.org/2000/svg',PI=Math.PI;
@@ -170,7 +176,7 @@ function render(t){
  else{setD(ropeF,lead+arc(0,o)+arc(0,j));setD(ropeB,'')}
 }
 function frame(now){raf=0;if(!run)return;clock+=Math.min(now-last,100);last=now;let t=clock/1000;if(t>=END){clock-=END*1000;t-=END}render(t);raf=requestAnimationFrame(frame)}
-function go(){if(frozen||run||!ready||document.hidden||!vis)return;run=true;layout();last=performance.now();raf=requestAnimationFrame(frame)}
+function go(){if(userPaused||RM.matches||frozen||run||!ready||document.hidden||!vis)return;run=true;layout();last=performance.now();raf=requestAnimationFrame(frame)}
 function stop(){run=false;if(raf)cancelAnimationFrame(raf);raf=0}
 document.addEventListener('visibilitychange',()=>document.hidden?stop():go());
 addEventListener('resize',()=>{if(run)layout()});

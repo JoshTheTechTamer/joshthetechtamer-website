@@ -58,7 +58,7 @@ css=(ROOT/'assets/website-package.css').read_text();wpjs=(ROOT/'assets/website-p
 wcopy=json.loads((ROOT/'data/website-package-copy.json').read_text())
 assert wcopy['hero_price_build']=='Only $800 to build & launch.' and wcopy['hero_kicker_lead']=='Like it?'
 kick=re.search(r'<p class="wp-kicker">(.*?)</p>',pkg,re.S).group(1)
-assert re.sub(r'<[^>]+>','',kick).split()==['Like','it?','Only','$800','to','build','&amp;','launch.','$25/month','hosting','&amp;','care,','first','month','free.'],kick
+assert re.sub(r'<[^>]+>','',kick).split()==['Like','it?','Only','$800','to','build','&amp;','launch.','First-year','hosting','&amp;','domain','included.','Optional','care:','$25/month,','first','month','free.'],kick
 tl=re.search(r'<ol class="wp-tl" data-wp-timeline>(.*?)</ol>',pkg,re.S).group(1)
 assert tl.count('<li class="wp-tl-step')==5 and tl.count('class="wp-step-num"')==5
 assert re.findall(r'<h3>(.*?)</h3>',tl)==['A short call.','Build a free preview.','A fit check.','$800 to launch.','Go-live.'],'timeline headings'
@@ -158,9 +158,9 @@ for n in ['services.html','digital-kits.html']:
 FINAL=['Muscatine, IA','Fruitland, IA','Wilton, IA','West Liberty, IA','Durant, IA','Columbus Junction, IA','Letts, IA','Nichols, IA','Atalissa, IA','Buffalo, IA','Blue Grass, IA','Davenport, IA','Bettendorf, IA','Moline, IL','Rock Island, IL','East Moline, IL','Silvis, IL','Milan, IL','Illinois City, IL','Muscatine County, IA']
 assert served==FINAL,('areaServed must be exactly Josh’s list, in his order',served)
 for n in pages+['404.html']:
- t=(ROOT/n).read_text().replace('Muscatine · Iowa City · Quad Cities','')  # Josh's sign-off is the only allowed mention
+ t=(ROOT/n).read_text().replace('Muscatine · Nearby towns · Quad Cities','')  # Josh's sign-off is the only allowed mention
  assert 'Iowa City' not in t and 'Coralville' not in t,('Iowa City/Coralville dropped',n)
- assert (ROOT/n).read_text().count('Muscatine · Iowa City · Quad Cities')==1,('sign-off unchanged',n)
+ assert (ROOT/n).read_text().count('Muscatine · Nearby towns · Quad Cities')==1,('sign-off unchanged',n)
 sa=(ROOT/'service-area.html').read_text()
 order=[sa.index('<h3>'+t+'</h3>') for t in ['Muscatine','Fruitland','Wilton','West Liberty','Durant','Columbus Junction','Letts','Nichols','Atalissa','Buffalo','Blue Grass','The Quad Cities','Illinois City','Muscatine County']]
 assert order==sorted(order),'service-area town cards in Josh’s order'
@@ -198,13 +198,13 @@ for n in locked:
   if k=='images':a,b=[list(x) for x in a],[list(x) for x in b]
   assert a==b,('content changed by the redesign',n,k)
 dcss=(ROOT/'assets/design.css').read_text();djs=(ROOT/'assets/design.js').read_text()
-GOLD={'index.html':'you','services.html':'Working','business.html':'work','digital-kits.html':'confidence','rates.html':'pricing','about.html':'local','contact.html':'tame','tech-help-muscatine.html':'Muscatine','service-area.html':'Muscatine','scam-help.html':'Help','tech-help-quad-cities.html':'In-Home','404.html':'wandered'}
+GOLD={'privacy.html':'Privacy','accessibility.html':'help','index.html':'you','services.html':'Working','business.html':'work','digital-kits.html':'confidence','rates.html':'pricing','about.html':'local','contact.html':'tame','tech-help-muscatine.html':'Muscatine','service-area.html':'Muscatine','scam-help.html':'Help','tech-help-quad-cities.html':'In-Home','404.html':'wandered'}
 for f in ROOT.glob('*.html'):
  t=f.read_text();head=t[:t.index('</head>')]
  if f.name=='website-package.html':assert 'design.css' not in t and 'ds-hero' not in t,'showcase keeps its own layer';continue
  assert re.search(r'<link rel="stylesheet" href="/assets/design\.css\?v=[^"]+">',head) and re.search(r'<script src="/assets/design\.js\?v=[^"]+" defer></script>',head),('design layer',f.name)
  assert head.index('site.css')<head.index('design.css'),f.name
- assert 'family=Montserrat' in head,f.name
+ assert 'fonts.googleapis.com' not in head and '/assets/audit.css?' in head,f.name
  # one dark hero band (first section), with decorative dots + stripe hidden from assistive tech
  first=re.search(r'<main[^>]*>\s*<section class="([^"]*)">(<span class="ds-deco" aria-hidden="true">)?',t)
  assert first and 'ds-hero' in first.group(1).split() and first.group(2),('hero band',f.name)
@@ -299,14 +299,14 @@ for f in sorted(ROOT.glob('*.html')):
  t=f.read_text();hd=re.search(r'<header\b.*?</header>',t,re.S).group()
  assert '<canvas' not in t,('old canvas header',f.name)
  assert hd.count('<a href="/" class="brand brand-lockup header-animation" aria-label="The Tech Tamer home — House calls. Office visits. Tech tamed.">'+STAGE+'</a>')==1,('header stage',f.name)
- assert t.count('/assets/header-animation.js?v=20261012-ha11" defer')==1,('header script',f.name)
- assert 'assets/site.css?v=20261011-headeranim6' in t,f.name
+ assert t.count('/assets/header-animation.js?v=20261012-audit1" defer')==1,('header script',f.name)
+ assert 'assets/site.css?v=20261012-audit1' in t,f.name
 # the slogan is real text, hidden from screen readers (the link's aria-label reads it once); printer is decorative
 assert '<span class="ha-slogan" aria-hidden="true">' in STAGE and '<span class="ha-printer is-grumpy" aria-hidden="true">' in STAGE and 'alt="The Tech Tamer"' in STAGE
 assert 'House calls.' in STAGE and 'Office visits.' in STAGE and 'TECH</span> <span class="ha-gold">TAMED.' in STAGE and '#f7c948' in ha_css.lower()
 assert re.search(r'\.ha-slogan\{[^}]*font:900 [^}]*"Montserrat DS","Montserrat"',ha_css) and 'color:#23335c' in ha_css
 # no data-URI sprites, no canvas, no libraries; layers are fetched only after load/idle; reduced motion never starts it
-assert 'base64' not in ha_js and 'getContext' not in ha_js and len(ha_js.encode())<14_000,len(ha_js)
+assert 'base64' not in ha_js and 'getContext' not in ha_js and len(ha_js.encode())<15_500,len(ha_js)
 assert "addEventListener(\"load\"" in ha_js or "addEventListener('load'" in ha_js
 assert 'requestIdleCallback' in ha_js and 'prefers-reduced-motion: reduce' in ha_js and 'visibilitychange' in ha_js and 'IntersectionObserver' in ha_js
 # round 2: the markup is the loop's start state (angry printer on the right, slogan masked off); reduced motion
@@ -330,7 +330,7 @@ assert "'ha-debris'" in ha_js or '"ha-debris"' in ha_js
 for n in LAYERS:assert f'"/assets/header/"' in ha_js or '/assets/header/' in ha_js
 from PIL import Image
 sizes={n:(ROOT/f'assets/header/{n}.png').stat().st_size for n in LAYERS+['still']}
-assert sizes['still']<30_000 and sum(sizes[n] for n in LAYERS)+len(ha_js.encode())<60_000,sizes
+assert sizes['still']<30_000 and sum(sizes[n] for n in LAYERS)+len(ha_js.encode())<62_000,sizes
 assert sorted(p.name for p in (ROOT/'assets/header').glob('*'))==sorted(n+'.png' for n in LAYERS+['still'])
 # frame 0 == rig at rest: the four layers stacked are pixel-identical to the still (same palette, disjoint pixels)
 def _comp(names):
@@ -343,3 +343,17 @@ assert Image.open(ROOT/'assets/header/still.png').getpalette() and all(Image.ope
 print('PASS: header animation (still-first stage on every page, layers == still at rest, payload',sum(sizes[n] for n in LAYERS)+len(ha_js.encode()),'B after load).')
 
 print('PASS: HTML nesting, internal links/anchors, headings, images, structured data, all six kit links, review ratings and deployment exclusions.')
+
+# Audit fixes: consent gates, published disclosures, urgent scam response, motion control.
+for f in ROOT.glob('*.html'):
+ t=f.read_text();assert 'href="/privacy"' in t and 'href="/accessibility"' in t
+ assert 'class="motion-toggle" aria-pressed="false"' in t
+ assert 'fonts.googleapis.com' not in t
+assert 'googletagmanager.com/gtag/js' not in (ROOT/'assets/site.js').read_text()
+privacy_js=(ROOT/'assets/privacy.js').read_text()
+assert "if(choice==='allow')start()" in privacy_js and "if(!live||loaded)return" in privacy_js
+assert 'userPaused||e.matches' in ha_js
+assert sc.index('Money or a card involved?') < sc.index('From a safe device, secure your accounts.')
+assert 'It usually means someone has your password' not in sc
+assert 'No real business, utility or government office asks' not in sc
+print('Audit disclosure, motion, scam-order and analytics-gating checks passed.')
