@@ -296,21 +296,28 @@ for f in sorted(ROOT.glob('*.html')):
  t=f.read_text();hd=re.search(r'<header\b.*?</header>',t,re.S).group()
  assert '<canvas' not in t,('old canvas header',f.name)
  assert hd.count('<a href="/" class="brand brand-lockup header-animation" aria-label="The Tech Tamer home — House calls. Office visits. Tech tamed.">'+STAGE+'</a>')==1,('header stage',f.name)
- assert t.count('/assets/header-animation.js?v=20261011-ha2" defer')==1,('header script',f.name)
+ assert t.count('/assets/header-animation.js?v=20261011-ha3" defer')==1,('header script',f.name)
  assert 'assets/site.css?v=20261011-headeranim' in t,f.name
 # the slogan is real text, hidden from screen readers (the link's aria-label reads it once); printer is decorative
-assert '<span class="ha-slogan" aria-hidden="true">' in STAGE and '<span class="ha-printer" aria-hidden="true">' in STAGE and 'alt="The Tech Tamer"' in STAGE
-assert 'House calls.' in STAGE and 'Office visits.' in STAGE and 'Tech tamed.' in STAGE and '#f5b731' in ha_css.lower()
+assert '<span class="ha-slogan" aria-hidden="true">' in STAGE and '<span class="ha-printer is-grumpy" aria-hidden="true">' in STAGE and 'alt="The Tech Tamer"' in STAGE
+assert 'House calls.' in STAGE and 'Office visits.' in STAGE and 'Tech</span> <span class="ha-gold">tamed.' in STAGE and '#f5b731' in ha_css.lower()
 assert re.search(r'\.ha-slogan\{[^}]*font:900 [^}]*"Montserrat DS","Montserrat"',ha_css) and 'color:#23335c' in ha_css
 # no data-URI sprites, no canvas, no libraries; layers are fetched only after load/idle; reduced motion never starts it
 assert 'base64' not in ha_js and 'getContext' not in ha_js and len(ha_js.encode())<9_000,len(ha_js)
 assert "addEventListener(\"load\"" in ha_js or "addEventListener('load'" in ha_js
-assert 'requestIdleCallback' in ha_js and 'prefers-reduced-motion: reduce' in ha_js and 'visibilitychange' in ha_js
-LAYERS=['bg','body','coil','word']
+assert 'requestIdleCallback' in ha_js and 'prefers-reduced-motion: reduce' in ha_js and 'visibilitychange' in ha_js and 'IntersectionObserver' in ha_js
+# round 2: the markup is the loop's start state (angry printer on the right, slogan masked off); reduced motion
+# and no-JS get the final state with the slogan; feathered mask reveal; gold 'tamed.' underlined
+assert 'class="ha-printer is-grumpy"' in STAGE and '<noscript><style>' in STAGE and '<span class="ha-tech">Tech</span> <span class="ha-gold">tamed.<svg class="ha-swoosh"' in STAGE
+assert 'mask-image:linear-gradient(90deg,transparent calc(var(--rv) - var(--fe)),#000 calc(var(--rv) + var(--fe)))' in ha_css and '--rv:9999px' in ha_css
+assert re.search(r'@media\(prefers-reduced-motion:reduce\)\{\n \.header-animation \.ha\{--rv:-200px\}',ha_css)
+assert 'ha-anger' in STAGE and 'ha-smoke' in STAGE and 'ha-thumb' in STAGE and '.ha-gold{' in ha_css and 'color:#f5b731' in ha_css
+LAYERS=['circle','body','ringf','coil','fist','word']
 for n in LAYERS:assert f'"/assets/header/"' in ha_js or '/assets/header/' in ha_js
 from PIL import Image
 sizes={n:(ROOT/f'assets/header/{n}.png').stat().st_size for n in LAYERS+['still']}
 assert sizes['still']<30_000 and sum(sizes[n] for n in LAYERS)+len(ha_js.encode())<60_000,sizes
+assert sorted(p.name for p in (ROOT/'assets/header').glob('*'))==sorted(n+'.png' for n in LAYERS+['still'])
 # frame 0 == rig at rest: the four layers stacked are pixel-identical to the still (same palette, disjoint pixels)
 def _comp(names):
  o=Image.new('RGBA',(300,258),(255,255,255,255))

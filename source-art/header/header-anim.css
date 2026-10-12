@@ -1,34 +1,48 @@
-/* header-anim-2026-10-11: layered lasso header (still logo + HTML slogan + vector printer; rig lazy-loaded) */
-.header-animation .ha{--W:700;position:relative;display:block;width:100%;aspect-ratio:3.5;background:#fff;container-type:inline-size;overflow:hidden;line-height:1;-webkit-tap-highlight-color:transparent}
+/* header-anim-2026-10-11 (round 2): looping lasso header. Default markup = the loop's start state
+   (still logo, angry printer on the right, slogan hidden); reduced motion / no JS = final state. */
+.header-animation .ha{--W:700;--PR:230;--PE:612;--rv:9999px;position:relative;display:block;width:100%;aspect-ratio:3.5;background:#fff;container-type:inline-size;overflow:hidden;line-height:1;-webkit-tap-highlight-color:transparent}
 .header-animation .ha>*{position:absolute}
 .header-animation .ha span{font-size:inherit;letter-spacing:inherit;text-transform:none;color:inherit}
-.header-animation .ha .ha-still,.header-animation .ha .ha-rig{left:calc(8%/var(--W)*100);top:12%;width:calc(166%/var(--W)*100);height:71.38%}
+.header-animation .ha .ha-still,.header-animation .ha .ha-rig,.header-animation .ha .ha-top{left:calc(8%/var(--W)*100);top:12%;width:calc(166%/var(--W)*100);height:71.38%}
 .header-animation .ha .ha-still{display:block;max-width:none;object-fit:fill;flex:none}
-.header-animation .ha .ha-rig{display:block}.header-animation .ha .ha-rig[hidden]{display:none}
-.header-animation .ha .ha-rig img,.header-animation .ha .ha-rig span{position:absolute;inset:0;width:100%;height:100%;max-width:none;object-fit:fill}
-.header-animation .ha .ha-body{transform-origin:51% 78.3%}
+.header-animation .ha .ha-rig,.header-animation .ha .ha-top{display:block;pointer-events:none}
+.header-animation .ha .ha-rig[hidden],.header-animation .ha .ha-top[hidden]{display:none}
+.header-animation .ha .ha-rig img,.header-animation .ha .ha-rig span,.header-animation .ha .ha-top img,.header-animation .ha .ha-top span{position:absolute;inset:0;width:100%;height:100%;max-width:none;object-fit:fill}
+.header-animation .ha .ha-move{transform-origin:51% 78.3%}
 .header-animation .ha.is-live .ha-still{visibility:hidden}
-.header-animation .ha .ha-slogan{left:calc(288%/var(--W)*100);top:21%;color:#23335c;font:900 calc(25*100cqw/var(--W))/1.18 "Montserrat DS","Montserrat",Arial,Helvetica,sans-serif;letter-spacing:-.005em;white-space:nowrap;clip-path:inset(-30% -10% -40% 0)}
+.header-animation .ha .ha-slogan{--fe:calc(14*100cqw/var(--W));left:calc(288%/var(--W)*100);top:19%;padding:.1em .3em .55em 0;color:#23335c;font:900 calc(25*100cqw/var(--W))/1.18 "Montserrat DS","Montserrat",Arial,Helvetica,sans-serif;letter-spacing:-.005em;white-space:nowrap;-webkit-mask-image:linear-gradient(90deg,transparent calc(var(--rv) - var(--fe)),#000 calc(var(--rv) + var(--fe)));mask-image:linear-gradient(90deg,transparent calc(var(--rv) - var(--fe)),#000 calc(var(--rv) + var(--fe)))}
 .header-animation .ha .ha-line{display:inline}
-.header-animation .ha .ha-tamed{position:relative;display:block;width:max-content;margin-top:.14em;color:#00a3ed;font-size:1.62em;line-height:1}
-.header-animation .ha .ha-swoosh{position:absolute;left:-2%;bottom:-.3em;width:104%;height:.34em;overflow:visible}
+.header-animation .ha .ha-tamed{display:block;width:max-content;margin-top:.14em;font-size:1.62em;line-height:1}
+.header-animation .ha .ha-tech{color:#00a3ed}
+.header-animation .ha .ha-gold{position:relative;display:inline-block;color:#f5b731;-webkit-text-stroke:.012em #c9900f;paint-order:stroke fill}
+.header-animation .ha .ha-swoosh{position:absolute;left:-3%;bottom:-.3em;width:106%;height:.34em;overflow:visible}
 .ha-swoosh path{fill:none;stroke:#f5b731;stroke-linecap:round;stroke-width:6;stroke-dasharray:1;stroke-dashoffset:0}
 .ha-swoosh path+path{stroke-width:2.4;opacity:.55}
-.header-animation .ha .ha-printer{left:calc((230 - 44.2)*100%/var(--W));top:36%;width:calc(88.4%/var(--W)*100);aspect-ratio:1.04}
+.header-animation .ha .ha-printer{left:calc((var(--PR) - 44.2)*100%/var(--W));top:36%;width:calc(88.4%/var(--W)*100);aspect-ratio:1.04;transform:translateX(calc((var(--PE) - var(--PR))*100cqw/var(--W)))}
 .ha-printer svg{display:block;width:100%;height:100%;overflow:visible}
 .ha-pr rect{stroke:#071426;stroke-width:3;stroke-linejoin:round}
+.ha-pr,.ha-page,.ha-thumb,.ha-anger,.ha-smoke circle{transform-box:fill-box;transform-origin:50% 50%}
+.ha-pr{transform-origin:50% 100%}.ha-page{transform-origin:50% 0}
 .ha-led{fill:#00a3ed;stroke:#071426;stroke-width:2}
-.ha-grumpy{display:none}
-.ha-printer.is-grumpy .ha-grumpy{display:inline}.ha-printer.is-grumpy .ha-happy{display:none}.ha-printer.is-grumpy .ha-led{fill:#e58b42}
-.ha-page{transform-box:fill-box;transform-origin:50% 0}
+.ha-grumpy,.ha-anger,.ha-smoke,.ha-thumb{display:none}
+.ha-printer.is-grumpy .ha-grumpy{display:inline}.ha-printer.is-grumpy .ha-happy,.ha-printer.is-grumpy .ha-page{display:none}.ha-printer.is-grumpy .ha-led{fill:#e58b42}
+.ha-printer.is-broken .ha-anger,.ha-printer.is-broken .ha-smoke{display:inline}
+.ha-printer.is-broken .ha-anger{animation:ha-vein .55s ease-in-out infinite alternate}
+.ha-printer.is-broken .ha-smoke circle{opacity:0;animation:ha-puff 1.5s ease-out infinite}
+.ha-printer.is-broken .ha-smoke circle:nth-child(2){animation-delay:.5s}.ha-printer.is-broken .ha-smoke circle:nth-child(3){animation-delay:1s}
+@keyframes ha-vein{from{transform:scale(1.05)}to{transform:scale(1.5)}}
+@keyframes ha-puff{0%{opacity:0;transform:translate(0,6px) scale(.6)}20%{opacity:.85}100%{opacity:0;transform:translate(-10px,-30px) scale(1.9)}}
 .header-animation .ha .ha-rope{inset:0;width:100%;height:100%;overflow:visible;pointer-events:none}
 .ha-rope path{fill:none;stroke-linecap:round;stroke-linejoin:round}
-.ha-rope .k{stroke:#071426;stroke-width:3.2}.ha-rope .g{stroke:#fcb64e;stroke-width:2}.ha-rope .t{stroke:#b07a22;stroke-width:2;stroke-dasharray:.8 1.6}
-.header-animation .ha .ha-rope[hidden]{display:none}
+.ha-rope .k{stroke:#071426;stroke-width:3.4}.ha-rope .g{stroke:#fcb64e;stroke-width:2.3}.ha-rope .t{stroke:#c98a22;stroke-width:2.3;stroke-dasharray:.7 2.1}
 @media(max-width:620px){
- .header-animation .ha{--W:540;aspect-ratio:2.7}
- .header-animation .ha .ha-slogan{left:calc(258%/var(--W)*100);top:13%;font-size:calc(29*100cqw/var(--W))}
+ .header-animation .ha{--W:540;--PR:212;--PE:470;aspect-ratio:2.7}
+ .header-animation .ha .ha-slogan{left:calc(258%/var(--W)*100);top:9%;font-size:calc(29*100cqw/var(--W))}
  .header-animation .ha .ha-line{display:block}
  .header-animation .ha .ha-tamed{font-size:1.24em;margin-top:.08em}
- .header-animation .ha .ha-printer{left:calc((212 - 37.4)*100%/var(--W));top:36%;width:calc(74.8%/var(--W)*100)}
+ .header-animation .ha .ha-printer{left:calc((var(--PR) - 37.4)*100%/var(--W));top:36%;width:calc(74.8%/var(--W)*100)}
+}
+@media(prefers-reduced-motion:reduce){
+ .header-animation .ha{--rv:-200px}.header-animation .ha .ha-printer{transform:none}
+ .ha-printer.is-grumpy .ha-grumpy,.ha-printer .ha-anger,.ha-printer .ha-smoke{display:none}.ha-printer.is-grumpy .ha-happy,.ha-printer.is-grumpy .ha-page{display:inline}.ha-printer.is-grumpy .ha-led{fill:#00a3ed}
 }
