@@ -158,9 +158,9 @@ for n in ['services.html','digital-kits.html']:
 FINAL=['Muscatine, IA','Fruitland, IA','Wilton, IA','West Liberty, IA','Durant, IA','Columbus Junction, IA','Letts, IA','Nichols, IA','Atalissa, IA','Buffalo, IA','Blue Grass, IA','Davenport, IA','Bettendorf, IA','Moline, IL','Rock Island, IL','East Moline, IL','Silvis, IL','Milan, IL','Illinois City, IL','Muscatine County, IA']
 assert served==FINAL,('areaServed must be exactly Josh’s list, in his order',served)
 for n in pages+['404.html']:
- t=(ROOT/n).read_text().replace('Muscatine · Iowa City · Quad Cities','')  # Josh's sign-off is the only allowed mention
+ t=(ROOT/n).read_text().replace('Muscatine · Nearby towns · Quad Cities','')  # Josh's sign-off is the only allowed mention
  assert 'Iowa City' not in t and 'Coralville' not in t,('Iowa City/Coralville dropped',n)
- assert (ROOT/n).read_text().count('Muscatine · Iowa City · Quad Cities')==1,('sign-off unchanged',n)
+ assert (ROOT/n).read_text().count('Muscatine · Nearby towns · Quad Cities')==1,('sign-off unchanged',n)
 sa=(ROOT/'service-area.html').read_text()
 order=[sa.index('<h3>'+t+'</h3>') for t in ['Muscatine','Fruitland','Wilton','West Liberty','Durant','Columbus Junction','Letts','Nichols','Atalissa','Buffalo','Blue Grass','The Quad Cities','Illinois City','Muscatine County']]
 assert order==sorted(order),'service-area town cards in Josh’s order'
@@ -299,8 +299,8 @@ for f in sorted(ROOT.glob('*.html')):
  t=f.read_text();hd=re.search(r'<header\b.*?</header>',t,re.S).group()
  assert '<canvas' not in t,('old canvas header',f.name)
  assert hd.count('<a href="/" class="brand brand-lockup header-animation" aria-label="The Tech Tamer home — House calls. Office visits. Tech tamed.">'+STAGE+'</a>')==1,('header stage',f.name)
- assert t.count('/assets/header-animation.js?v=20261012-ha11" defer')==1,('header script',f.name)
- assert 'assets/site.css?v=20261011-headeranim6' in t,f.name
+ assert t.count('/assets/header-animation.js?v=20261012-ha12" defer')==1,('header script',f.name)
+ assert 'assets/site.css?v=20261012-audit2' in t,f.name
 # the slogan is real text, hidden from screen readers (the link's aria-label reads it once); printer is decorative
 assert '<span class="ha-slogan" aria-hidden="true">' in STAGE and '<span class="ha-printer is-grumpy" aria-hidden="true">' in STAGE and 'alt="The Tech Tamer"' in STAGE
 assert 'House calls.' in STAGE and 'Office visits.' in STAGE and 'TECH</span> <span class="ha-gold">TAMED.' in STAGE and '#f7c948' in ha_css.lower()
