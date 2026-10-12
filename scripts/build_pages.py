@@ -265,7 +265,7 @@ def redesign(s,name):
  s=re.sub(r'<div class="grid3">(?=<(?:article|div) class="step">)','<div class="grid3 ds-steps" data-ds-steps>',s)
  return s
 HEADER_STAGE=(ROOT/'source-art/header/stage.html').read_text().strip()
-HEADER_V='20261012-ha12'
+HEADER_V='20261012-ha13'
 # Cloudflare Web Analytics: Pages custom domains do not get auto JS injection reliably,
 # so every page ships the deferred beacon (token from account Web Analytics site).
 CF_BEACON="<!-- Cloudflare Web Analytics --><script defer src=\"https://static.cloudflareinsights.com/beacon.min.js\" data-cf-beacon='{\"token\": \"a5008ae940f94281862ffbab9ef72546\"}'></script><!-- End Cloudflare Web Analytics -->"
