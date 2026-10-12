@@ -71,7 +71,7 @@ coil=op&~fist&~word&(yy<1018)&((~inDisc&(xx>1000)&(yy>775))|((xx>1195)&(yy>650))
 coil&=~((xx<1075)&ndi.binary_dilation(blue,disk(3)))
 ringf=ring&(ang>30)&(ang<138)&~word&~fist&~coil&~ndi.binary_dilation(goldish,disk(14))   # rope crossing the ring moves with him
 rope=ndi.binary_dilation(gold&inDisc&~actor,disk(7))&~blue&op&inDisc
-halo=ndi.binary_dilation(actor|rope,disk(22))&white&inDisc&~ring
+halo=ndi.binary_dilation(actor|rope,disk(22))&white&inDisc&~ring&(d<RI-12)   # no white outline hugging the ring: it would cover the ring when he leans
 body=op&~word&~coil&~fist&~ringf&((~inDisc)|((actor|rope|halo|(ropeAll&inDisc))&~(ring&~actor0&~ropeAll)))
 circle=op&inDisc&~word&~coil&~fist&~ringf&~body
 # 4) the rebuilt medallion (only shows where the mascot moves away)

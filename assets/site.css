@@ -365,13 +365,14 @@ button:disabled{opacity:.65;cursor:wait}
 .header-animation .ha .ha-line{display:inline}
 .header-animation .ha .ha-tamed{display:block;width:max-content;margin-top:.14em;font-size:1.62em;line-height:1}
 .header-animation .ha .ha-tech{color:#00a3ed}
-.header-animation .ha .ha-gold{position:relative;display:inline-block;color:#f5b731;-webkit-text-stroke:.075em #424d7d;paint-order:stroke fill;transform-origin:30% 75%}
+.header-animation .ha .ha-gold{position:relative;display:inline-block;color:#d9a42a;background:linear-gradient(180deg,#fde58f 0%,#f7c948 26%,#e7ad2c 62%,#c8901a 100%);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;transform-origin:30% 75%;filter:drop-shadow(0 .02em 0 rgba(122,79,12,.35))}
 .header-animation .ha .ha-swoosh{position:absolute;left:-3%;bottom:-.3em;width:106%;height:.34em;overflow:visible}
-.ha-swoosh path{fill:none;stroke:#f5b731;stroke-linecap:round;stroke-width:6;stroke-dasharray:1;stroke-dashoffset:0}
-.ha-swoosh .e{stroke:#424d7d;stroke-width:9.5}.ha-swoosh .l{stroke-width:2.4;opacity:.55}
+.ha-swoosh path{fill:none;stroke:url(#ha-gg);stroke-linecap:round;stroke-width:6;stroke-dasharray:1;stroke-dashoffset:0}
+.ha-swoosh .l{stroke:#fde58f;stroke-width:2.4;opacity:.7}
 .header-animation .ha .ha-printer{left:calc((var(--PR) - 44.2)*100%/var(--W));top:36%;width:calc(88.4%/var(--W)*100);aspect-ratio:1.04;transform:translateX(calc((var(--PE) - var(--PR))*100cqw/var(--W)))}
 .ha-printer svg{display:block;width:100%;height:100%;overflow:visible}
 .ha-pr rect{stroke:#071426;stroke-width:3;stroke-linejoin:round}
+.ha-smoke circle{fill:#f2f5f9;stroke:#23335c;stroke-width:2}
 .ha-pr,.ha-page,.ha-thumb,.ha-anger,.ha-smoke circle{transform-box:fill-box;transform-origin:50% 50%}
 .ha-pr{transform-origin:50% 100%}.ha-page{transform-origin:50% 0}
 .ha-led{fill:#00a3ed;stroke:#071426;stroke-width:2}
@@ -382,11 +383,11 @@ button:disabled{opacity:.65;cursor:wait}
 .ha-printer.is-broken .ha-smoke circle{opacity:0;animation:ha-puff 1.5s ease-out infinite}
 .ha-printer.is-broken .ha-smoke circle:nth-child(2){animation-delay:.5s}.ha-printer.is-broken .ha-smoke circle:nth-child(3){animation-delay:1s}
 @keyframes ha-vein{from{transform:scale(1.05)}to{transform:scale(1.5)}}
-@keyframes ha-puff{0%{opacity:0;transform:translate(0,6px) scale(.6)}20%{opacity:.85}100%{opacity:0;transform:translate(-10px,-30px) scale(1.9)}}
-.header-animation .ha .ha-sparks{inset:0;pointer-events:none}
-.header-animation .ha .ha-spark{position:absolute;display:block;left:calc(var(--x)*100%/var(--W));top:calc(var(--y)*.5%);width:calc(var(--s)*100cqw/var(--W));aspect-ratio:1;transform:translate(-50%,-50%);color:#00a3ed}
-.header-animation .ha .ha-spark--l{color:#7fd0f7}
-.ha-spark>svg{display:block;width:100%;height:100%;overflow:visible}
+@keyframes ha-puff{0%{opacity:0;transform:translate(0,6px) scale(.6)}20%{opacity:.95}100%{opacity:0;transform:translate(10px,-30px) scale(1.9)}}
+.header-animation .ha .ha-twinkle{position:absolute;right:-.5em;top:-.5em;width:.75em;height:.75em;pointer-events:none}
+.header-animation .ha .ha-twinkle svg{position:absolute;left:0;top:0;width:100%;height:100%;overflow:visible;transform:scale(0);fill:#f7c948;stroke:#c8901a;stroke-width:1.6;stroke-linejoin:round}
+.header-animation .ha .ha-smog{inset:0;width:100%;height:100%;overflow:visible;pointer-events:none}
+.ha-smog .k{fill:#23335c}.ha-smog .f{fill:#f2f5f9}.ha-smog .s{fill:#dfe6ef}
 .header-animation .ha .ha-debris{inset:0;width:100%;height:100%;overflow:visible;pointer-events:none}
 .ha-debris path{stroke:#071426;stroke-width:1.3;stroke-linejoin:round}
 .header-animation .ha .ha-rope{inset:0;width:100%;height:100%;overflow:visible;pointer-events:none}
@@ -396,7 +397,7 @@ button:disabled{opacity:.65;cursor:wait}
  .header-animation .ha{--W:540;--PR:212;--PE:470;aspect-ratio:2.7}
  .header-animation .ha .ha-slogan{left:calc(258%/var(--W)*100);top:9%;font-size:calc(29*100cqw/var(--W))}
  .header-animation .ha .ha-line{display:block}
- .header-animation .ha .ha-spark{left:calc(var(--mx)*100%/var(--W));top:calc(var(--my)*.5%);width:calc(var(--ms)*100cqw/var(--W))}
+ .header-animation .ha .ha-twinkle{right:.1em;top:-.62em}
  .header-animation .ha .ha-tamed{font-size:1.24em;margin-top:.08em}
  .header-animation .ha .ha-printer{left:calc((var(--PR) - 37.4)*100%/var(--W));top:36%;width:calc(74.8%/var(--W)*100)}
 }
