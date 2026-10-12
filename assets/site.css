@@ -480,3 +480,25 @@ button:disabled{opacity:.65;cursor:wait}
 .scam-hero .actions .btn[href^="tel:"]{padding-left:30px;padding-right:30px}
 @media(max-width:620px){.scam-hero .actions{grid-template-columns:minmax(0,.75fr) minmax(0,1.3fr)}.scam-hero .actions .btn[href^="tel:"]{padding-left:22px;padding-right:22px}}
 @media(max-width:480px){.review-links--card{left:10px;gap:5px}.review-links--card .btn{padding:6px 13px;font-size:10.5px}.review-links--card .btn>span[aria-hidden]{display:none}}
+
+/* Site polish 2: Google buttons share the controls' bottom edge; tighter card bottom. */
+.review-carousel .review-controls{bottom:16px;right:16px}
+.review-links--card{bottom:16px!important;left:16px}
+.review-carousel .review-card{padding-bottom:84px}
+@media(max-width:900px){
+ .review-carousel .review-controls{bottom:12px;right:12px}
+ .review-links--card{bottom:46px!important;left:12px}
+ .review-carousel .review-card{padding-bottom:108px}
+}
+@media(max-width:480px){.review-links--card{left:10px}.review-carousel .review-card{padding-bottom:104px}}
+
+/* Site polish 2 r2: clamp long carousel quotes with a Read more toggle. */
+.review-carousel.is-enhanced .review-card blockquote p{display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:3;line-clamp:3;overflow:hidden}
+.review-carousel.is-enhanced .review-card.is-expanded blockquote p{display:block;-webkit-line-clamp:unset;line-clamp:none;overflow:visible}
+.review-carousel .review-card blockquote{margin-bottom:8px}
+.review-more{font:inherit;font-size:14px;font-weight:700;color:#0074aa;background:none;border:0;padding:4px 0;margin:0 0 14px;cursor:pointer;text-decoration:underline;text-underline-offset:3px;min-height:24px}
+.review-more[hidden]{display:none}
+.review-more:focus-visible{outline:3px solid #0074aa;outline-offset:3px}
+@media(max-width:620px){.review-carousel.is-enhanced .review-card blockquote p{-webkit-line-clamp:4;line-clamp:4}}
+.review-carousel .review-card blockquote{margin:16px 0 2px}
+.review-more{padding:2px 0;margin:0 0 8px;font-size:13.5px}

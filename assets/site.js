@@ -46,13 +46,22 @@ if(form){
 const carousel=document.querySelector('.review-carousel');
 if(carousel){
  const cards=Array.from(carousel.querySelectorAll('.review-card')),controls=carousel.querySelector('.review-controls'),count=carousel.querySelector('.review-count'),pause=carousel.querySelector('[data-review="pause"]');
- let index=0,paused=matchMedia('(prefers-reduced-motion: reduce)').matches,hovered=false,timer;
+ let expanded=false,index=0,paused=matchMedia('(prefers-reduced-motion: reduce)').matches,hovered=false,timer;
  carousel.classList.add('is-enhanced');controls.hidden=false;
- function show(n,automatic=false){index=(n+cards.length)%cards.length;cards.forEach((c,i)=>c.hidden=i!==index);count.setAttribute('aria-live',automatic?'off':'polite');count.textContent=`${index+1} / ${cards.length}`}
- function schedule(){clearInterval(timer);pause.textContent=paused?'Play rotation':'Pause rotation';if(!paused&&!hovered&&!document.hidden)timer=setInterval(()=>show(index+1,true),10000)}
+ function show(n,automatic=false){collapseAll();index=(n+cards.length)%cards.length;cards.forEach((c,i)=>c.hidden=i!==index);count.setAttribute('aria-live',automatic?'off':'polite');count.textContent=`${index+1} / ${cards.length}`}
+ function schedule(){clearInterval(timer);pause.textContent=paused?'Play rotation':'Pause rotation';if(!paused&&!expanded&&!hovered&&!document.hidden)timer=setInterval(()=>show(index+1,true),10000)}
  controls.addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;const action=b.dataset.review;if(action==='pause')paused=!paused;else{paused=true;show(index+(action==='next'?1:-1))}schedule()});
  carousel.addEventListener('mouseenter',()=>{hovered=true;schedule()});carousel.addEventListener('mouseleave',()=>{hovered=false;schedule()});
- carousel.addEventListener('focusin',()=>{paused=true;schedule()});document.addEventListener('visibilitychange',schedule);show(0);schedule();
+ carousel.addEventListener('focusin',()=>{paused=true;schedule()});
+ /* Read more: quotes are clamped by CSS; the toggle appears only when a quote actually overflows. */
+ const toggles=cards.map((c,i)=>{const q=c.querySelector('blockquote');if(!q)return null;q.id=q.id||'review-quote-'+(i+1);
+  const b=document.createElement('button');b.type='button';b.className='review-more';b.setAttribute('aria-expanded','false');b.setAttribute('aria-controls',q.id);b.textContent='Read more';b.hidden=true;
+  b.addEventListener('click',()=>{const open=!c.classList.contains('is-expanded');c.classList.toggle('is-expanded',open);b.setAttribute('aria-expanded',String(open));b.textContent=open?'Show less':'Read more';expanded=open;if(open)paused=true;schedule()});
+  q.after(b);return b});
+ function collapseAll(){cards.forEach((c,i)=>{if(c.classList.contains('is-expanded')){c.classList.remove('is-expanded');const b=toggles[i];if(b){b.setAttribute('aria-expanded','false');b.textContent='Read more'}}});expanded=false}
+ function measure(){cards.forEach((c,i)=>{const b=toggles[i];if(!b||c.classList.contains('is-expanded'))return;const p=c.querySelector('blockquote p');b.hidden=!(p&&p.scrollHeight>p.clientHeight+2)})}
+ measure();addEventListener('resize',measure);if(document.fonts&&document.fonts.ready)document.fonts.ready.then(measure);
+ document.addEventListener('visibilitychange',schedule);show(0);schedule();
 }
 if(!preview&&(location.pathname.endsWith('/')||location.pathname.endsWith('index.html'))){const old={services:'/services',kits:'/digital-kits',rates:'/rates',about:'/about',booking:'/contact'};const dest=old[location.hash.slice(1)];if(dest)location.replace(dest)}
 if(!preview&&(location.hostname==='joshthetechtamer.com'||location.hostname==='www.joshthetechtamer.com')){

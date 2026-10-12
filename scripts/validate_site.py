@@ -30,7 +30,7 @@ kit=(ROOT/'digital-kits.html').read_text();base=(ROOT/'templates/digital-kits.ht
 assert kit.count('class="product"')==6
 assert re.findall(r'https://joshthetechtamer.gumroad.com/l/[^" ]+',kit)==re.findall(r'https://joshthetechtamer.gumroad.com/l/[^" ]+',base)
 assert 'class="review-carousel"' in (ROOT/'index.html').read_text()
-assert [r['rating'] for r in json.loads((ROOT/'data/reviews.json').read_text())].count(5)==3
+assert [r['rating'] for r in json.loads((ROOT/'data/reviews.json').read_text())].count(5)==4
 assert 'backups' in (ROOT/'_config.yml').read_text()
 # Website Package page: linked from Rates and For Business; unapproved example sites stay hidden.
 pkg=(ROOT/'website-package.html').read_text();cfg=json.loads((ROOT/'data/site-config.json').read_text())
@@ -175,14 +175,14 @@ for n in ['services.html','business.html']:assert 'residential' in (ROOT/n).read
 assert '<svg class="area-svg"' in (ROOT/'service-area.html').read_text() and 'See me on Google Maps' in (ROOT/'service-area.html').read_text()
 # Review carousel: every entry in data/reviews.json renders verbatim; stars only for the two Google 5-star reviews; Facebook items carry no rating.
 revs=json.loads((ROOT/'data/reviews.json').read_text())
-assert idx.count('class="review-card"')==len(revs) and idx.count('class="review-stars"')==3 and f'1 / {len(revs)}' in idx
-assert len(revs)==14 and '1 / 14' in idx,'14 carousel cards (Barb Google review added Oct 11)'
+assert idx.count('class="review-card"')==len(revs) and idx.count('class="review-stars"')==4 and f'1 / {len(revs)}' in idx
+assert len(revs)==15 and '1 / 15' in idx,'15 carousel cards (Brandie Google website review added Oct 12)'
 assert revs[2]=={'name':'Barb','source':'Google review','quote':'Josh is very knowledgeable and friendly. He helped me 2 times in home and a few times on line. Rates are very reasonable. If you need help contact him.','rating':5},'Barb Google card is card 3'
 assert [x['name'] for x in revs].count('Barbara M.')==3,'her Facebook cards stay Barbara M.'
 assert {'name':'Barbara M.','source':'Facebook comment','quote':'JOSH is very helpful explains things so you understand.','rating':None} in revs
 for r in revs:
  assert escape(r['quote'],quote=True) in idx,('review not verbatim',r['name'])
- assert (r['rating'] is None)==r['source'].startswith('Facebook'),r
+ assert (r['rating'] is None) if r['source'].startswith('Facebook') else (r['rating'] in (5,None)),r  # Google cards: stars only when a 5-star rating is confirmed (Brandie confirmed 5 stars Oct 12)
 # Never publish the street address (service-area business).
 for n in pages+['404.html']:assert 'Cedar' not in (ROOT/n).read_text() and 'streetAddress' not in (ROOT/n).read_text(),n
 
@@ -301,7 +301,7 @@ for f in sorted(ROOT.glob('*.html')):
  assert '<canvas' not in t,('old canvas header',f.name)
  assert hd.count('<a href="/" class="brand brand-lockup header-animation" aria-label="The Tech Tamer home — House calls. Office visits. Tech tamed.">'+STAGE+'</a>')==1,('header stage',f.name)
  assert t.count('/assets/header-animation.js?v=20261012-ha13" defer')==1,('header script',f.name)
- assert 'assets/site.css?v=20261012-polish3b' in t,f.name
+ assert 'assets/site.css?v=20261012-polish5' in t,f.name
 # the slogan is real text, hidden from screen readers (the link's aria-label reads it once); printer is decorative
 assert '<span class="ha-slogan" aria-hidden="true">' in STAGE and '<span class="ha-printer is-grumpy" aria-hidden="true">' in STAGE and 'alt="The Tech Tamer"' in STAGE
 assert 'House calls.' in STAGE and 'Office visits.' in STAGE and 'TECH</span> <span class="ha-gold">TAMED.' in STAGE and '#f7c948' in ha_css.lower()
