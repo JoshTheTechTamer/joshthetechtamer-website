@@ -7,7 +7,7 @@ const ha=document.querySelector('.header-animation .ha');if(!ha)return;
 const RM=matchMedia('(prefers-reduced-motion: reduce)');if(RM.matches)return;
 const SMALL=matchMedia('(max-width:620px)'),slogan=ha.querySelector('.ha-slogan'),printer=ha.querySelector('.ha-printer'),
  pr=printer.querySelector('.ha-pr'),page=printer.querySelector('.ha-page'),thumb=printer.querySelector('.ha-thumb'),led=printer.querySelector('.ha-led'),swoosh=[...slogan.querySelectorAll('.ha-swoosh path')],gold=slogan.querySelector('.ha-gold'),stars=[...slogan.querySelectorAll('.ha-twinkle svg')];
-const V='?v=20261012-ha11',NS='http://www.w3.org/2000/svg',PI=Math.PI;
+const V='?v=20261012-ha13',NS='http://www.w3.org/2000/svg',PI=Math.PI;
 const clamp=x=>x<0?0:x>1?1:x,ease=x=>(x=clamp(x),x*x*(3-2*x)),mix=(a,b,t)=>a+(b-a)*t,seg=(t,a,b)=>ease((t-a)/(b-a));
 const back=x=>{x=clamp(x);const s=1.9;return 1+(s+1)*Math.pow(x-1,3)+s*Math.pow(x-1,2)};   // ease-out with overshoot
 const trk=(k,t)=>{if(t<=k[0][0])return k[0][1];for(let i=1;i<k.length;i++)if(t<=k[i][0])return mix(k[i-1][1],k[i][1],ease((t-k[i-1][0])/(k[i][0]-k[i-1][0])));return k[k.length-1][1]};
@@ -51,11 +51,17 @@ function reset(){ // back to the markup's own state = the loop's first frame
  slogan.style.removeProperty('--rv');printer.className='ha-printer is-grumpy';ropeB.style.display=ropeF.style.display='none';
  ha.classList.remove('is-live');rig.hidden=top.hidden=true;state='rest'}
 // ---- mascot pose (one rigid cut-out; small moves so the medallion never shows a seam) ----
-const sm=x=>x*x*x*(x*(6*x-15)+10);   // smoothstep: the whirl winds up and settles with weight
+// ONE continuous counter-clockwise whirl angle (radians, decreasing = CCW on screen), C1-smooth across the lift,
+// both revolutions, the wind-up and the throw: heavy ease-in from rest, full speed at the end of rev 2, then it bleeds
+// off through the wind-up and the throw carries the last bit into the knot's landing angle (PI - 6PI == PI).
+const W0=.75,W1=2.45,W2=2.75,REV=4*PI,V0=REV/(W1-W0),AW=-PI/2-REV-V0*(W2-W1)/2;
+function S(t){if(t<=W0)return 0;if(t<W1){const x=(t-W0)/(W1-W0);return -REV*x*x*(2-x)}
+ if(t<W2){const s=t-W1,d=W2-W1;return -REV-V0*(s-s*s/(2*d))}return AW+PI/2}
+function knot(t){const a=-PI/2+S(t);return t<W2?a:mix(AW,PI-6*PI,seg(t,W2,3.4))}
 function pose(t){
- const spin=-4*PI*sm(clamp((t-1.05)/1.4));
+ const spin=S(t);
  let th=trk([[LIVE0,0],[1,-2],[1.05,-1],[2.45,-1],[2.75,-4.5],[3.2,4.5],[3.8,2],[4.15,-3.6],[6,-3],[6.4,-1],[7.4,0],[7.6,-1.6],[8.4,-1.2],[8.65,0]],t);
- if(t>1.05&&t<2.45)th+=1.4*Math.sin(spin-.5);
+ if(t>W0&&t<W1)th+=1.4*Math.sin(spin)*Math.sin(PI*(t-W0)/(W1-W0));   // sway starts and ends at zero (no snap)
  if(t>4.2&&t<6)th+=.6*Math.sin((t-4.2)*15)*(1-seg(t,5.6,6));
  if(t>7.5&&t<8.3)th+=.5*Math.sin((t-7.5)*20);
  const dx=trk([[LIVE0,0],[2.45,0],[2.75,-3],[3.2,3.5],[3.8,1.5],[4.15,-2],[6,-1.6],[6.6,0]],t),dy=trk([[LIVE0,0],[1,-2],[1.1,-3.5],[2.45,-3.5],[2.75,-4.5],[3.3,-1.5],[6,-1],[8.4,-1],[8.65,0]],t);
@@ -82,19 +88,19 @@ const revEdge=(t,px)=>{const OPEN=L.TX-2*FE,ed=px+49*L.S+FE*.7;return t<4.25?1e4
 // ---- the lasso loop: centre, radii, tilt, the knot angle; slack (0 taut .. 1 slack) drives the rope's droop ----
 const T0=()=>[lp(THUMB)[0]-10,25];
 function twirl(t,spin){const T=T0(),w=Math.sin(t*4.2),w2=Math.sin(t*5.6+1),lg=spin+.75;
- return{c:[T[0]+9*Math.cos(lg),T[1]+3.5*Math.sin(lg)],rx:43*(1+.1*w),ry:10+4*Math.sin(lg)+1.8*w2,rot:6*Math.sin(lg)+2.5*w2,a:PI/2+spin-.35,sl:.35}}
+ return{c:[T[0]+9*Math.cos(lg),T[1]+3.5*Math.sin(lg)],rx:43*(1+.1*w),ry:10+4*Math.sin(lg)+1.8*w2,rot:6*Math.sin(lg)+2.5*w2,a:knot(t),sl:.35}}
 const WIND=()=>{const T=T0();return{c:[T[0]-38,6],rx:46,ry:8,rot:-16}};
 function loop(t,P,pp){
  const coilC=P.mv(COIL),hw=49*L.S;let g;
- if(t<1.05){const q=seg(t,.75,1.05),e=twirl(1.05,0);g={c:[mix(coilC[0],e.c[0],q),mix(coilC[1],e.c[1],q)-10*Math.sin(q*PI)],rx:mix(CR[0],e.rx,q),ry:mix(CR[1],e.ry,q),rot:mix(0,e.rot,q),a:mix(-PI/2,PI/2,q),sl:.7}}
+ if(t<1.05){const q=seg(t,.75,1.05),e=twirl(t,S(t));g={c:[mix(coilC[0],e.c[0],q),mix(coilC[1],e.c[1],q)-10*Math.sin(q*PI)],rx:mix(CR[0],e.rx,q),ry:mix(CR[1],e.ry,q),rot:mix(0,e.rot,q),a:knot(t),sl:.7}}
  else if(t<2.45)g=twirl(t,P.spin);
  else if(t<2.75){ // wind-up: the loop whips back up over his hat for a beat
-  const q=seg(t,2.45,2.66),e=twirl(2.45,-4*PI),W=WIND(),h=t>2.66?Math.sin((t-2.66)*30)*(1-(t-2.66)/.09):0;
-  g={c:[mix(e.c[0],W.c[0],q),mix(e.c[1],W.c[1],q)],rx:mix(e.rx,W.rx,q)*(1+.05*h),ry:mix(e.ry,W.ry,q)*(1-.15*h),rot:mix(e.rot,W.rot,q),a:mix(PI/2-.35,PI*.85,q),sl:mix(.2,.3,q)}}
+  const q=seg(t,2.45,2.66),e=twirl(2.45,S(2.45)),W=WIND(),h=t>2.66?Math.sin((t-2.66)*30)*(1-(t-2.66)/.09):0;
+  g={c:[mix(e.c[0],W.c[0],q),mix(e.c[1],W.c[1],q)],rx:mix(e.rx,W.rx,q)*(1+.05*h),ry:mix(e.ry,W.ry,q)*(1-.15*h),rot:mix(e.rot,W.rot,q),a:knot(t),sl:mix(.2,.3,q)}}
  else if(t<3.4){ // high arc; the loop squashes, stretches and wobbles, lagging a beat behind his arm
   const q=seg(t,2.75,3.4),e=WIND(),A=e.c,B=[L.PE+10,L.PY-60],C=[(A[0]+B[0])/2,-12],u=1-q;
   const c=[u*u*A[0]+2*u*q*C[0]+q*q*B[0],u*u*A[1]+2*u*q*C[1]+q*q*B[1]],w=Math.sin((t-2.75)*17)*(1-q*.5);
-  g={c,rx:mix(e.rx,66,q)*(1+.16*w),ry:mix(e.ry,11,q)*(1-.3*w),rot:mix(e.rot,-6,q)+6*Math.sin((t-2.75)*11),a:mix(PI*.85,PI,q),sl:mix(.6,.35,q)}}
+  g={c,rx:mix(e.rx,66,q)*(1+.16*w),ry:mix(e.ry,11,q)*(1-.3*w),rot:mix(e.rot,-6,q)+6*Math.sin((t-2.75)*11),a:knot(t),sl:mix(.6,.35,q)}}
  else if(t<3.8){const q=(t-3.4)/.4;g={c:[mix(L.PE+10,L.PE,ease(q)),mix(L.PY-60,L.PY+6,back(q))],rx:mix(66,60,ease(q)),ry:mix(11,22,ease(q)),rot:mix(-6,0,ease(q)),a:PI,sl:.55,wrap:q>.45}}
  else if(t<6.3){const q=clamp((t-3.8)/.45),b=back(q);g={c:[pp.px,L.PY+6+pp.py],rx:mix(60,hw+1.5,b),ry:mix(22,11,b),rot:0,a:PI,sl:mix(.5,.08,seg(t,3.8,4.2)),wrap:true}}
  else if(t<6.85){const q=seg(t,6.3,6.85),f=q*q;g={c:[pp.px,mix(L.PY+6,L.FL,f)],rx:mix(hw+1.5,hw+12,ease(q*1.6)),ry:mix(11,3.4,f),rot:0,a:PI,sl:mix(.08,.9,q),wrap:q<.55,floor:q>.6}}
@@ -170,8 +176,9 @@ function render(t){
  else{setD(ropeF,lead+arc(0,o)+arc(0,j));setD(ropeB,'')}
 }
 function frame(now){raf=0;if(!run)return;clock+=Math.min(now-last,100);last=now;let t=clock/1000;if(t>=END){clock-=END*1000;t-=END}render(t);raf=requestAnimationFrame(frame)}
-function go(){if(frozen||run||!ready||document.hidden||!vis)return;run=true;layout();last=performance.now();raf=requestAnimationFrame(frame)}
+function go(){if(window.__haPaused||frozen||run||!ready||document.hidden||!vis)return;run=true;layout();last=performance.now();raf=requestAnimationFrame(frame)}
 function stop(){run=false;if(raf)cancelAnimationFrame(raf);raf=0}
+window.__haCtl={p:stop,f:go};   // site.js Pause/Play control
 document.addEventListener('visibilitychange',()=>document.hidden?stop():go());
 addEventListener('resize',()=>{if(run)layout()});
 RM.addEventListener&&RM.addEventListener('change',()=>{if(RM.matches){stop();reset()}else go()});

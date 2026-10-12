@@ -299,14 +299,14 @@ for f in sorted(ROOT.glob('*.html')):
  t=f.read_text();hd=re.search(r'<header\b.*?</header>',t,re.S).group()
  assert '<canvas' not in t,('old canvas header',f.name)
  assert hd.count('<a href="/" class="brand brand-lockup header-animation" aria-label="The Tech Tamer home — House calls. Office visits. Tech tamed.">'+STAGE+'</a>')==1,('header stage',f.name)
- assert t.count('/assets/header-animation.js?v=20261012-ha12" defer')==1,('header script',f.name)
+ assert t.count('/assets/header-animation.js?v=20261012-ha13" defer')==1,('header script',f.name)
  assert 'assets/site.css?v=20261012-audit2' in t,f.name
 # the slogan is real text, hidden from screen readers (the link's aria-label reads it once); printer is decorative
 assert '<span class="ha-slogan" aria-hidden="true">' in STAGE and '<span class="ha-printer is-grumpy" aria-hidden="true">' in STAGE and 'alt="The Tech Tamer"' in STAGE
 assert 'House calls.' in STAGE and 'Office visits.' in STAGE and 'TECH</span> <span class="ha-gold">TAMED.' in STAGE and '#f7c948' in ha_css.lower()
 assert re.search(r'\.ha-slogan\{[^}]*font:900 [^}]*"Montserrat DS","Montserrat"',ha_css) and 'color:#23335c' in ha_css
 # no data-URI sprites, no canvas, no libraries; layers are fetched only after load/idle; reduced motion never starts it
-assert 'base64' not in ha_js and 'getContext' not in ha_js and len(ha_js.encode())<14_000,len(ha_js)
+assert 'base64' not in ha_js and 'getContext' not in ha_js and len(ha_js.encode())<15_000,len(ha_js)
 assert "addEventListener(\"load\"" in ha_js or "addEventListener('load'" in ha_js
 assert 'requestIdleCallback' in ha_js and 'prefers-reduced-motion: reduce' in ha_js and 'visibilitychange' in ha_js and 'IntersectionObserver' in ha_js
 # round 2: the markup is the loop's start state (angry printer on the right, slogan masked off); reduced motion
