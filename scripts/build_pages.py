@@ -262,7 +262,7 @@ def redesign(s,name):
  s=re.sub(r'<div class="grid3">(?=<(?:article|div) class="step">)','<div class="grid3 ds-steps" data-ds-steps>',s)
  return s
 HEADER_STAGE=(ROOT/'source-art/header/stage.html').read_text().strip()
-HEADER_V='20261011-ha1'
+HEADER_V='20261011-ha2'
 for file in (ROOT/'templates').glob('*.html'):
  s=apply_header_logo(file.read_text());name=file.name
  s=footer(s)

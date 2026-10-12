@@ -5,7 +5,7 @@ const ha=document.querySelector('.header-animation .ha');if(!ha)return;
 const link=ha.closest('a'),still=ha.querySelector('.ha-still'),slogan=ha.querySelector('.ha-slogan'),printer=ha.querySelector('.ha-printer'),page=printer.querySelector('.ha-page'),swoosh=[...slogan.querySelectorAll('.ha-swoosh path')];
 const RM=matchMedia('(prefers-reduced-motion: reduce)'),SMALL=matchMedia('(max-width:620px)');
 if(RM.matches)return;                       // reduced motion: the still banner already is the final state
-const V='?v=20261011-ha1',NS='http://www.w3.org/2000/svg';
+const V='?v=20261011-ha2',NS='http://www.w3.org/2000/svg';
 const clamp=x=>x<0?0:x>1?1:x,ease=x=>(x=clamp(x),x*x*(3-2*x)),mix=(a,b,t)=>a+(b-a)*t,PI=Math.PI;
 const seg=(t,a,b)=>ease((t-a)/(b-a));
 // keyframe track: [[t,v],...] eased between keys
@@ -17,7 +17,7 @@ const U=166/1353,LX=8,LY=24,PIV=[690,910],HAND=[1150,742],COIL=[1182,881],CR=[14
 const lp=(x,y)=>[LX+x*U,LY+y*U];
 let rig,body,coil,ropeB,ropeF,ready=false,playing=false,t0=0,pausedAt=0,raf=0,lastEnd=-1e9,L,k;
 function el(tag,cls,attrs){const e=document.createElement(tag);if(cls)e.className=cls;if(attrs)for(const a in attrs)e.setAttribute(a,attrs[a]);return e}
-function ropeSvg(cls){const s=document.createElementNS(NS,'svg');s.setAttribute('class','ha-rope '+cls);s.setAttribute('aria-hidden','true');s.setAttribute('focusable','false');s.hidden=true;
+function ropeSvg(cls){const s=document.createElementNS(NS,'svg');s.setAttribute('class','ha-rope '+cls);s.setAttribute('aria-hidden','true');s.setAttribute('focusable','false');s.style.display='none';
  const p=['k','g','t'].map(c=>{const q=document.createElementNS(NS,'path');q.setAttribute('class',c);s.appendChild(q);return q});s._p=p;return s}
 function build(){
  rig=el('span','ha-rig');rig.hidden=true;rig.setAttribute('aria-hidden','true');
@@ -56,7 +56,7 @@ function render(t){
  const edge=px+49*L.S;slogan.style.clipPath='inset(-30% -10% -40% '+Math.max(0,(edge-L.TX)*k).toFixed(1)+'px)';
  const dr=t<.3?0:1-seg(t,5.55,6.25);for(const p of swoosh){p.style.strokeDashoffset=dr.toFixed(3);p.style.visibility=dr>.995?'hidden':''}
  // ---- lasso: the drawn coil hands over to a vector rope while he spins it, and back at the end ----
- const live=t>=.9&&t<7.1;coil.style.visibility=live?'hidden':'';ropeB.hidden=ropeF.hidden=!live;
+ const live=t>=.9&&t<7.1;coil.style.visibility=live?'hidden':'';ropeB.style.display=ropeF.style.display=live?'':'none';
  if(live){
   const pc=[px,L.PY+8+py];let c,rx,ry,a,sag=0;
   const top=[hand[0]+14,hand[1]-27];
@@ -79,7 +79,7 @@ function render(t){
   setD(ropeF,lead+arc(0));setD(ropeB,'M'+f1(j[0])+' '+f1(j[1])+arc(1));
  }
 }
-function reset(){body.style.transform='';printer.style.transform='';printer.classList.remove('is-grumpy');page.style.transform='';page.style.visibility='';slogan.style.clipPath='';for(const p of swoosh){p.style.strokeDashoffset='';p.style.visibility=''}coil.style.visibility='';ropeB.hidden=ropeF.hidden=true}
+function reset(){body.style.transform='';printer.style.transform='';printer.classList.remove('is-grumpy');page.style.transform='';page.style.visibility='';slogan.style.clipPath='';for(const p of swoosh){p.style.strokeDashoffset='';p.style.visibility=''}coil.style.visibility='';ropeB.style.display=ropeF.style.display='none'}
 function finish(){reset();ha.classList.remove('is-live');rig.hidden=true;playing=false;lastEnd=performance.now();ha.dispatchEvent(new Event('ha:end'))}
 function play(){if(playing||!ready||document.hidden)return;playing=true;layout();rig.hidden=false;t0=performance.now();raf=requestAnimationFrame(frame)}
 document.addEventListener('visibilitychange',()=>{if(!playing)return;if(document.hidden){cancelAnimationFrame(raf);pausedAt=performance.now()}else{t0+=performance.now()-pausedAt;raf=requestAnimationFrame(frame)}});
