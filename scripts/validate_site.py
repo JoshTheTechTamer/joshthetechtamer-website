@@ -274,7 +274,7 @@ for bad in ['guarantee','recover your money','get your money back','money back',
 # timelines: twisted rope above the headings (JS-built, decorative), drawn in on view
 assert "rope.className='ds-rope'" in djs and "setAttribute('aria-hidden','true')" in djs and "url(/assets/design/rope-h.svg)" in dcss and "url(/assets/design/rope-v.svg)" in dcss
 assert (ROOT/'assets/design/rope-h.svg').is_file() and (ROOT/'assets/design/rope-v.svg').is_file()
-assert '.ds-anim .ds-steps.is-drawn .ds-rope{clip-path:inset(0 0 0 0' in dcss and 'url(/assets/design/rope-v.svg)' in (ROOT/'assets/website-package.css').read_text()
+assert '.ds-steps.ds-scroll .ds-rope{clip-path:inset(0 calc((1 - var(--fill,0))*100%)' in dcss and '.ds-steps:not(.has-rope)::before' in dcss and 'offsetTop' in djs and 'url(/assets/design/rope-v.svg)' in (ROOT/'assets/website-package.css').read_text()
 # shared gold icon set: contact methods + rate cards get icons
 icons=json.loads((ROOT/'data/icons.json').read_text());assert {'devices','phone','map-star','globe','cloud-check','pencil'}<=set(icons)
 assert pages['contact.html'].count('<div class="contact-option has-icon"><div class="icon" aria-hidden="true">')==4
@@ -288,5 +288,55 @@ if '--production' in sys.argv:
  assert 'challenges.cloudflare.com/turnstile/v0/api.js' in contact and 'id="request-turnstile"' in contact
  assert 'Send request' in contact and "action:'lead'" in script and 'encodeURIComponent(body)' not in script
  assert (ROOT/'functions/api/lead.js').is_file()
+
+# ---- Header lasso animation rebuild (Oct 11, 2026): still logo first, layered rig after load ----
+ha_js=(ROOT/'assets/header-animation.js').read_text();ha_css=(ROOT/'assets/site.css').read_text()
+STAGE=(ROOT/'source-art/header/stage.html').read_text().strip()
+for f in sorted(ROOT.glob('*.html')):
+ t=f.read_text();hd=re.search(r'<header\b.*?</header>',t,re.S).group()
+ assert '<canvas' not in t,('old canvas header',f.name)
+ assert hd.count('<a href="/" class="brand brand-lockup header-animation" aria-label="The Tech Tamer home — House calls. Office visits. Tech tamed.">'+STAGE+'</a>')==1,('header stage',f.name)
+ assert t.count('/assets/header-animation.js?v=20261012-ha11" defer')==1,('header script',f.name)
+ assert 'assets/site.css?v=20261011-headeranim6' in t,f.name
+# the slogan is real text, hidden from screen readers (the link's aria-label reads it once); printer is decorative
+assert '<span class="ha-slogan" aria-hidden="true">' in STAGE and '<span class="ha-printer is-grumpy" aria-hidden="true">' in STAGE and 'alt="The Tech Tamer"' in STAGE
+assert 'House calls.' in STAGE and 'Office visits.' in STAGE and 'TECH</span> <span class="ha-gold">TAMED.' in STAGE and '#f7c948' in ha_css.lower()
+assert re.search(r'\.ha-slogan\{[^}]*font:900 [^}]*"Montserrat DS","Montserrat"',ha_css) and 'color:#23335c' in ha_css
+# no data-URI sprites, no canvas, no libraries; layers are fetched only after load/idle; reduced motion never starts it
+assert 'base64' not in ha_js and 'getContext' not in ha_js and len(ha_js.encode())<14_000,len(ha_js)
+assert "addEventListener(\"load\"" in ha_js or "addEventListener('load'" in ha_js
+assert 'requestIdleCallback' in ha_js and 'prefers-reduced-motion: reduce' in ha_js and 'visibilitychange' in ha_js and 'IntersectionObserver' in ha_js
+# round 2: the markup is the loop's start state (angry printer on the right, slogan masked off); reduced motion
+# and no-JS get the final state with the slogan; feathered mask reveal; gold 'tamed.' underlined
+assert 'class="ha-printer is-grumpy"' in STAGE and '<noscript><style>' in STAGE and '<span class="ha-tech">TECH</span> <span class="ha-gold">TAMED.<svg class="ha-swoosh"' in STAGE
+assert 'mask-image:linear-gradient(90deg,transparent calc(var(--rv) - var(--fe)),#000 calc(var(--rv) + var(--fe)))' in ha_css and '--rv:9999px' in ha_css
+assert re.search(r'@media\(prefers-reduced-motion:reduce\)\{\n \.header-animation \.ha\{--rv:-200px\}',ha_css)
+assert 'ha-anger' in STAGE and 'ha-smoke' in STAGE and 'ha-thumb' in STAGE and '.ha-gold{' in ha_css and '#c8901a' in ha_css
+LAYERS=['circle','body','ringf','coil','fist','word']
+# round 3: slate-outlined gold 'tamed.' that swells after its underline; wider feather; blue sparkles; broken bits
+# round 4: no blue sparkles; gradient-gold 'tamed.' (no outline) with a gold twinkle; same feather width; smokescreen
+assert 'ha-spark' not in STAGE and 'ha-spark' not in ha_css and 'text-stroke' not in ha_css and '--fe:calc(36*100cqw/var(--W))' in ha_css
+assert '#f7c948' in ha_css and '#c8901a' in ha_css and 'background-clip:text' in ha_css and STAGE.count('<span class="ha-twinkle">')==1 and 'url(#ha-gg)' in ha_css
+assert "'ha-smog'" in ha_js or '"ha-smog"' in ha_js
+# round 5: irregular puffs (no perfect circles) above the printer; one chunk per hop landing; smoke only during the drag
+_sm=re.search(r'<g class="ha-smoke">(.*?)</g>',STAGE).group(1)
+assert '<circle' not in _sm and _sm.count('<path')==3 and '.ha-smoke path{' in ha_css
+ha_src=(ROOT/'source-art/header/header-animation.src.js').read_text()
+assert 'const SH=HOPS.map(' in ha_src and 'PAPER' in ha_src and '#fbf8ef' in ha_src and 'ESC0+.05' not in ha_src
+assert "'ha-debris'" in ha_js or '"ha-debris"' in ha_js
+for n in LAYERS:assert f'"/assets/header/"' in ha_js or '/assets/header/' in ha_js
+from PIL import Image
+sizes={n:(ROOT/f'assets/header/{n}.png').stat().st_size for n in LAYERS+['still']}
+assert sizes['still']<30_000 and sum(sizes[n] for n in LAYERS)+len(ha_js.encode())<60_000,sizes
+assert sorted(p.name for p in (ROOT/'assets/header').glob('*'))==sorted(n+'.png' for n in LAYERS+['still'])
+# frame 0 == rig at rest: the four layers stacked are pixel-identical to the still (same palette, disjoint pixels)
+def _comp(names):
+ o=Image.new('RGBA',(300,258),(255,255,255,255))
+ for n in names:
+  im=Image.open(ROOT/f'assets/header/{n}.png').convert('RGBA');assert im.size==(300,258),n;o.alpha_composite(im)
+ return o.convert('RGB').tobytes()
+assert _comp(['still'])==_comp(LAYERS),'header layers at rest must equal the still logo'
+assert Image.open(ROOT/'assets/header/still.png').getpalette() and all(Image.open(ROOT/f'assets/header/{n}.png').mode=='P' for n in LAYERS+['still'])
+print('PASS: header animation (still-first stage on every page, layers == still at rest, payload',sum(sizes[n] for n in LAYERS)+len(ha_js.encode()),'B after load).')
 
 print('PASS: HTML nesting, internal links/anchors, headings, images, structured data, all six kit links, review ratings and deployment exclusions.')
