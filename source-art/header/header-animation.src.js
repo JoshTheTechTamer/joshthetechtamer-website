@@ -7,7 +7,7 @@ const ha=document.querySelector('.header-animation .ha');if(!ha)return;
 const RM=matchMedia('(prefers-reduced-motion: reduce)');if(RM.matches)return;
 const SMALL=matchMedia('(max-width:620px)'),slogan=ha.querySelector('.ha-slogan'),printer=ha.querySelector('.ha-printer'),
  pr=printer.querySelector('.ha-pr'),page=printer.querySelector('.ha-page'),thumb=printer.querySelector('.ha-thumb'),swoosh=[...slogan.querySelectorAll('.ha-swoosh path')],gold=slogan.querySelector('.ha-gold'),stars=[...slogan.querySelectorAll('.ha-twinkle svg')];
-const V='?v=20261011-ha7',NS='http://www.w3.org/2000/svg',PI=Math.PI;
+const V='?v=20261011-ha8',NS='http://www.w3.org/2000/svg',PI=Math.PI;
 const clamp=x=>x<0?0:x>1?1:x,ease=x=>(x=clamp(x),x*x*(3-2*x)),mix=(a,b,t)=>a+(b-a)*t,seg=(t,a,b)=>ease((t-a)/(b-a));
 const back=x=>{x=clamp(x);const s=1.9;return 1+(s+1)*Math.pow(x-1,3)+s*Math.pow(x-1,2)};   // ease-out with overshoot
 const trk=(k,t)=>{if(t<=k[0][0])return k[0][1];for(let i=1;i<k.length;i++)if(t<=k[i][0])return mix(k[i-1][1],k[i][1],ease((t-k[i-1][0])/(k[i][0]-k[i-1][0])));return k[k.length-1][1]};
@@ -18,9 +18,10 @@ const LAY={d:{W:700,PR:230,PE:612,PY:117.9,S:.85,TX:288,FL:160},m:{W:540,PR:212,
  // printer hops in the opening: [start, land, from, to, height] (distances left of its parking spot)
 const HOPS=[[.4,.72,0,45,14],[.95,1.22,45,90,10],[1.62,1.88,90,62,6],[2.05,2.33,62,102,12],[2.6,2.95,102,36,16],[3.0,3.28,36,0,9]];
 // broken bits: [spawn time = a landing, rest position left of parking spot, rotation]
-const SH=[[.72,59,20],[.72,32,-35],[1.22,76,60],[1.88,82,-15],[2.33,120,30],[2.33,92,-60],[2.95,54,10]];
+// exactly one chunk per hop landing, dropped behind the printer: [landing time, landing offset, side behind (+1 = right), spin]
+const SH=HOPS.map((h,i)=>[h[1],h[3],h[3]>h[2]?1:-1,[20,-35,60,-15,30,10][i]]);
 const SHAPE=['M-4-3l5-1 3 4-6 2z','M-3-2l6-2-1 5-4 0z','M-4 0l3-3 4 1-2 3z'];
-const U=166/1353,P0=[8+690*U,24+910*U],THUMB=[1176,690],PINKY=[1150,752],COIL=[1182,881],CR=[14.4,11.8],NP=18;
+const U=166/1353,P0=[8+690*U,24+910*U],THUMB=[1176,690],PINKY=[1150,752],COIL=[1182,881],CR=[14.4,11.8],NP=6,BLOB=["M7.8 -0.9A6.1 6.1 0 0 1 4.6 7.6A5.2 5.2 0 0 1 -3.7 6.8A5.5 5.5 0 0 1 -8.3 -0.4A4.9 4.9 0 0 1 -4.4 -8.1A4.6 4.6 0 0 1 2.7 -7.6A5.7 5.7 0 0 1 7.8 -0.9z", "M8.9 -0.2A5.0 5.0 0 0 1 5.5 6.6A5.3 5.3 0 0 1 -4.0 7.8A3.8 3.8 0 0 1 -7.2 3.2A4.6 4.6 0 0 1 -7.6 -3.3A4.7 4.7 0 0 1 -1.4 -7.1A4.0 4.0 0 0 1 4.7 -7.5A4.8 4.8 0 0 1 8.9 -0.2z", "M10.0 0.8A6.5 6.5 0 0 1 1.4 7.5A5.1 5.1 0 0 1 -6.6 4.2A4.9 4.9 0 0 1 -6.7 -4.5A5.6 5.6 0 0 1 2.2 -7.3A6.7 6.7 0 0 1 10.0 0.8z"];
 const lp=q=>[8+q[0]*U,24+q[1]*U];
 let deb,smog,puffs=[],shards=[],frozen=false,moveEls=[],coil,ropeB,ropeF,rig,top,ready=false,run=false,raf=0,clock=0,last=0,vis=true,L,k,state='';
 const el=(t,c,a)=>{const e=document.createElement(t);e.className=c;if(a)for(const n in a)e.setAttribute(n,a[n]);return e};
@@ -36,9 +37,8 @@ function build(){
  deb=document.createElementNS(NS,'svg');deb.setAttribute('class','ha-debris');deb.setAttribute('aria-hidden','true');deb.style.display='none';
  shards=SH.map((s,i)=>{const p=document.createElementNS(NS,'path');p.setAttribute('d',SHAPE[i%3]);p.setAttribute('fill',i%2?'#dce8f4':'#b9c8da');deb.appendChild(p);return p});
  smog=document.createElementNS(NS,'svg');smog.setAttribute('class','ha-smog');smog.setAttribute('aria-hidden','true');smog.style.display='none';
- // cartoon smoke clouds (navy outline under a light fill, so overlapping puffs read as one billow)
- const CL=[[0,0,1],[-.75,.25,.7],[.75,.2,.75],[.15,-.55,.7]];
- puffs=Array.from({length:NP},()=>{const g=document.createElementNS(NS,'g');for(const cls of ['k','f','s'])for(const[x,y,r]of CL){if(cls==='s'&&y<0)continue;const c=document.createElementNS(NS,'circle');c.setAttribute('class',cls);c.setAttribute('cx',x*10);c.setAttribute('cy',y*10+(cls==='s'?3:0));c.setAttribute('r',r*10+(cls==='k'?1.8:cls==='s'?-4:0));g.appendChild(c)}smog.appendChild(g);g.style.display='none';return g});
+ // a few irregular puffs in the printer's own smoke style (light fill, navy outline), just bigger
+ puffs=Array.from({length:NP},(_,i)=>{const g=document.createElementNS(NS,'path');g.setAttribute('d',BLOB[i%3]);g.setAttribute('fill','#f2f5f9');g.setAttribute('stroke','#23335c');g.setAttribute('stroke-linejoin','round');smog.appendChild(g);g.style.display='none';return g});
  ha.insertBefore(rig,slogan);slogan.after(smog);ha.insertBefore(deb,printer);ha.insertBefore(ropeB,printer);ha.append(ropeF,top);
  return Promise.all(Object.values(im).map(i=>i.decode()))
 }
@@ -52,12 +52,12 @@ function reset(){ // back to the markup's own state = the loop's first frame
  ha.classList.remove('is-live');rig.hidden=top.hidden=true;state='rest'}
 // ---- mascot pose (one rigid cut-out; small moves so the medallion never shows a seam) ----
 function pose(t){
- const spin=4*PI*seg(t,1.05,2.65);
- let th=trk([[LIVE0,0],[1,-2],[1.05,-1],[2.65,-1],[3.2,4.5],[3.8,2],[4.15,-3.6],[6,-3],[6.4,-1],[7.4,0],[7.6,-1.6],[8.4,-1.2],[8.65,0]],t);
- if(t>1.05&&t<2.65)th+=1.4*Math.sin(spin-.5);
+ const spin=-4*PI*seg(t,1.05,2.45);
+ let th=trk([[LIVE0,0],[1,-2],[1.05,-1],[2.45,-1],[2.75,-3.2],[3.2,4.5],[3.8,2],[4.15,-3.6],[6,-3],[6.4,-1],[7.4,0],[7.6,-1.6],[8.4,-1.2],[8.65,0]],t);
+ if(t>1.05&&t<2.45)th+=1.4*Math.sin(spin-.5);
  if(t>4.2&&t<6)th+=.6*Math.sin((t-4.2)*15)*(1-seg(t,5.6,6));
  if(t>7.5&&t<8.3)th+=.5*Math.sin((t-7.5)*20);
- const dx=trk([[LIVE0,0],[2.65,0],[3.2,3.5],[3.8,1.5],[4.15,-2],[6,-1.6],[6.6,0]],t),dy=trk([[LIVE0,0],[1,-2],[1.1,-3.5],[2.65,-3.5],[3.3,-1.5],[6,-1],[8.4,-1],[8.65,0]],t);
+ const dx=trk([[LIVE0,0],[2.45,0],[2.75,-2],[3.2,3.5],[3.8,1.5],[4.15,-2],[6,-1.6],[6.6,0]],t),dy=trk([[LIVE0,0],[1,-2],[1.1,-3.5],[2.45,-3.5],[2.75,-4.5],[3.3,-1.5],[6,-1],[8.4,-1],[8.65,0]],t);
  const r=th*PI/180,co=Math.cos(r),si=Math.sin(r);
  return{th,dx,dy,spin,mv:q=>{q=lp(q);const x=q[0]-P0[0],y=q[1]-P0[1];return[P0[0]+x*co-y*si+dx,P0[1]+x*si+y*co+dy]}}}
 // ---- printer ----
@@ -82,14 +82,18 @@ const revEdge=(t,px)=>{const OPEN=L.TX-2*FE,ed=px+49*L.S+FE*.7;return t<4.25?1e4
 const T0=()=>[lp(THUMB)[0]-10,25];
 function twirl(t,spin){const T=T0(),w=Math.sin(t*7.3),w2=Math.sin(t*11.1+1);
  return{c:[T[0]+6*Math.cos(spin),T[1]+3*Math.sin(spin)],rx:42*(1+.12*w),ry:10+4*Math.sin(spin)+2.2*w2,rot:5*Math.sin(spin)+3*w2,a:PI/2+spin,sl:.2}}
+const WIND=()=>{const T=T0();return{c:[T[0]-14,8],rx:48,ry:8,rot:-10}};
 function loop(t,P,pp){
  const coilC=P.mv(COIL),hw=49*L.S;let g;
  if(t<1.05){const q=seg(t,.75,1.05),e=twirl(1.05,0);g={c:[mix(coilC[0],e.c[0],q),mix(coilC[1],e.c[1],q)-10*Math.sin(q*PI)],rx:mix(CR[0],e.rx,q),ry:mix(CR[1],e.ry,q),rot:mix(0,e.rot,q),a:mix(-PI/2,PI/2,q),sl:.7}}
- else if(t<2.65)g=twirl(t,P.spin);
+ else if(t<2.45)g=twirl(t,P.spin);
+ else if(t<2.75){ // wind-up: the loop whips back up over his hat for a beat
+  const q=seg(t,2.45,2.62),e=twirl(2.45,-4*PI),W=WIND(),h=t>2.62?Math.sin((t-2.62)*24)*(1-(t-2.62)/.13):0;
+  g={c:[mix(e.c[0],W.c[0],q),mix(e.c[1],W.c[1],q)],rx:mix(e.rx,W.rx,q)*(1+.05*h),ry:mix(e.ry,W.ry,q)*(1-.15*h),rot:mix(e.rot,W.rot,q),a:mix(PI/2,PI*.85,q),sl:mix(.2,.3,q)}}
  else if(t<3.4){ // high arc; the loop squashes, stretches and wobbles, lagging a beat behind his arm
-  const q=seg(t,2.65,3.4),e=twirl(2.65,4*PI),A=e.c,B=[L.PE+10,L.PY-60],C=[(A[0]+B[0])/2,-12],u=1-q;
-  const c=[u*u*A[0]+2*u*q*C[0]+q*q*B[0],u*u*A[1]+2*u*q*C[1]+q*q*B[1]],w=Math.sin((t-2.65)*17)*(1-q*.5);
-  g={c,rx:mix(e.rx,66,q)*(1+.16*w),ry:mix(e.ry,11,q)*(1-.3*w),rot:mix(e.rot,-6,q)+6*Math.sin((t-2.65)*11),a:mix(PI/2,PI,q),sl:mix(.6,.35,q)}}
+  const q=seg(t,2.75,3.4),e=WIND(),A=e.c,B=[L.PE+10,L.PY-60],C=[(A[0]+B[0])/2,-12],u=1-q;
+  const c=[u*u*A[0]+2*u*q*C[0]+q*q*B[0],u*u*A[1]+2*u*q*C[1]+q*q*B[1]],w=Math.sin((t-2.75)*17)*(1-q*.5);
+  g={c,rx:mix(e.rx,66,q)*(1+.16*w),ry:mix(e.ry,11,q)*(1-.3*w),rot:mix(e.rot,-6,q)+6*Math.sin((t-2.75)*11),a:mix(PI*.85,PI,q),sl:mix(.6,.35,q)}}
  else if(t<3.8){const q=(t-3.4)/.4;g={c:[mix(L.PE+10,L.PE,ease(q)),mix(L.PY-60,L.PY+6,back(q))],rx:mix(66,60,ease(q)),ry:mix(11,22,ease(q)),rot:mix(-6,0,ease(q)),a:PI,sl:.55,wrap:q>.45}}
  else if(t<6.3){const q=clamp((t-3.8)/.45),b=back(q);g={c:[pp.px,L.PY+6+pp.py],rx:mix(60,hw+1.5,b),ry:mix(22,11,b),rot:0,a:PI,sl:mix(.5,.08,seg(t,3.8,4.2)),wrap:true}}
  else if(t<6.85){const q=seg(t,6.3,6.85),f=q*q;g={c:[pp.px,mix(L.PY+6,L.FL,f)],rx:mix(hw+1.5,hw+12,ease(q*1.6)),ry:mix(11,3.4,f),rot:0,a:PI,sl:mix(.08,.9,q),wrap:q<.55,floor:q>.6}}
@@ -117,23 +121,23 @@ function render(t){
  else css(thumb,'display','');
  // broken plastic bits: knocked loose on each stomp, swept up as he drags the printer back over them
  const FLP=72+89*L.S+1.5;let anyD=false;
- SH.forEach((s,i)=>{const[ts,dxs,rot]=s,e=shards[i];let v='',sc=1,x=L.PE-dxs,y=FLP;
+ SH.forEach((s,i)=>{const[ts,vv,sd,rot]=s,e=shards[i];let v='',sc=1,x=L.PE-vv+sd*(49*L.S+5),y=FLP;
   const tl=ts+.3;
   if(t>=ts&&t<6.2){const gone=px<=x+6&&t>4.25?1:0;
-   if(t<tl){const q=(t-ts)/.3,sx0=L.PE-HOPS.find(h=>Math.abs(h[1]-ts)<.01)[3];x=mix(sx0,x,q);y=FLP-14*4*q*(1-q)-4*(1-q)}
+   if(t<tl){const q=(t-ts)/.3,sx0=L.PE-vv;x=mix(sx0,x,q);y=FLP-14*4*q*(1-q)-4*(1-q)}
    if(gone){e._g=e._g||t;const q=(t-e._g)/.22;sc=1+.8*q;if(q>=1)v='hidden';e.style.opacity=(1-clamp(q)).toFixed(2)}else{e._g=0;e.style.opacity=''}
    anyD=anyD||v!=='hidden';
    e.setAttribute('transform','translate('+f1(x)+' '+f1(y)+') rotate('+(rot+(t<tl?(t-ts)*900:0)).toFixed(0)+') scale('+(sc*2*L.S/.85).toFixed(2)+')')}else v='hidden';
   if(e._v!==v){e._v=v;e.style.visibility=v}});
  css(deb,'display',anyD?'':'none');
  // the smokescreen: cartoon clouds billow off the printer's leading edge and the words fade in through them
- const DT=.05,LIFE=.8,Y0=36,Y1=L.W>600?122:150;let anyS=false;
- puffs.forEach((g,s)=>{let best=null;
-  for(const[s0,s1]of[[4.3,6.05],[ESC0+.05,ESC1-.1]]){const n=Math.floor((t-s0)/DT);for(let i=n;i>n-NP&&i>=0;i--){const ts=s0+i*DT;if(i%NP===s&&ts<=s1&&t-ts<LIFE){best=[ts,i];break}}if(best)break}
+ const DT=.2,LIFE=1.1,S0d=4.3,S1d=6,Y0=40,Y1=L.W>600?118:146;let anyS=false;
+ puffs.forEach((g,s)=>{let best=null;const n=Math.floor((t-S0d)/DT);
+  for(let i=n;i>n-NP&&i>=0;i--){const ts=S0d+i*DT;if(i%NP===s&&ts<=S1d&&t-ts<LIFE){best=[ts,i];break}}
   if(!best){css(g,'display','none');return}
-  const[ts,i]=best,q=(t-ts)/LIFE,h=((i*.618034)%1),h2=((i*.414214)%1),e0=revEdge(ts,prn(ts).px)-FE*.4;
-  const x=e0+6*h2+6*q,y=mix(Y0,Y1,h)-6*q,sc=(.95+.5*h2)*(.65+.6*Math.sqrt(q))*L.S/.85,op=q<.12?q/.12:1-seg(q,.4,1);
-  anyS=true;css(g,'display','');g.setAttribute('transform','translate('+f1(x)+' '+f1(y)+') scale('+sc.toFixed(3)+')');css(g,'opacity',op.toFixed(3))});
+  const[ts,i]=best,q=(t-ts)/LIFE,h=((i*.618034)%1),h2=((i*.414214)%1),e0=revEdge(ts,prn(ts).px)-FE*.3;
+  const x=e0+10*q,y=mix(Y0,Y1,h)-10*q,sc=(.9+1.1*h2)*(.7+1.1*q)*L.S/.85,op=q<.15?.95*q/.15:.95*(1-seg(q,.35,1)),rt=(i*67)%360+40*q;
+  anyS=true;css(g,'display','');g.setAttribute('transform','translate('+f1(x)+' '+f1(y)+') rotate('+rt.toFixed(0)+') scale('+sc.toFixed(3)+')');g.setAttribute('stroke-width',(2/sc*L.S).toFixed(2));css(g,'opacity',op.toFixed(3))});
  css(smog,'display',anyS?'':'none');
  // 'tamed.': underline draws in, the word swells, and a little gold twinkle pops off its corner as it lands
  const dr=t<LIVE1?1:1-seg(t,LIVE1,LIVE1+.7);for(const p of swoosh){css(p,'strokeDashoffset',dr.toFixed(3));css(p,'visibility',dr>.995?'hidden':'')}

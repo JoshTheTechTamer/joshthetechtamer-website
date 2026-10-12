@@ -296,8 +296,8 @@ for f in sorted(ROOT.glob('*.html')):
  t=f.read_text();hd=re.search(r'<header\b.*?</header>',t,re.S).group()
  assert '<canvas' not in t,('old canvas header',f.name)
  assert hd.count('<a href="/" class="brand brand-lockup header-animation" aria-label="The Tech Tamer home — House calls. Office visits. Tech tamed.">'+STAGE+'</a>')==1,('header stage',f.name)
- assert t.count('/assets/header-animation.js?v=20261011-ha7" defer')==1,('header script',f.name)
- assert 'assets/site.css?v=20261011-headeranim4' in t,f.name
+ assert t.count('/assets/header-animation.js?v=20261011-ha8" defer')==1,('header script',f.name)
+ assert 'assets/site.css?v=20261011-headeranim5' in t,f.name
 # the slogan is real text, hidden from screen readers (the link's aria-label reads it once); printer is decorative
 assert '<span class="ha-slogan" aria-hidden="true">' in STAGE and '<span class="ha-printer is-grumpy" aria-hidden="true">' in STAGE and 'alt="The Tech Tamer"' in STAGE
 assert 'House calls.' in STAGE and 'Office visits.' in STAGE and 'Tech</span> <span class="ha-gold">tamed.' in STAGE and '#f7c948' in ha_css.lower()
@@ -318,6 +318,11 @@ LAYERS=['circle','body','ringf','coil','fist','word']
 assert 'ha-spark' not in STAGE and 'ha-spark' not in ha_css and 'text-stroke' not in ha_css and '--fe:calc(36*100cqw/var(--W))' in ha_css
 assert '#f7c948' in ha_css and '#c8901a' in ha_css and 'background-clip:text' in ha_css and STAGE.count('<span class="ha-twinkle">')==1 and 'url(#ha-gg)' in ha_css
 assert "'ha-smog'" in ha_js or '"ha-smog"' in ha_js
+# round 5: irregular puffs (no perfect circles) above the printer; one chunk per hop landing; smoke only during the drag
+_sm=re.search(r'<g class="ha-smoke">(.*?)</g>',STAGE).group(1)
+assert '<circle' not in _sm and _sm.count('<path')==3 and '.ha-smoke path{' in ha_css
+ha_src=(ROOT/'source-art/header/header-animation.src.js').read_text()
+assert 'const SH=HOPS.map(' in ha_src and 'ESC0+.05' not in ha_src
 assert "'ha-debris'" in ha_js or '"ha-debris"' in ha_js
 for n in LAYERS:assert f'"/assets/header/"' in ha_js or '/assets/header/' in ha_js
 from PIL import Image
