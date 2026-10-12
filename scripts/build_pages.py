@@ -266,6 +266,9 @@ def redesign(s,name):
  return s
 HEADER_STAGE=(ROOT/'source-art/header/stage.html').read_text().strip()
 HEADER_V='20261012-ha11'
+# Cloudflare Web Analytics: Pages custom domains do not get auto JS injection reliably,
+# so every page ships the deferred beacon (token from account Web Analytics site).
+CF_BEACON="<!-- Cloudflare Web Analytics --><script defer src=\"https://static.cloudflareinsights.com/beacon.min.js\" data-cf-beacon='{\"token\": \"a5008ae940f94281862ffbab9ef72546\"}'></script><!-- End Cloudflare Web Analytics -->"
 for file in (ROOT/'templates').glob('*.html'):
  s=apply_header_logo(file.read_text());name=file.name
  s=footer(s)
@@ -387,6 +390,8 @@ for file in (ROOT/'templates').glob('*.html'):
  s=re.sub(r'(href|src)="((?:assets/|images/)[^"]*|[a-z0-9-]+\.html(?:\?[^"]*)?)"',lambda m:m[1]+'="/'+m[2]+'"',s)
  s=normalize_urls(s,name)
  s=redesign(s,name)
+ if 'static.cloudflareinsights.com/beacon.min.js' not in s:
+  assert '</body>' in s,('missing body close',name);s=s.replace('</body>',CF_BEACON+'</body>',1)
  (ROOT/name).write_text(s)
 (ROOT/'robots.txt').write_text('User-agent: *\nAllow: /\n\nSitemap: '+BASE+'/sitemap.xml\n')
 assert set(lastmod)==set(meta),('data/sitemap-lastmod.json must list every indexed page',set(meta)^set(lastmod))
