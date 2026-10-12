@@ -261,12 +261,17 @@ def redesign(s,name):
  # 4) Three-step rows become a gold-filling timeline.
  s=re.sub(r'<div class="grid3">(?=<(?:article|div) class="step">)','<div class="grid3 ds-steps" data-ds-steps>',s)
  return s
+HEADER_STAGE=(ROOT/'source-art/header/stage.html').read_text().strip()
+HEADER_V='20261011-ha1'
 for file in (ROOT/'templates').glob('*.html'):
  s=apply_header_logo(file.read_text());name=file.name
  s=footer(s)
- # Header canvas fallback: small optimized logo instead of the 1.48 MB original.
- s=s.replace('<img src="/assets/hero-logo.png" alt="The Tech Tamer" width="128" height="110">','<img src="/assets/optimized/hero-logo-256.png" alt="The Tech Tamer" width="128" height="110">')
- s=re.sub(r'assets/site\.css\?v=[^"]+','assets/site.css?v=20261011-localseo',s)
+ # Header (Oct 11 rebuild): the still logo, HTML slogan and vector printer render at once; the
+ # animated layers (assets/header/*.png) are fetched by header-animation.js only after page load.
+ a='<canvas width="1400" height="400" aria-hidden="true"><img src="/assets/hero-logo.png" alt="The Tech Tamer" width="128" height="110"></canvas>'
+ assert a in s,('header canvas markup',file.name);s=s.replace(a,HEADER_STAGE,1)
+ s=re.sub(r'/assets/header-animation\.js\?v=[^"]+','/assets/header-animation.js?v='+HEADER_V,s)
+ s=re.sub(r'assets/site\.css\?v=[^"]+','assets/site.css?v=20261011-headeranim',s)
  if name=='index.html':
   # H1 keyword line (audit B2): visible headline unchanged, eyebrow promoted into the H1.
   s=s.replace('<img src="assets/hero-logo.png" alt="The Tech Tamer: Josh’s top-hatted technology tamer mascot and wordmark" width="1353" height="1162">',HERO_PICTURE,1)

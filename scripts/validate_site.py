@@ -289,4 +289,36 @@ if '--production' in sys.argv:
  assert 'Send request' in contact and "action:'lead'" in script and 'encodeURIComponent(body)' not in script
  assert (ROOT/'functions/api/lead.js').is_file()
 
+# ---- Header lasso animation rebuild (Oct 11, 2026): still logo first, layered rig after load ----
+ha_js=(ROOT/'assets/header-animation.js').read_text();ha_css=(ROOT/'assets/site.css').read_text()
+STAGE=(ROOT/'source-art/header/stage.html').read_text().strip()
+for f in sorted(ROOT.glob('*.html')):
+ t=f.read_text();hd=re.search(r'<header\b.*?</header>',t,re.S).group()
+ assert '<canvas' not in t,('old canvas header',f.name)
+ assert hd.count('<a href="/" class="brand brand-lockup header-animation" aria-label="The Tech Tamer home — House calls. Office visits. Tech tamed.">'+STAGE+'</a>')==1,('header stage',f.name)
+ assert t.count('/assets/header-animation.js?v=20261011-ha1" defer')==1,('header script',f.name)
+ assert 'assets/site.css?v=20261011-headeranim' in t,f.name
+# the slogan is real text, hidden from screen readers (the link's aria-label reads it once); printer is decorative
+assert '<span class="ha-slogan" aria-hidden="true">' in STAGE and '<span class="ha-printer" aria-hidden="true">' in STAGE and 'alt="The Tech Tamer"' in STAGE
+assert 'House calls.' in STAGE and 'Office visits.' in STAGE and 'Tech tamed.' in STAGE and '#f5b731' in ha_css.lower()
+assert re.search(r'\.ha-slogan\{[^}]*font:900 [^}]*"Montserrat DS","Montserrat"',ha_css) and 'color:#23335c' in ha_css
+# no data-URI sprites, no canvas, no libraries; layers are fetched only after load/idle; reduced motion never starts it
+assert 'base64' not in ha_js and 'getContext' not in ha_js and len(ha_js.encode())<9_000,len(ha_js)
+assert "addEventListener(\"load\"" in ha_js or "addEventListener('load'" in ha_js
+assert 'requestIdleCallback' in ha_js and 'prefers-reduced-motion: reduce' in ha_js and 'visibilitychange' in ha_js
+LAYERS=['bg','body','coil','word']
+for n in LAYERS:assert f'"/assets/header/"' in ha_js or '/assets/header/' in ha_js
+from PIL import Image
+sizes={n:(ROOT/f'assets/header/{n}.png').stat().st_size for n in LAYERS+['still']}
+assert sizes['still']<30_000 and sum(sizes[n] for n in LAYERS)+len(ha_js.encode())<60_000,sizes
+# frame 0 == rig at rest: the four layers stacked are pixel-identical to the still (same palette, disjoint pixels)
+def _comp(names):
+ o=Image.new('RGBA',(300,258),(255,255,255,255))
+ for n in names:
+  im=Image.open(ROOT/f'assets/header/{n}.png').convert('RGBA');assert im.size==(300,258),n;o.alpha_composite(im)
+ return o.convert('RGB').tobytes()
+assert _comp(['still'])==_comp(LAYERS),'header layers at rest must equal the still logo'
+assert Image.open(ROOT/'assets/header/still.png').getpalette() and all(Image.open(ROOT/f'assets/header/{n}.png').mode=='P' for n in LAYERS+['still'])
+print('PASS: header animation (still-first stage on every page, layers == still at rest, payload',sum(sizes[n] for n in LAYERS)+len(ha_js.encode()),'B after load).')
+
 print('PASS: HTML nesting, internal links/anchors, headings, images, structured data, all six kit links, review ratings and deployment exclusions.')
