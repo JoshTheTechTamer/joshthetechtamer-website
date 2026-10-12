@@ -14,3 +14,9 @@ html{scroll-padding-top:16px}
 .privacy-choice-inner{display:flex;gap:22px;align-items:center;justify-content:space-between}.privacy-choice p{margin:0;max-width:760px;font-size:15px}.privacy-choice a{color:#23335c;text-decoration:underline}
 .privacy-actions{display:flex;gap:10px;flex-wrap:wrap;flex-shrink:0}.privacy-actions button{font:inherit;font-weight:700;min-height:44px;padding:10px 16px;cursor:pointer;background:white;border:2px solid #23335c;border-radius:5px;color:#23335c}
 @media(max-width:700px){.privacy-choice-inner{display:block}.privacy-actions{margin-top:14px}.privacy-actions button{flex:1}.privacy-choice{padding-bottom:90px}.policy-links{gap:14px}.policy-copy{overflow-wrap:anywhere}}
+
+/* Visible keyboard focus, readable small copy, and motion-safe anchor jumps. */
+:where(a,button,input,select,textarea,summary):focus-visible{outline:3px solid #0074aa;outline-offset:3px}
+.policy-draft{border-left:4px solid #b57900;background:#fff4d5;padding:16px;color:#40311a}
+.policy-copy code{overflow-wrap:anywhere}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto!important}}

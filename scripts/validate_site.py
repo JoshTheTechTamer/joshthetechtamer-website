@@ -198,7 +198,7 @@ for n in locked:
   if k=='images':a,b=[list(x) for x in a],[list(x) for x in b]
   assert a==b,('content changed by the redesign',n,k)
 dcss=(ROOT/'assets/design.css').read_text();djs=(ROOT/'assets/design.js').read_text()
-GOLD={'privacy.html':'Privacy','accessibility.html':'help','index.html':'you','services.html':'Working','business.html':'work','digital-kits.html':'confidence','rates.html':'pricing','about.html':'local','contact.html':'tame','tech-help-muscatine.html':'Muscatine','service-area.html':'Muscatine','scam-help.html':'Help','tech-help-quad-cities.html':'In-Home','404.html':'wandered'}
+GOLD={'terms.html':'start','refunds.html':'refund','cookies.html':'cookie','privacy.html':'Privacy','accessibility.html':'help','index.html':'you','services.html':'Working','business.html':'work','digital-kits.html':'confidence','rates.html':'pricing','about.html':'local','contact.html':'tame','tech-help-muscatine.html':'Muscatine','service-area.html':'Muscatine','scam-help.html':'Help','tech-help-quad-cities.html':'In-Home','404.html':'wandered'}
 for f in ROOT.glob('*.html'):
  t=f.read_text();head=t[:t.index('</head>')]
  if f.name=='website-package.html':assert 'design.css' not in t and 'ds-hero' not in t,'showcase keeps its own layer';continue
@@ -268,7 +268,7 @@ for topic in ['Fake “virus” pop-ups','Tech-support calls','Bank, Amazon and 
 ext=set(re.findall(r'href="(https?://[^"]+)"',sc[sc.index('<main'):sc.index('</main>')]))
 assert ext=={'https://reportfraud.ftc.gov/','https://www.identitytheft.gov/','https://www.ic3.gov/'},ext
 assert not re.search(r'(?i)\b(kits?|download\w*|gumroad)\b',sc),'no kit/download mentions on the scam page'
-assert 'If there’s a way back in, we’ll find it together.' in sc
+assert 'We’ll work through the available recovery options together; the provider controls the outcome.' in sc
 assert '<div class="scam-hero-art" aria-hidden="true"><svg class="scam-shield"' in sc and '<img' not in re.search(r'<section class="[^"]*ds-hero.*?</section>',sc,re.S).group()
 assert '.scam-shield *{animation:none!important;stroke-dashoffset:0!important}' in dcss
 wpcss=(ROOT/'assets/website-package.css').read_text()
@@ -299,8 +299,8 @@ for f in sorted(ROOT.glob('*.html')):
  t=f.read_text();hd=re.search(r'<header\b.*?</header>',t,re.S).group()
  assert '<canvas' not in t,('old canvas header',f.name)
  assert hd.count('<a href="/" class="brand brand-lockup header-animation" aria-label="The Tech Tamer home — House calls. Office visits. Tech tamed.">'+STAGE+'</a>')==1,('header stage',f.name)
- assert t.count('/assets/header-animation.js?v=20261012-audit1" defer')==1,('header script',f.name)
- assert 'assets/site.css?v=20261012-audit1' in t,f.name
+ assert t.count('/assets/header-animation.js?v=20261012-audit2" defer')==1,('header script',f.name)
+ assert 'assets/site.css?v=20261012-audit2' in t,f.name
 # the slogan is real text, hidden from screen readers (the link's aria-label reads it once); printer is decorative
 assert '<span class="ha-slogan" aria-hidden="true">' in STAGE and '<span class="ha-printer is-grumpy" aria-hidden="true">' in STAGE and 'alt="The Tech Tamer"' in STAGE
 assert 'House calls.' in STAGE and 'Office visits.' in STAGE and 'TECH</span> <span class="ha-gold">TAMED.' in STAGE and '#f7c948' in ha_css.lower()

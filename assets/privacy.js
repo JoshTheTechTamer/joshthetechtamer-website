@@ -15,7 +15,7 @@
  function start(){
   if(!live||loaded)return;loaded=true;window['ga-disable-'+ID]=false;
   window.dataLayer=window.dataLayer||[];window.gtag=function(){window.dataLayer.push(arguments)};
-  window.gtag('js',new Date());window.gtag('config',ID);
+  window.gtag('js',new Date());window.gtag('config',ID,{allow_google_signals:false,allow_ad_personalization_signals:false});
   const script=document.createElement('script');script.async=true;script.src='https://www.googletagmanager.com/gtag/js?id='+ID;document.head.append(script);
  }
  function clearCookies(){
