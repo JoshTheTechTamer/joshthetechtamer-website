@@ -271,7 +271,7 @@ for file in (ROOT/'templates').glob('*.html'):
  a='<canvas width="1400" height="400" aria-hidden="true"><img src="/assets/hero-logo.png" alt="The Tech Tamer" width="128" height="110"></canvas>'
  assert a in s,('header canvas markup',file.name);s=s.replace(a,HEADER_STAGE,1)
  s=re.sub(r'/assets/header-animation\.js\?v=[^"]+','/assets/header-animation.js?v='+HEADER_V,s)
- s=re.sub(r'assets/site\.css\?v=[^"]+','assets/site.css?v=20261011-headeranim',s)
+ s=re.sub(r'assets/site\.css\?v=[^"]+','assets/site.css?v=20261011-headeranim2',s)
  if name=='index.html':
   # H1 keyword line (audit B2): visible headline unchanged, eyebrow promoted into the H1.
   s=s.replace('<img src="assets/hero-logo.png" alt="The Tech Tamer: Josh’s top-hatted technology tamer mascot and wordmark" width="1353" height="1162">',HERO_PICTURE,1)
