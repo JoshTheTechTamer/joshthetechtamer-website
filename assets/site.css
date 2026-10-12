@@ -480,3 +480,14 @@ button:disabled{opacity:.65;cursor:wait}
 .scam-hero .actions .btn[href^="tel:"]{padding-left:30px;padding-right:30px}
 @media(max-width:620px){.scam-hero .actions{grid-template-columns:minmax(0,.75fr) minmax(0,1.3fr)}.scam-hero .actions .btn[href^="tel:"]{padding-left:22px;padding-right:22px}}
 @media(max-width:480px){.review-links--card{left:10px;gap:5px}.review-links--card .btn{padding:6px 13px;font-size:10.5px}.review-links--card .btn>span[aria-hidden]{display:none}}
+
+/* Site polish 2: Google buttons share the controls' bottom edge; tighter card bottom. */
+.review-carousel .review-controls{bottom:16px;right:16px}
+.review-links--card{bottom:16px!important;left:16px}
+.review-carousel .review-card{padding-bottom:84px}
+@media(max-width:900px){
+ .review-carousel .review-controls{bottom:12px;right:12px}
+ .review-links--card{bottom:46px!important;left:12px}
+ .review-carousel .review-card{padding-bottom:108px}
+}
+@media(max-width:480px){.review-links--card{left:10px}.review-carousel .review-card{padding-bottom:104px}}
