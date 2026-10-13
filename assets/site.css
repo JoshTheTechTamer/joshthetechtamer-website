@@ -635,3 +635,14 @@ main>section:not(:first-child):not(.reviews-section){content-visibility:auto;con
 @media(max-width:700px){.svc4-split{grid-template-columns:1fr;gap:16px}.svc4-main .svc4-list{margin-bottom:16px}}
 @media(max-width:620px){.svc4{--rope-x:17px}.svc4-row,.svc4-row:nth-child(odd){grid-template-columns:44px minmax(0,1fr)}.svc4-row .svc4-knot{padding-top:20px}.svc4-iconpanel{aspect-ratio:16/9}.svc4-iconpanel .icon{width:72px!important;height:72px!important}.svc4-iconpanel .icon svg{width:40px!important;height:40px!important}}
 .svc4-split>.svc4-media,.svc4-split>.svc4-main{grid-column:auto!important;grid-row:auto!important;order:0!important}
+/* websites card: tall image fills the right column (>700px) */
+@media(min-width:701px){
+.svc4--web .svc4-body{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,46%);column-gap:26px;grid-template-rows:auto auto 1fr}
+.svc4--web .svc4-head,.svc4--web .svc4-line{grid-column:1}
+.svc4--web .svc4-split{display:contents}
+.svc4--web .svc4-main{grid-column:1;grid-row:3;align-self:end}
+.svc4--web .svc4-split>.svc4-media{grid-column:2!important;grid-row:1/span 3!important;align-self:stretch;display:flex}
+.svc4--web .svc4-frame{flex:1;display:flex}
+.svc4--web .svc4-frame--browser img{aspect-ratio:auto;height:100%;min-height:300px;object-fit:cover;object-position:50% 35%}
+}
+@media(max-width:700px){.svc4--web .svc4-frame img{aspect-ratio:1280/1040!important;height:auto!important;object-position:top}}
