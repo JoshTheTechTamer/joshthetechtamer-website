@@ -546,3 +546,4 @@ main .product-grid .checklist li{font-size:15px}
 .path-shot img{display:block;width:100%;height:auto;aspect-ratio:16/10;object-fit:cover;object-position:top}
 /* Render below-the-fold sections lazily (splits the first layout into smaller pieces). */
 main>section:not(:first-child):not(.reviews-section){content-visibility:auto;contain-intrinsic-size:auto 900px}
+.home-paths .path-card .path-shot{grid-column:2;margin:4px 0 2px}
