@@ -148,7 +148,7 @@ assert 'Tech help in the Quad Cities' in (ROOT/'index.html').read_text()
 hero=re.search(r'<section class="hero ds-hero">.*?</section>',idx,re.S).group()
 plain=re.sub(r'<span class="ds-deco".*?</span></span></span>|<svg class="ds-swoosh".*?</svg>','',hero,flags=re.S).replace('<span class="ds-gold">you</span>','you').replace('<span class="ds-gold-dot">.</span>','.')
 assert '<div class="eyebrow">Your local tech guy · Muscatine, Iowa</div><h1>Not very tech savvy?<br><span>I’ll come to you.</span></h1>' in plain and 'eyebrow-h1' not in hero and 'hero-local' not in hero,'home hero changed'
-assert '<a class="btn " href="sms:+15632610200">Text Josh<span aria-hidden="true">↗</span></a><a class="btn secondary" href="/services">Explore services<span aria-hidden="true">↗</span></a>' in hero and 'hero-logo-800.webp' in hero and '<a class="art-label" href="tel:+15632610200">563-261-0200</a>' in hero,'home hero buttons/photo'
+assert '<a class="btn " href="sms:+15632610200">Text Josh<span aria-hidden="true">↗</span></a><a class="btn secondary" href="tel:+15632610200">Call 563-261-0200<span aria-hidden="true">↗</span></a>' in hero and '<a class="btn light" href="/website-package">Start with a free preview<span aria-hidden="true">↗</span></a>' in hero and 'hero-logo-800.webp' in hero and '<a class="art-label" href="tel:+15632610200">563-261-0200</a>' in hero,'home hero buttons/photo'
 assert '</span><span class="ds-gold-dot">.</span></span></h1>' in hero and '.ds-gold-dot{color:var(--ds-gold)' in (ROOT/'assets/design.css').read_text()
 assert 'In-home computer &amp; tech help in Muscatine, IA' in idx and 'House calls all over' in idx
 # Josh's final list (small towns first, then the Quad Cities on both sides of the river), no Iowa City/Coralville.
@@ -218,7 +218,7 @@ for f in ROOT.glob('*.html'):
  for ic in re.findall(r'<div class="icon[ "][^>]*><svg\b.*?</svg>',t,re.S):
   assert 'aria-hidden="true"' in ic and not re.search(r'<(path|rect|circle|line|polyline|polygon|ellipse)\b(?![^>]*pathLength="1")',ic),(f.name,ic[:80])
 # timelines wherever there are steps
-for n in ['index.html','services.html','tech-help-muscatine.html','tech-help-quad-cities.html']:
+for n in ['services.html','tech-help-muscatine.html','tech-help-quad-cities.html']:  # homepage-hybrid: the home steps moved to /services
  t=(ROOT/n).read_text();assert t.count('data-ds-steps')==1 and not re.search(r'<div class="grid3">(?=<(?:article|div) class="step">)',t),n
 # motion: hidden states only behind .ds-anim (JS on, no reduced motion); reduced motion = everything still and visible; tilt mouse-only
 for sel,body in re.findall(r'([^{}]*)\{([^{}]*opacity:0[^{}]*)\}',dcss):
@@ -248,13 +248,13 @@ home=pages['index.html']
 assert '<a class="hero-speech hero-speech-link" href="/website-package">If you like my website,<br><strong>I can build you one!</strong></a>' in home
 assert 'a.hero-speech-link:focus-visible' in dcss and 'a.hero-speech-link:hover' in dcss
 # recliner photo in the "A little help goes a long way." frame; alt describes Josh; no client photo left on the homepage
-fr=re.search(r'<div class="home-paths-frame">(<img\b[^>]*>)</div>',home).group(1)
-assert 'about-cta-laptop-' in fr and 'alt="Josh Sargent, The Tech Tamer, smiling in a recliner with a laptop on his lap"' in fr and 'loading="lazy"' in fr and 'client' not in fr and 'home-client-visit' not in home
+# homepage-hybrid: the intro photo was dropped with the old path cards; still no client photo on the homepage
+assert 'home-client-visit' not in home and 'class="hh-card" href="/scam-help"' in home
 # scam badges: own spot on Services (not stacked with the card button), and on the homepage under the help cards
 WARN='<span class="scam-badge__icon"><svg viewBox="0 0 24 24" aria-hidden="true"'
 svc=pages['services.html']
 assert svc.count('class="scam-badge"')==1 and re.search(r'</ul><a class="scam-badge" href="/scam-help">'+re.escape(WARN),svc) and '<a class="textlink" href="/scam-help">' not in svc
-assert re.search(r'See the website package</a></article></div><a class="scam-badge scam-badge--wide" href="/scam-help">',home)
+# homepage-hybrid: the scam badge is replaced by the Scam & hacked-account help card (checked above)
 assert '.scam-badge:focus-visible' in dcss and 'background:#fff1ec' in dcss and 'color:#8f2a17' in dcss
 # scam page: calm heading, 8-step numbered checklist, help-now block near top and bottom; FAQ JSON-LD matches the visible FAQ (checked above)
 sc=pages['scam-help.html']
@@ -301,7 +301,7 @@ for f in sorted(ROOT.glob('*.html')):
  assert '<canvas' not in t,('old canvas header',f.name)
  assert hd.count('<a href="/" class="brand brand-lockup header-animation" aria-label="The Tech Tamer home — House calls. Office visits. Tech tamed.">'+STAGE+'</a>')==1,('header stage',f.name)
  assert t.count('/assets/header-animation.js?v=20261012-ha13" defer')==1,('header script',f.name)
- assert 'assets/site.css?v=20261012-polish10' in t,f.name
+ assert 'assets/site.css?v=20261012-hybrid1' in t,f.name
 # the slogan is real text, hidden from screen readers (the link's aria-label reads it once); printer is decorative
 assert '<span class="ha-slogan" aria-hidden="true">' in STAGE and '<span class="ha-printer is-grumpy" aria-hidden="true">' in STAGE and 'alt="The Tech Tamer"' in STAGE
 assert 'House calls.' in STAGE and 'Office visits.' in STAGE and 'TECH</span> <span class="ha-gold">TAMED.' in STAGE and '#f7c948' in ha_css.lower()

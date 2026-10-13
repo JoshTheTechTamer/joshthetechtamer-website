@@ -51,7 +51,7 @@ def image_tag(m):
  if len(variants)>1:attrs+=' srcset="'+', '.join('/'+v['src']+' '+str(v['width'])+'w' for v in variants)+'" sizes="(max-width: 620px) calc(100vw - 44px), 580px"'
  return tag[:-1]+attrs+'>'
 form='''<form id="request-form" action="/api/lead" method="post"><div class="form-row"><div><label for="name">Your name *</label><input id="name" name="name" required autocomplete="name" maxlength="100"></div><div><label for="reply">Reply by *</label><select id="reply" name="reply"><option value="text">Text message</option><option value="phone">Phone call</option><option value="email">Email</option></select></div></div><label for="contact">Phone number *</label><input id="contact" name="contact" type="tel" required maxlength="150" autocomplete="tel"><label for="service">What can I help with?</label><select id="service" name="service"><option>Tech help at home</option><option>Computers & printers</option><option>Phones & tablets</option><option>Wi-Fi & home networks</option><option>TVs & streaming</option><option>Smart home & home cameras</option><option>Accounts & scam help</option><option>Logo & brand work</option><option>Advertising setup</option><option>Startup consulting</option><option>Website & business tech</option><option>Something else</option></select><label for="location">City (optional)</label><input id="location" name="location" autocomplete="address-level2" maxlength="150" placeholder="For example, Muscatine"><label for="time">Good times to reach you (optional)</label><input id="time" name="preferred_time" maxlength="150" placeholder="For example, weekday afternoons"><label for="issue">A little about your request *</label><textarea id="issue" name="issue" required maxlength="4000" placeholder="What’s happening, or what would you like help creating?"></textarea><div class="form-trap" aria-hidden="true"><label for="website">Leave this field empty</label><input id="website" name="_gotcha" tabindex="-1" autocomplete="off"></div><p class="small">Your details are used to respond to this request. Please leave out passwords, payment details, and other sensitive information.</p><div id="request-turnstile" class="cf-turnstile-box" data-sitekey="0x4AAAAAAFR89kkQkacO3Tdf" style="margin:0 0 18px;min-height:65px"></div><button class="btn" type="submit">Send request</button><p class="status" id="form-status" role="status" aria-live="polite">Your request goes straight to Josh, and he’ll get back to you the way you picked. A visit is confirmed after you agree on a time.</p><noscript><p>Please call, text, or email Josh using the links on this page.</p></noscript></form>'''
-visit='''<section class="section tint" id="your-visit"><div class="wrap"><div class="section-head"><div><div class="eyebrow">Help where you need it</div><h2>What happens during a visit?</h2></div><p>At your home or office, with a plan you can understand.</p></div><div class="grid3"><article class="step"><div class="number">01</div><h3>Show me what’s happening.</h3><p>We’ll look at the device and its setup together. You don’t need to know the technical name for the problem.</p></article><article class="step"><div class="number">02</div><h3>Talk through the next step.</h3><p>We’ll discuss the work and any equipment or software needed. Hands-on help is $50/hour; larger projects start with an estimate.</p></article><article class="step"><div class="number">03</div><h3>Try it together.</h3><p>We’ll check the result and walk through how to use it. There’s room for questions along the way.</p></article></div><a class="textlink" href="/contact.html?service=Tech%20help%20at%20home">Request a visit</a></div></section>'''
+visit='''<section class="section tint" id="your-visit"><div class="wrap"><div class="section-head"><div><div class="eyebrow">Help where you need it</div><h2>What happens during a visit?</h2></div><p>At your home or office, with a plan you can understand.</p></div><div class="grid3 grid-steps4"><article class="step"><div class="number">01</div><h3>Tell me what’s going on.</h3><p>Send a text or give me a call. A quick conversation helps us figure out what you need.</p></article><article class="step"><div class="number">02</div><h3>Show me what’s happening.</h3><p>We’ll look at the device and its setup together. You don’t need to know the technical name for the problem.</p></article><article class="step"><div class="number">03</div><h3>Talk through the next step.</h3><p>We’ll discuss the work and any equipment or software needed. Hands-on help is $50/hour; larger projects start with an estimate.</p></article><article class="step"><div class="number">04</div><h3>Try it together.</h3><p>We’ll check the result and walk through how to use it. There’s room for questions along the way.</p></article></div><a class="textlink" href="/contact.html?service=Tech%20help%20at%20home">Request a visit</a></div></section>'''
 
 # ---- Local SEO (Oct 2026 audit) ----
 gbp=config.get('google_business_profile_url','').strip();review_url=config.get('google_review_url','').strip()
@@ -259,11 +259,12 @@ def redesign(s,name):
   s=s.replace('<div class="contact-option"><h2>'+h+'</h2>','<div class="contact-option has-icon">'+icon_tile(ic)+'<h2>'+h+'</h2>',1)
  s=s.replace('<article class="price-card featured"><div class="eyebrow">','<article class="price-card featured">'+icon_tile('dollar',' icon--light')+'<div class="eyebrow">',1)
  s=s.replace('<article class="price-card"><h2>Something a little bigger?</h2>','<article class="price-card">'+icon_tile('clipboard')+'<h2>Something a little bigger?</h2>',1)
+ s=re.sub(r'\{\{icon:([a-z-]+)\}\}',lambda m:icon_tile(m.group(1)),s)
  # 3) Card icons draw themselves in (gold stroke): pathLength="1" lets CSS animate any shape the same way.
  def icon(m):return re.sub(r'<(path|rect|circle|line|polyline|polygon|ellipse)\b(?![^>]*pathLength)',r'<\1 pathLength="1"',m.group())
  s=re.sub(r'<div class="icon(?: icon--light)?" aria-hidden="true"><svg\b.*?</svg>|<span class="help-now__icon"><svg\b.*?</svg>',icon,s,flags=re.S)
  # 4) Three-step rows become a gold-filling timeline.
- s=re.sub(r'<div class="grid3">(?=<(?:article|div) class="step">)','<div class="grid3 ds-steps" data-ds-steps>',s)
+ s=re.sub(r'<div class="grid3( grid-steps4)?">(?=<(?:article|div) class="step">)',r'<div class="grid3\1 ds-steps" data-ds-steps>',s)
  return s
 HEADER_STAGE=(ROOT/'source-art/header/stage.html').read_text().strip()
 HEADER_V='20261012-ha13'
@@ -278,22 +279,22 @@ for file in (ROOT/'templates').glob('*.html'):
  a='<canvas width="1400" height="400" aria-hidden="true"><img src="/assets/hero-logo.png" alt="The Tech Tamer" width="128" height="110"></canvas>'
  assert a in s,('header canvas markup',file.name);s=s.replace(a,HEADER_STAGE,1)
  s=re.sub(r'/assets/header-animation\.js\?v=[^"]+','/assets/header-animation.js?v='+HEADER_V,s)
- s=re.sub(r'assets/site\.css\?v=[^"]+','assets/site.css?v=20261012-polish10',s)
+ s=re.sub(r'assets/site\.css\?v=[^"]+','assets/site.css?v=20261012-hybrid1',s)
  if name=='index.html':
   # H1 keyword line (audit B2): visible headline unchanged, eyebrow promoted into the H1.
   s=s.replace('<img src="assets/hero-logo.png" alt="The Tech Tamer: Josh’s top-hatted technology tamer mascot and wordmark" width="1353" height="1162">',HERO_PICTURE,1)
   # Hero stays exactly as on main (Josh's call); the local keyword line sits in the "Getting help should be easy" section instead.
-  a='<div class="eyebrow">No jargon. No runaround.</div><h2>Getting help should be easy.</h2></div>'
+  a='<h2 id="home-paths-heading">A little help goes a long way.</h2>'
   assert a in s;s=s.replace(a,a+'<p class="home-local"><strong>In-home computer &amp; tech help in Muscatine, IA.</strong> House calls all over <a href="tech-help-muscatine.html">Muscatine</a>, <a href="service-area.html">nearby towns</a>, and the <a href="tech-help-quad-cities.html">Quad Cities</a>, evenings &amp; weekends.</p>',1)
   s=s.replace('<a class="textlink" href="services.html">Find your tech fix</a>','<a class="textlink" href="tech-help-muscatine.html">Tech help in Muscatine</a>',1)
   # Speech bubble = link to the Website Package (same words).
   rep1(s,'<p class="hero-speech">If you like my website,<br><strong>I can build you one!</strong></p>','<a class="hero-speech hero-speech-link" href="website-package.html">If you like my website,<br><strong>I can build you one!</strong></a>')
   s=S[0]
   # "A little help goes a long way." photo: Josh in his recliner (same photo as the About page's closing section).
-  rep1(s,'<img src="/assets/home-client-visit.webp" alt="Josh, The Tech Tamer, with a client during a home visit" width="1084" height="1049" loading="lazy" decoding="async">','<img src="assets/about-cta-laptop.png" alt="Josh Sargent, The Tech Tamer, smiling in a recliner with a laptop on his lap" width="1534" height="1536" loading="lazy">')
+  pass  # homepage-hybrid: section removed
   s=S[0]
   # Scam warning badge right under the three help cards.
-  rep1(s,'<a class="textlink" href="website-package.html">See the website package</a></article></div></div></section>','<a class="textlink" href="website-package.html">See the website package</a></article></div>'+SCAM_BADGE_HOME+'</div></section>')
+  pass  # homepage-hybrid: section removed
   s=S[0]
  if name=='services.html':
   # Security cameras/systems: residential (in-home) only. Never commercial or business security.
