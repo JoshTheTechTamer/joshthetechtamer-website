@@ -521,3 +521,16 @@ button:disabled{opacity:.65;cursor:wait}
  .review-carousel .review-card{padding-bottom:104px!important}
 }
 @media(min-width:1101px){.review-carousel .review-card{padding-bottom:84px!important}}
+
+/* Site polish 4: section intros beside headings use the Scam Help callout everywhere. */
+.section-head{align-items:center}
+.section-head>p{max-width:470px;background:#fff;border:1px solid #d9e1ef;border-left:5px solid #f5b731;border-radius:12px;padding:18px 22px;color:var(--ink);font-size:18px;line-height:1.6;box-shadow:0 8px 22px rgba(35,51,92,.08)}
+/* Type scale matched to the Get a Website page: Montserrat 900 headings, larger intros and lists. */
+main h2{font-family:"Montserrat DS","Montserrat",Arial,Helvetica,sans-serif;font-weight:900;letter-spacing:-.03em}
+main li,main .checklist li{font-size:17px}
+main .product-grid .checklist li{font-size:15px}
+.lead{font-size:clamp(19px,1.75vw,22px)}
+@media(max-width:620px){
+ .section-head>p{max-width:none;padding:16px 18px;font-size:16px}
+ main li,main .checklist li{font-size:16px}
+}
