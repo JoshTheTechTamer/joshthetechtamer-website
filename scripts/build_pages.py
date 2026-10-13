@@ -209,13 +209,13 @@ def normalize_urls(s,name):
 # Shared layer: assets/design.css + assets/design.js. Markup changes are decorative only (aria-hidden), so every
 # page's words, links, images, forms, header, footer, JSON-LD and metadata stay exactly as they were
 # (scripts/content_lock.py + data/content-lock.json, checked by validate_site.py).
-DESIGN_V='20261012-steps2'
+DESIGN_V='20261012-perf1'
 GOLD_WORD={'index.html':'you','services.html':'Working','business.html':'work','digital-kits.html':'confidence','rates.html':'pricing',
  'about.html':'local','contact.html':'tame','tech-help-muscatine.html':'Muscatine','service-area.html':'Muscatine','scam-help.html':None,
  'tech-help-quad-cities.html':'In-Home','404.html':'wandered'}
 # Shared gold line-icon set (data/icons.json): the Website Package "essentials" icons plus matching ones for every icon spot.
 ICONS=json.loads((ROOT/'data/icons.json').read_text())
-ICON_FOR=[(r'locked-out','key'),(r'pop-up','warning'),(r'lock it down','lock'),(r'scam|hacked|accounts?\b','shield'),(r'computer|laptop','laptop'),(r'printer','printer'),
+ICON_FOR=[(r'website for your business','globe'),(r'locked-out','key'),(r'pop-up','warning'),(r'lock it down','lock'),(r'scam|hacked|accounts?\b','shield'),(r'computer|laptop','laptop'),(r'printer','printer'),
  (r'phone|tablet','smartphone'),(r'wi-fi|network','wifi'),(r'\btvs?\b|streaming','tv'),(r'camera|smart home','camera'),(r'logo|brand','pencil'),(r'advertis','megaphone'),
  (r'startup','lightbulb'),(r'\bweb','devices'),(r'tech help at home','home'),(r'business','briefcase'),(r'yourself','book')]
 def icon_tile(name,extra=''):return '<div class="icon'+extra+'" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false">'+ICONS[name]+'</svg></div>'
@@ -226,7 +226,7 @@ def redesign(s,name):
  if name=='website-package.html':return s  # the showcase keeps its own page CSS/JS
  s=s.replace('</head>','<link rel="preload" href="/assets/fonts/montserrat-900-latin.woff2" as="font" type="font/woff2" crossorigin><link rel="stylesheet" href="/assets/design.css?v='+DESIGN_V+'"><script src="/assets/design.js?v='+DESIGN_V+'" defer></script></head>',1)
  if 'family=Montserrat' not in s.split('</head>')[0]:  # hero headlines use the showcase's Montserrat Black
-  s=s.replace('</head>','<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@900&display=swap" rel="stylesheet"></head>',1)
+  s=s.replace('</head>','<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@900&display=swap" rel="stylesheet" media="print" onload="this.media=\'all\'"></head>',1)
  # 1) Dark navy hero band with dot grids and the diagonal blue stripe.
  n=0
  def hero(m):
@@ -278,7 +278,7 @@ for file in (ROOT/'templates').glob('*.html'):
  a='<canvas width="1400" height="400" aria-hidden="true"><img src="/assets/hero-logo.png" alt="The Tech Tamer" width="128" height="110"></canvas>'
  assert a in s,('header canvas markup',file.name);s=s.replace(a,HEADER_STAGE,1)
  s=re.sub(r'/assets/header-animation\.js\?v=[^"]+','/assets/header-animation.js?v='+HEADER_V,s)
- s=re.sub(r'assets/site\.css\?v=[^"]+','assets/site.css?v=20261012-polish7',s)
+ s=re.sub(r'assets/site\.css\?v=[^"]+','assets/site.css?v=20261012-polish8',s)
  if name=='index.html':
   # H1 keyword line (audit B2): visible headline unchanged, eyebrow promoted into the H1.
   s=s.replace('<img src="assets/hero-logo.png" alt="The Tech Tamer: Josh’s top-hatted technology tamer mascot and wordmark" width="1353" height="1162">',HERO_PICTURE,1)
@@ -293,7 +293,7 @@ for file in (ROOT/'templates').glob('*.html'):
   rep1(s,'<img src="/assets/home-client-visit.webp" alt="Josh, The Tech Tamer, with a client during a home visit" width="1084" height="1049" loading="lazy" decoding="async">','<img src="assets/about-cta-laptop.png" alt="Josh Sargent, The Tech Tamer, smiling in a recliner with a laptop on his lap" width="1534" height="1536" loading="lazy">')
   s=S[0]
   # Scam warning badge right under the three help cards.
-  rep1(s,'<a class="textlink" href="digital-kits.html">Browse digital kits</a></article></div></div></section>','<a class="textlink" href="digital-kits.html">Browse digital kits</a></article></div>'+SCAM_BADGE_HOME+'</div></section>')
+  rep1(s,'<a class="textlink" href="website-package.html">See the website package</a></article></div></div></section>','<a class="textlink" href="website-package.html">See the website package</a></article></div>'+SCAM_BADGE_HOME+'</div></section>')
   s=S[0]
  if name=='services.html':
   # Security cameras/systems: residential (in-home) only. Never commercial or business security.
@@ -359,7 +359,7 @@ for file in (ROOT/'templates').glob('*.html'):
   s=s.replace('I’ll tame promptly on your schedule','Let’s find a time to tame your tech.')
   s=s.replace('This prepares a message in your email app. Review it and press Send there to get in touch.','Tell me what you need and how you’d like me to get back to you. We’ll arrange the next step together.')
   s=re.sub(r'<form id="request-form".*?</form>',form,s)
-  s=s.replace('<script src="assets/site.js?v=20261012-readmore" defer></script>','<script src="assets/site.js?v=20261012-readmore" defer></script><script src="https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit&onload=onTechTamerTurnstile" async defer></script>',1)
+  s=s.replace('<script src="assets/site.js?v=20261012-perf1" defer></script>','<script src="assets/site.js?v=20261012-perf1" defer></script><script src="https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit&onload=onTechTamerTurnstile" async defer></script>',1)
  if name=='rates.html':
   s=s.replace('or prepare an email request on the Contact page','or send an inquiry on the Contact page')
   extra='<details><summary>What should I have ready for a visit?</summary><p>Keep the device and its usual cables available. If signing in is needed, you can enter your password yourself. Share your location and a brief description when arranging the visit.</p></details><details><summary>How are travel and payment details handled?</summary><p>Share your location when you request help. Ask Josh to confirm any travel charges, minimum billing, and payment arrangements before your visit.</p></details>'
