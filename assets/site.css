@@ -640,8 +640,8 @@ main>section:not(:first-child):not(.reviews-section){content-visibility:auto;con
 .svc4--web .svc4-body{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,46%);column-gap:26px;grid-template-rows:auto auto 1fr}
 .svc4--web .svc4-head,.svc4--web .svc4-line{grid-column:1}
 .svc4--web .svc4-split{display:contents}
-.svc4--web .svc4-main{grid-column:1;grid-row:3;align-self:start}
-.svc4--web .svc4-split>.svc4-media{grid-column:2!important;grid-row:1/span 3!important;align-self:center;display:block}
+.svc4--web .svc4-main{grid-column:1;grid-row:3;align-self:end}
+.svc4--web .svc4-split>.svc4-media{grid-column:2!important;grid-row:1/span 3!important;align-self:end;display:block}
 
 .svc4--web .svc4-frame--browser img{aspect-ratio:1140/1260;height:auto;object-fit:contain}
 }
