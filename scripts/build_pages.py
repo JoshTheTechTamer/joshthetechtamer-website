@@ -259,6 +259,7 @@ def redesign(s,name):
   s=s.replace('<div class="contact-option"><h2>'+h+'</h2>','<div class="contact-option has-icon">'+icon_tile(ic)+'<h2>'+h+'</h2>',1)
  s=s.replace('<article class="price-card featured"><div class="eyebrow">','<article class="price-card featured">'+icon_tile('dollar',' icon--light')+'<div class="eyebrow">',1)
  s=s.replace('<article class="price-card"><h2>Something a little bigger?</h2>','<article class="price-card">'+icon_tile('clipboard')+'<h2>Something a little bigger?</h2>',1)
+ s=re.sub(r'\{\{icon:([a-z-]+)\}\}',lambda m:icon_tile(m.group(1)),s)
  # 3) Card icons draw themselves in (gold stroke): pathLength="1" lets CSS animate any shape the same way.
  def icon(m):return re.sub(r'<(path|rect|circle|line|polyline|polygon|ellipse)\b(?![^>]*pathLength)',r'<\1 pathLength="1"',m.group())
  s=re.sub(r'<div class="icon(?: icon--light)?" aria-hidden="true"><svg\b.*?</svg>|<span class="help-now__icon"><svg\b.*?</svg>',icon,s,flags=re.S)
@@ -278,7 +279,7 @@ for file in (ROOT/'templates').glob('*.html'):
  a='<canvas width="1400" height="400" aria-hidden="true"><img src="/assets/hero-logo.png" alt="The Tech Tamer" width="128" height="110"></canvas>'
  assert a in s,('header canvas markup',file.name);s=s.replace(a,HEADER_STAGE,1)
  s=re.sub(r'/assets/header-animation\.js\?v=[^"]+','/assets/header-animation.js?v='+HEADER_V,s)
- s=re.sub(r'assets/site\.css\?v=[^"]+','assets/site.css?v=20261012-polish10',s)
+ s=re.sub(r'assets/site\.css\?v=[^"]+','assets/site.css?v=20261012-svcmenu1',s)
  if name=='index.html':
   # H1 keyword line (audit B2): visible headline unchanged, eyebrow promoted into the H1.
   s=s.replace('<img src="assets/hero-logo.png" alt="The Tech Tamer: Josh’s top-hatted technology tamer mascot and wordmark" width="1353" height="1162">',HERO_PICTURE,1)
@@ -293,7 +294,7 @@ for file in (ROOT/'templates').glob('*.html'):
   rep1(s,'<img src="/assets/home-client-visit.webp" alt="Josh, The Tech Tamer, with a client during a home visit" width="1084" height="1049" loading="lazy" decoding="async">','<img src="assets/about-cta-laptop.png" alt="Josh Sargent, The Tech Tamer, smiling in a recliner with a laptop on his lap" width="1534" height="1536" loading="lazy">')
   s=S[0]
   # Scam warning badge right under the three help cards.
-  rep1(s,'<a class="textlink" href="website-package.html">See the website package</a></article></div></div></section>','<a class="textlink" href="website-package.html">See the website package</a></article></div>'+SCAM_BADGE_HOME+'</div></section>')
+  rep1(s,'</div></nav></div></section>','</div></nav>'+SCAM_BADGE_HOME+'</div></section>')
   s=S[0]
  if name=='services.html':
   # Security cameras/systems: residential (in-home) only. Never commercial or business security.
