@@ -643,6 +643,6 @@ main>section:not(:first-child):not(.reviews-section){content-visibility:auto;con
 .svc4--web .svc4-main{grid-column:1;grid-row:3;align-self:end}
 .svc4--web .svc4-split>.svc4-media{grid-column:2!important;grid-row:1/span 3!important;align-self:end;display:block}
 
-.svc4--web .svc4-frame--browser img{aspect-ratio:1140/1260;height:auto;object-fit:contain}
+.svc4--web .svc4-frame--browser img{aspect-ratio:1140/906;height:auto;object-fit:contain}
 }
-@media(max-width:700px){.svc4--web .svc4-frame img{aspect-ratio:1140/1260!important;height:auto!important;object-fit:contain!important}}
+@media(max-width:700px){.svc4--web .svc4-frame img{aspect-ratio:1140/906!important;height:auto!important;object-fit:contain!important}}
