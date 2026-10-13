@@ -641,8 +641,8 @@ main>section:not(:first-child):not(.reviews-section){content-visibility:auto;con
 .svc4--web .svc4-head,.svc4--web .svc4-line{grid-column:1}
 .svc4--web .svc4-split{display:contents}
 .svc4--web .svc4-main{grid-column:1;grid-row:3;align-self:end}
-.svc4--web .svc4-split>.svc4-media{grid-column:2!important;grid-row:1/span 3!important;align-self:stretch;display:flex}
-.svc4--web .svc4-frame{flex:1;display:flex}
-.svc4--web .svc4-frame--browser img{aspect-ratio:auto;height:100%;min-height:300px;object-fit:cover;object-position:50% 50%}
+.svc4--web .svc4-split>.svc4-media{grid-column:2!important;grid-row:1/span 3!important;align-self:end;display:block}
+
+.svc4--web .svc4-frame--browser img{aspect-ratio:1140/906;height:auto;object-fit:contain}
 }
-@media(max-width:700px){.svc4--web .svc4-frame img{aspect-ratio:1280/1040!important;height:auto!important;object-position:top}}
+@media(max-width:700px){.svc4--web .svc4-frame img{aspect-ratio:1140/906!important;height:auto!important;object-fit:contain!important}}
