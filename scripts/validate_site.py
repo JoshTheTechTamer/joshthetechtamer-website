@@ -254,7 +254,8 @@ assert 'about-cta-laptop-' in fr and 'alt="Josh Sargent, The Tech Tamer, smiling
 WARN='<span class="scam-badge__icon"><svg viewBox="0 0 24 24" aria-hidden="true"'
 svc=pages['services.html']
 assert svc.count('class="scam-badge"')==1 and re.search(r'</ul><a class="scam-badge" href="/scam-help">'+re.escape(WARN),svc) and '<a class="textlink" href="/scam-help">' not in svc
-assert re.search(r'Browse digital kits</a></article></div><a class="scam-badge scam-badge--wide" href="/scam-help">',home)
+# services-four: four service rows; the scam row (button to /scam-help) replaces the homepage scam badge
+assert home.count('class="svc4-row ')==4 and '<a class="btn svc4-btn" href="/scam-help">Get scam help' in home and 'Smart home &amp; in-home security cameras' in home
 assert '.scam-badge:focus-visible' in dcss and 'background:#fff1ec' in dcss and 'color:#8f2a17' in dcss
 # scam page: calm heading, 8-step numbered checklist, help-now block near top and bottom; FAQ JSON-LD matches the visible FAQ (checked above)
 sc=pages['scam-help.html']
@@ -301,7 +302,7 @@ for f in sorted(ROOT.glob('*.html')):
  assert '<canvas' not in t,('old canvas header',f.name)
  assert hd.count('<a href="/" class="brand brand-lockup header-animation" aria-label="The Tech Tamer home — House calls. Office visits. Tech tamed.">'+STAGE+'</a>')==1,('header stage',f.name)
  assert t.count('/assets/header-animation.js?v=20261012-ha13" defer')==1,('header script',f.name)
- assert 'assets/site.css?v=20261012-polish7' in t,f.name
+ assert 'assets/site.css?v=20261012-four4' in t,f.name
 # the slogan is real text, hidden from screen readers (the link's aria-label reads it once); printer is decorative
 assert '<span class="ha-slogan" aria-hidden="true">' in STAGE and '<span class="ha-printer is-grumpy" aria-hidden="true">' in STAGE and 'alt="The Tech Tamer"' in STAGE
 assert 'House calls.' in STAGE and 'Office visits.' in STAGE and 'TECH</span> <span class="ha-gold">TAMED.' in STAGE and '#f7c948' in ha_css.lower()

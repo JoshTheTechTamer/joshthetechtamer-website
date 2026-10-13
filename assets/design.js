@@ -1,6 +1,6 @@
 /* Shared design layer (Oct 2026): scroll reveal, self-drawing gold icons, gold-filling step timelines, card tilt/glow.
    Vanilla JS, no libraries. Without JS (or with reduced motion) every page is fully visible and still. */
-(function(){
+(function(){var go=function(){
   var d=document,root=d.documentElement,w=window;
   var mm=function(q){return w.matchMedia&&w.matchMedia(q).matches;};
   var reduce=mm('(prefers-reduced-motion: reduce)');
@@ -85,4 +85,8 @@
       card.addEventListener('pointerleave',function(){card.classList.remove('is-tilt');card.style.setProperty('--rx','0deg');card.style.setProperty('--ry','0deg');});
     });
   }
+};
+  /* Off the critical path: run after first paint, in idle time (chunked away from input). */
+  var start=function(){('requestIdleCallback' in window)?requestIdleCallback(go,{timeout:800}):setTimeout(go,120);};
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',function(){requestAnimationFrame(start);},{once:true});else requestAnimationFrame(start);
 })();
