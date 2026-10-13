@@ -80,3 +80,10 @@ if(!preview&&(location.hostname==='joshthetechtamer.com'||location.hostname==='w
  b.addEventListener("click",()=>{window.__haPaused=!window.__haPaused;try{localStorage.setItem("tt-header-paused",String(window.__haPaused))}catch(_){}
   const c=window.__haCtl;if(c)window.__haPaused?c.p():c.f();L()});
  w.append(b);h.append(w)})();
+/* Services-four: reveal rows as they scroll in and fill the gold rope (transform only, passive scroll, rAF). */
+(()=>{const w=document.querySelector('[data-svc4-wrap]');if(!w||matchMedia('(prefers-reduced-motion: reduce)').matches||!('IntersectionObserver' in window))return;
+ w.classList.add('svc4-anim');const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('is-in');io.unobserve(e.target)}}),{rootMargin:'0px 0px -12% 0px'});
+ w.querySelectorAll('[data-svc4]').forEach(r=>io.observe(r));let raf=0;
+ const fill=()=>{raf=0;const r=w.getBoundingClientRect();w.style.setProperty('--fill',Math.min(1,Math.max(0,(innerHeight*.65-r.top)/r.height)).toFixed(3))};
+ const on=()=>{if(!raf)raf=requestAnimationFrame(fill)};
+ new IntersectionObserver(es=>{if(es[0].isIntersecting){addEventListener('scroll',on,{passive:true});on()}else removeEventListener('scroll',on)}).observe(w)})();
