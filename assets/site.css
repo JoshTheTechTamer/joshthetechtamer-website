@@ -613,3 +613,4 @@ main>section:not(:first-child):not(.reviews-section){content-visibility:auto;con
  .svc4-iconpanel .icon{width:88px!important;height:88px!important}.svc4-iconpanel .icon svg{width:48px;height:48px}
 }
 @media(prefers-reduced-motion:reduce){.svc4-body,.svc4-frame,.svc4 *{transition:none!important}.svc4-rope span{transform:none!important}}
+.svc4-iconpanel .icon svg{width:64px!important;height:64px!important}@media(max-width:620px){.svc4-iconpanel .icon svg{width:48px!important;height:48px!important}}
