@@ -98,7 +98,7 @@ eager=[re.search(r'src="([^"]+)"',t).group(1) for t in re.findall(r'<img [^>]*>'
 size=lambda u:(ROOT/u.lstrip('/').split('?')[0]).stat().st_size
 eager_bytes=sum(size(u) for u in eager)+len(css)+len(wpjs)
 assert eager_bytes<300_000,('website-package eager weight',eager_bytes)
-assert 'jtt-home-mobile-tall' not in re.sub(r'data-tall-\d+="[^"]+"','',pkg) and max(size('assets/website-package/jtt-home-mobile-tall-%d.webp'%n) for n in (300,450))<160_000
+assert 'jtt-home-mobile-tall' not in re.sub(r'data-tall-\d+="[^"]+"','',pkg) and max(size('assets/website-package/jtt-home-mobile-tall-v2-%d.webp'%n) for n in (300,450))<160_000
 # ---- Local SEO (Oct 2026 audit): final URLs, sitemap, robots, structured data, no address, no ratings ----
 BASE='https://joshthetechtamer.com'
 pages=sorted(f.name for f in ROOT.glob('*.html') if f.name!='404.html')
