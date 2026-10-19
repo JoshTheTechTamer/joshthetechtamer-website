@@ -1,17 +1,104 @@
 [
- {"name":"Peggy S.","source":"Facebook recommendation","quote":"Super nice guy, knowledgeable, came to my house & solved my issue. Very reasonable rates. Highly recommend!","rating":null},
- {"name":"Ashley D.","source":"Facebook comment","quote":"Josh I can't thank you enough. I was freaking out and you were calm and handled everything nicely. I can't thank you again enough. I feel so much better after you left. You definitely will have my/our support for any future business. Thank you","rating":null},
- {"name":"Barb","source":"Google review","quote":"Josh is very knowledgeable and friendly. He helped me 2 times in home and a few times on line. Rates are very reasonable. If you need help contact him.","rating":5},
- {"name":"Brandie","source":"Google review","quote":"Josh did a wonderful job building us our business website! He listened and tailored our website to our specific needs! He even was more then willing to make a few changes when after we show our vision come to life and changed our minds he made those changes happily!! Hes very knowledgeable and wants to see your dreams built through your .com! We will absolutely be hiring Josh for our other business websites!","rating":5},
- {"name":"Bob","source":"Google review","quote":"Josh helped me w/my problems and gave me helpful info after he left. EXTREMELY capable. Easy to talk to. Can't say enough about this experience. Do yourself and your computer a favor. Call him!","rating":5},
- {"name":"Jane S.","source":"Facebook comment","quote":"I am so glad that I called this company, Josh was so patient with me. Explained a lot to me over the phone. Thanks, Tech Tamer!","rating":null},
- {"name":"Barbara M.","source":"Facebook comment","quote":"He was very professional, very polite and friendly. Did all I needed done.","rating":null},
- {"name":"Arlene S.","source":"Google review","quote":"Josh was the best tech experience I ever had had with explaining and informing for enjoyment of my new device I would recommend him highly","rating":5},
- {"name":"Ronald C.","source":"Facebook comment","quote":"Josh did excellent work! He definitely knows what he's doing! We will certainly have him again if we need computer work done. Very happy!!!","rating":null},
- {"name":"Peggy S.","source":"Facebook comment","quote":"Very knowledgeable & friendly! Knows his stuff! Prompt service to my house, very reasonable rates!","rating":null},
- {"name":"Barbara M.","source":"Facebook recommendation","quote":"I message him and he answered my question in a way I could understand. Very nice guy","rating":null},
- {"name":"Bob G.","source":"Facebook comment","quote":"Found Josh here on FACEBOOK. He just left, after having resolved issues. Good work. Good guy! Recommend. 👍","rating":null},
- {"name":"Glenda C.","source":"Facebook comment","quote":"He too has helped me with some tech issues Highly Recommend!","rating":null},
- {"name":"Helen C.","source":"Facebook comment","quote":"He is awesome at what he does 😊","rating":null},
- {"name":"Barbara M.","source":"Facebook comment","quote":"JOSH is very helpful explains things so you understand.","rating":null}
+  {
+    "name": "Peggy S.",
+    "source": "Facebook recommendation",
+    "quote": "Super nice guy, knowledgeable, came to my house & solved my issue. Very reasonable rates. Highly recommend!",
+    "rating": null
+  },
+  {
+    "name": "Ashley D.",
+    "source": "Facebook comment",
+    "quote": "Josh I can't thank you enough. I was freaking out and you were calm and handled everything nicely. I can't thank you again enough. I feel so much better after you left. You definitely will have my/our support for any future business. Thank you",
+    "rating": null
+  },
+  {
+    "name": "Barb",
+    "source": "Google review",
+    "quote": "Josh is very knowledgeable and friendly. He helped me 2 times in home and a few times on line. Rates are very reasonable. If you need help contact him.",
+    "rating": 5
+  },
+  {
+    "name": "Brandie",
+    "source": "Google review",
+    "quote": "Josh did a wonderful job building us our business website! He listened and tailored our website to our specific needs! He even was more then willing to make a few changes when after we show our vision come to life and changed our minds he made those changes happily!! Hes very knowledgeable and wants to see your dreams built through your .com! We will absolutely be hiring Josh for our other business websites!",
+    "rating": 5
+  },
+  {
+    "name": "Bob",
+    "source": "Google review",
+    "quote": "Josh helped me w/my problems and gave me helpful info after he left. EXTREMELY capable. Easy to talk to. Can't say enough about this experience. Do yourself and your computer a favor. Call him!",
+    "rating": 5
+  },
+  {
+    "name": "Jane S.",
+    "source": "Facebook comment",
+    "quote": "I am so glad that I called this company, Josh was so patient with me. Explained a lot to me over the phone. Thanks, Tech Tamer!",
+    "rating": null
+  },
+  {
+    "name": "Barbara M.",
+    "source": "Facebook comment",
+    "quote": "He was very professional, very polite and friendly. Did all I needed done.",
+    "rating": null
+  },
+  {
+    "name": "Arlene S.",
+    "source": "Google review",
+    "quote": "Josh was the best tech experience I ever had had with explaining and informing for enjoyment of my new device I would recommend him highly",
+    "rating": 5
+  },
+  {
+    "name": "Ronald C.",
+    "source": "Facebook comment",
+    "quote": "Josh did excellent work! He definitely knows what he's doing! We will certainly have him again if we need computer work done. Very happy!!!",
+    "rating": null
+  },
+  {
+    "name": "Peggy S.",
+    "source": "Facebook comment",
+    "quote": "Very knowledgeable & friendly! Knows his stuff! Prompt service to my house, very reasonable rates!",
+    "rating": null
+  },
+  {
+    "name": "Barbara M.",
+    "source": "Facebook recommendation",
+    "quote": "I message him and he answered my question in a way I could understand. Very nice guy",
+    "rating": null
+  },
+  {
+    "name": "Bob G.",
+    "source": "Facebook comment",
+    "quote": "Found Josh here on FACEBOOK. He just left, after having resolved issues. Good work. Good guy! Recommend. 👍",
+    "rating": null
+  },
+  {
+    "name": "Glenda C.",
+    "source": "Facebook comment",
+    "quote": "He too has helped me with some tech issues Highly Recommend!",
+    "rating": null
+  },
+  {
+    "name": "Helen C.",
+    "source": "Facebook comment",
+    "quote": "He is awesome at what he does 😊",
+    "rating": null
+  },
+  {
+    "name": "Barbara M.",
+    "source": "Facebook comment",
+    "quote": "JOSH is very helpful explains things so you understand.",
+    "rating": null
+  },
+  {
+    "name": "LeAnn T.",
+    "source": "Facebook comment",
+    "quote": "Good to know your in town wuth reasonable rates . Thank you.",
+    "rating": null
+  },
+  {
+    "name": "Diane O.",
+    "source": "Google review",
+    "quote": "We are back in business. Thank you, Josh. He came immediately after my call to him, fixed our problem, and offered to provide technical support for a project we are developing. He is knowledgeable, personable, timely AND cost efficient. I'm so glad I found you through your Facebook ad.",
+    "rating": 5
+  }
 ]
