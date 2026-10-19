@@ -23,7 +23,7 @@
       "blurb": "Student concierge services for families in Tuscaloosa.",
       "url": "https://demo-bamamama.joshthetechtamer.workers.dev/",
       "thumb": "/assets/demos-gallery/thumbs/bamamama.webp",
-      "enabled": false,
+      "enabled": true,
       "status": "demo_sent",
       "location": "Tuscaloosa, AL"
     },
