@@ -20,7 +20,11 @@ for f in ROOT.glob('*.html'):
   path=unquote(u.path.lstrip('/'))
   # Internal page links must use the final extensionless URL ("/" for home, "/rates" not "/rates.html").
   if t=='a' or (t=='link' and a.get('rel')=='canonical'):assert not path.endswith('.html'),('.html link (redirect hop)',f.name,a[key])
-  target=(ROOT/'index.html' if path=='' else ROOT/(path+'.html') if (ROOT/(path+'.html')).is_file() else ROOT/path) if u.path else f
+  if not u.path: target=f
+  elif path=='': target=ROOT/'index.html'
+  elif (ROOT/(path.rstrip('/')+'.html')).is_file(): target=ROOT/(path.rstrip('/')+'.html')
+  elif (ROOT/path.rstrip('/')/'index.html').is_file(): target=ROOT/path.rstrip('/')/'index.html'
+  else: target=ROOT/path
   assert target.is_file(),(f.name,a[key])
   if u.fragment and target.suffix=='.html':assert u.fragment in [x.get('id') for t,x in Page(target.read_text()).tags],(f.name,a[key])
   if t=='img':assert all(k in a for k in ['alt','width','height'])
@@ -50,7 +54,7 @@ hdr=lambda n:re.sub(r' aria-current="page"|\?service=[^"]*','',re.search(r'<head
 for f in ROOT.glob('*.html'):assert hdr(f.name)==hdr('index.html'),('header differs',f.name)
 # Main menu order (desktop nav and mobile slide-out share this markup); current page marked on Website Package.
 nav=re.search(r'<nav class="navlinks".*?</nav>',(ROOT/'index.html').read_text(),re.S).group()
-assert re.findall(r'>([^<>]+)</a>',nav)==['Scam Help','Tech Help','For Business','Get a Website','Rates & FAQ','About Josh','Request a visit ↗'],nav
+assert re.findall(r'>([^<>]+)</a>',nav)==['Scam Help','Tech Help','For Business','Get a Website','Client website previews','Rates & FAQ','About Josh','Request a visit ↗'],nav
 assert '<a href="/website-package" aria-current="page">Get a Website</a>' in (ROOT/'website-package.html').read_text()
 
 # ---- Website Package showcase (Oct 2026): copy, timeline, slider, features, extras card, motion + weight ----
@@ -199,7 +203,7 @@ for n in locked:
   if k=='images':a,b=[list(x) for x in a],[list(x) for x in b]
   assert a==b,('content changed by the redesign',n,k)
 dcss=(ROOT/'assets/design.css').read_text();djs=(ROOT/'assets/design.js').read_text()
-GOLD={'index.html':'you','services.html':'Working','business.html':'work','digital-kits.html':'confidence','rates.html':'pricing','about.html':'local','contact.html':'tame','tech-help-muscatine.html':'Muscatine','service-area.html':'Muscatine','scam-help.html':None,'tech-help-quad-cities.html':'In-Home','404.html':'wandered'}
+GOLD={'index.html':'you','services.html':'Working','business.html':'work','digital-kits.html':'confidence','rates.html':'pricing','about.html':'local','contact.html':'tame','tech-help-muscatine.html':'Muscatine','service-area.html':'Muscatine','scam-help.html':None,'tech-help-quad-cities.html':'In-Home','privacy.html':'Privacy','404.html':'wandered'}
 for f in ROOT.glob('*.html'):
  t=f.read_text();head=t[:t.index('</head>')]
  if f.name=='website-package.html':assert 'design.css' not in t and 'ds-hero' not in t,'showcase keeps its own layer';continue

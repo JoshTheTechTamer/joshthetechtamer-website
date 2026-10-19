@@ -18,10 +18,11 @@ meta={
 'tech-help-muscatine.html':('Tech Help in Muscatine, IA: I Come to You | The Tech Tamer','Computer, printer, Wi-Fi and phone help at your home in Muscatine, IA. Evenings & weekends, $50/hr, free consultation. Call or text 563-261-0200.','muscatine'),
 'service-area.html':('Service Area: Tech Help Near Muscatine, IA | The Tech Tamer','House-call tech help about 30 miles around Muscatine: Fruitland, Wilton, West Liberty, Durant, Columbus Junction, Letts, Nichols & the Quad Cities.','areas'),
 'scam-help.html':('Scam & Hacked Account Help in Muscatine | The Tech Tamer','Pop-up scams, hacked email and Facebook, locked-out accounts and 2-step verification. Calm in-home help in Muscatine, IA. Call or text 563-261-0200.','scam'),
-'tech-help-quad-cities.html':('In-Home Tech Help in Davenport & the Quad Cities | Tech Tamer','In-home computer, printer, Wi-Fi and scam help in Davenport, Bettendorf, Moline, Rock Island, East Moline & nearby. $50/hr. Text 563-261-0200.','qc')}
+'tech-help-quad-cities.html':('In-Home Tech Help in Davenport & the Quad Cities | Tech Tamer','In-home computer, printer, Wi-Fi and scam help in Davenport, Bettendorf, Moline, Rock Island, East Moline & nearby. $50/hr. Text 563-261-0200.','qc'),
+'privacy.html':('Privacy Policy | The Tech Tamer','How The Tech Tamer LLC handles information you share through our website forms and Facebook or Instagram lead ads.','privacy')}
 # Pages without their own share image or a one-word breadcrumb name.
-share_key={'website':'business','muscatine':'about','areas':'home','scam':'about','qc':'about'}  # new pages: Josh-only share photo
-crumb={'website':'Website Package','muscatine':'Tech Help in Muscatine','areas':'Areas I Serve','scam':'Scam & Hacked Account Help','qc':'Quad Cities','kits':'Digital Kits','services':'Tech Help'}
+share_key={'website':'business','muscatine':'about','areas':'home','scam':'about','qc':'about','privacy':'about'}  # new pages: Josh-only share photo
+crumb={'website':'Website Package','muscatine':'Tech Help in Muscatine','areas':'Areas I Serve','scam':'Scam & Hacked Account Help','qc':'Quad Cities','kits':'Digital Kits','services':'Tech Help','privacy':'Privacy'}
 # Final, extensionless public URL for each page (Cloudflare Pages serves /about from about.html and 308s about.html -> /about).
 def url(name):return BASE+'/'+('' if name=='index.html' else name[:-5])
 parent={'tech-help-quad-cities.html':'service-area.html'}
@@ -117,7 +118,10 @@ def footer(s):
  assert '<a class="ttb" href="website-package.html">' in s,'built-by badge link'
  g=(f'<a href="{escape(gbp)}" target="_blank" rel="noopener noreferrer">Find us on Google ↗</a>' if gbp else '')+(f'<a href="{escape(review_url)}" target="_blank" rel="noopener noreferrer">Leave a Google review ↗</a>' if review_url else '')
  s=s.replace('LinkedIn ↗</a></div>','LinkedIn ↗</a>'+g+'</div>',1)
- assert FOOTER_AREAS in s and 'tech-help-muscatine.html">Tech help in Muscatine' in s and 'tech-help-quad-cities.html">Tech help in the Quad Cities' in s and 'service-area.html">Areas I serve</a><a href="digital-kits.html">Digital kits</a>' in s,'footer markup changed'
+ if 'href="privacy.html">Privacy</a>' not in s and 'href="/privacy">Privacy</a>' not in s:
+  assert '<div class="footer-bottom"><span>© 2026 The Tech Tamer LLC. All rights reserved.</span>' in s,'footer-bottom copyright'
+  s=s.replace('<div class="footer-bottom"><span>© 2026 The Tech Tamer LLC. All rights reserved.</span>','<div class="footer-bottom"><span>© 2026 The Tech Tamer LLC. All rights reserved. <a href="privacy.html">Privacy</a></span>',1)
+ assert FOOTER_AREAS in s and 'tech-help-muscatine.html">Tech help in Muscatine' in s and 'tech-help-quad-cities.html">Tech help in the Quad Cities' in s and 'service-area.html">Areas I serve</a><a href="digital-kits.html">Digital kits</a>' in s and 'privacy.html">Privacy</a>' in s,'footer markup changed'
  return s
 
 # ---- Round 2 of the redesign (Josh's feedback, Oct 11) ----
@@ -221,7 +225,7 @@ def normalize_urls(s,name):
 DESIGN_V='20261012-perf1'
 GOLD_WORD={'index.html':'you','services.html':'Working','business.html':'work','digital-kits.html':'confidence','rates.html':'pricing',
  'about.html':'local','contact.html':'tame','tech-help-muscatine.html':'Muscatine','service-area.html':'Muscatine','scam-help.html':None,
- 'tech-help-quad-cities.html':'In-Home','404.html':'wandered'}
+ 'tech-help-quad-cities.html':'In-Home','privacy.html':'Privacy','404.html':'wandered'}
 # Shared gold line-icon set (data/icons.json): the Website Package "essentials" icons plus matching ones for every icon spot.
 ICONS=json.loads((ROOT/'data/icons.json').read_text())
 ICON_FOR=[(r'website for your business','globe'),(r'locked-out','key'),(r'pop-up','warning'),(r'lock it down','lock'),(r'scam|hacked|accounts?\b','shield'),(r'computer|laptop','laptop'),(r'printer','printer'),
