@@ -1,0 +1,171 @@
+{
+  "version": 1,
+  "path": "/demos-gallery/",
+  "menu_label": "Client website previews",
+  "page_title": "Client website previews | The Tech Tamer",
+  "page_blurb": "Private website previews shared with specific businesses. Each one is a free concept preview \u2014 not that business's live site.",
+  "free_preview_label": "Free preview \u2014 not the business's live site",
+  "notes": "Set enabled:true only after Josh OKs. Password lives only in Cloudflare Pages env DEMOS_GALLERY_PASSWORD (secret). Cookie signing: DEMOS_GALLERY_COOKIE_SECRET. Never commit password values.",
+  "demos": [
+    {
+      "id": "sunsetview",
+      "name": "Sunset View Pet Hospital",
+      "blurb": "Wilton vet clinic \u2014 care, team, visits, reviews, and a guess-the-pet game.",
+      "url": "https://demo-sunsetview.joshthetechtamer.workers.dev/",
+      "thumb": "/assets/demos-gallery/thumbs/sunsetview.webp",
+      "enabled": true,
+      "status": "demo_sent",
+      "location": "Wilton, IA"
+    },
+    {
+      "id": "bamamama",
+      "name": "Bama Mama Concierge",
+      "blurb": "Student concierge services for families in Tuscaloosa.",
+      "url": "https://demo-bamamama.joshthetechtamer.workers.dev/",
+      "thumb": "/assets/demos-gallery/thumbs/bamamama.webp",
+      "enabled": false,
+      "status": "demo_sent",
+      "location": "Tuscaloosa, AL"
+    },
+    {
+      "id": "megsvintage",
+      "name": "Meg's Vintage Collective",
+      "blurb": "Vintage and antiques shop in Muscatine.",
+      "url": "https://demo-megsvintage.joshthetechtamer.workers.dev/",
+      "thumb": "/assets/demos-gallery/thumbs/megsvintage.webp",
+      "enabled": true,
+      "status": "demo_sent",
+      "location": "Muscatine, IA"
+    },
+    {
+      "id": "coffeebelt",
+      "name": "The Coffee Belt",
+      "blurb": "Coffee shop with downtown and north Muscatine locations.",
+      "url": "https://demo-coffeebelt.joshthetechtamer.workers.dev/",
+      "thumb": "/assets/demos-gallery/thumbs/coffeebelt.webp",
+      "enabled": true,
+      "status": "demo_sent",
+      "location": "Muscatine, IA"
+    },
+    {
+      "id": "osaka",
+      "name": "Osaka Japanese Steakhouse",
+      "blurb": "Sushi and hibachi restaurant in Muscatine.",
+      "url": "https://demo-osaka.joshthetechtamer.workers.dev/",
+      "thumb": "/assets/demos-gallery/thumbs/osaka.webp",
+      "enabled": true,
+      "status": "demo_sent",
+      "location": "Muscatine, IA"
+    },
+    {
+      "id": "riotsrebelles",
+      "name": "Riots & Rebelles Salon",
+      "blurb": "Hair, color, and waxing salon in Muscatine.",
+      "url": "https://demo-riotsrebelles.joshthetechtamer.workers.dev/",
+      "thumb": "/assets/demos-gallery/thumbs/riotsrebelles.webp",
+      "enabled": true,
+      "status": "demo_sent",
+      "location": "Muscatine, IA"
+    },
+    {
+      "id": "hawknest",
+      "name": "Hawk Nest Concierge",
+      "blurb": "Student concierge services for families in Iowa City.",
+      "url": "https://demo-hawknest.joshthetechtamer.workers.dev/",
+      "thumb": "/assets/demos-gallery/thumbs/hawknest.webp",
+      "enabled": true,
+      "status": "demo_sent",
+      "location": "Iowa City, IA"
+    },
+    {
+      "id": "elolmito",
+      "name": "El Olmito",
+      "blurb": "Mexican grocery and taquer\u00eda in Muscatine.",
+      "url": "https://demo-elolmito.joshthetechtamer.workers.dev/",
+      "thumb": "/assets/demos-gallery/thumbs/elolmito.webp",
+      "enabled": true,
+      "status": "demo_sent",
+      "location": "Muscatine, IA"
+    },
+    {
+      "id": "packnship",
+      "name": "Pack-N-Ship",
+      "blurb": "Packing, shipping, and notary in Muscatine.",
+      "url": "https://demo-packnship.joshthetechtamer.workers.dev/",
+      "thumb": "/assets/demos-gallery/thumbs/packnship.webp",
+      "enabled": true,
+      "status": "demo_sent",
+      "location": "Muscatine, IA"
+    },
+    {
+      "id": "lemon",
+      "name": "Lemon Landscaping",
+      "blurb": "Retaining walls, patios, and bulk materials in Muscatine.",
+      "url": "https://demo-lemon.joshthetechtamer.workers.dev/",
+      "thumb": "/assets/demos-gallery/thumbs/lemon.webp",
+      "enabled": true,
+      "status": "demo_sent",
+      "location": "Muscatine, IA"
+    },
+    {
+      "id": "tresses",
+      "name": "Tresses N' Tones Hair Studio",
+      "blurb": "Color, cuts, and formal styles in Bettendorf.",
+      "url": "https://demo-tresses.joshthetechtamer.workers.dev/",
+      "thumb": "/assets/demos-gallery/thumbs/tresses.webp",
+      "enabled": true,
+      "status": "demo_sent",
+      "location": "Bettendorf, IA"
+    },
+    {
+      "id": "decades",
+      "name": "Decades Barbershop",
+      "blurb": "Classic cuts and flattops in Davenport.",
+      "url": "https://demo-decades.joshthetechtamer.workers.dev/",
+      "thumb": "/assets/demos-gallery/thumbs/decades.webp",
+      "enabled": true,
+      "status": "demo_sent",
+      "location": "Davenport, IA"
+    },
+    {
+      "id": "shafferauto",
+      "name": "Shaffer Automotive",
+      "blurb": "Auto repair, body, and paint in Durant.",
+      "url": "https://demo-shafferauto.joshthetechtamer.workers.dev/",
+      "thumb": "/assets/demos-gallery/thumbs/shafferauto.webp",
+      "enabled": true,
+      "status": "demo_sent",
+      "location": "Durant, IA"
+    },
+    {
+      "id": "sellsauto",
+      "name": "Sell's Auto Repair",
+      "blurb": "Family-owned auto repair on Hwy 61 in Muscatine.",
+      "url": "https://demo-sellsauto.joshthetechtamer.workers.dev/",
+      "thumb": "/assets/demos-gallery/thumbs/sellsauto.webp",
+      "enabled": true,
+      "status": "demo_sent",
+      "location": "Muscatine, IA"
+    },
+    {
+      "id": "royalgrooming",
+      "name": "Royal Grooming Barber Lounge",
+      "blurb": "Barber lounge in downtown Muscatine (hosted on this site).",
+      "url": "https://joshthetechtamer.com/demos/royalgrooming/",
+      "thumb": "/assets/demos-gallery/thumbs/royalgrooming.webp",
+      "enabled": true,
+      "status": "on_site_demo",
+      "location": "Muscatine, IA"
+    },
+    {
+      "id": "backinline",
+      "name": "Back In Line Chiropractic",
+      "blurb": "Chiropractic and massage in Muscatine (hosted on this site).",
+      "url": "https://joshthetechtamer.com/demos/backinline/",
+      "thumb": "/assets/demos-gallery/thumbs/backinline.webp",
+      "enabled": true,
+      "status": "on_site_demo",
+      "location": "Muscatine, IA"
+    }
+  ]
+}

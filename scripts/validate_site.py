@@ -135,7 +135,8 @@ assert cfg.get('google_business_profile_url','')=='' or cfg['google_business_pro
 nf=(ROOT/'404.html').read_text();assert 'rel="canonical"' not in nf and 'noindex' in nf
 sm=(ROOT/'sitemap.xml').read_text();locs=re.findall(r'<url><loc>([^<]+)</loc><lastmod>(\d{4}-\d{2}-\d{2})</lastmod></url>',sm)
 assert sorted(l for l,_ in locs)==sorted(final(n) for n in pages) and sm.count('<url>')==len(pages),'sitemap: every page, final URLs, with lastmod'
-assert (ROOT/'robots.txt').read_text()=='User-agent: *\nAllow: /\n\nSitemap: '+BASE+'/sitemap.xml\n'
+ROBOTS_EXPECTED='User-agent: *\nAllow: /\n\nSitemap: '+BASE+'/sitemap.xml\n\n# Invite-only client website previews — keep out of search\nUser-agent: *\nDisallow: /demos-gallery/\n'
+assert (ROOT/'robots.txt').read_text()==ROBOTS_EXPECTED
 for n in ['tech-help-muscatine.html','service-area.html','scam-help.html','tech-help-quad-cities.html']:assert n in pages and 'Built by' in (ROOT/n).read_text(),n
 idx=(ROOT/'index.html').read_text()
 assert 'hero-logo.png' not in ''.join((ROOT/n).read_text() for n in pages+['404.html']),'1.48 MB hero-logo.png must not be referenced'

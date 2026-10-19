@@ -1,0 +1,37 @@
+/* Demos gallery + password gate — matches Tech Tamer design tokens */
+.dg-gate-body{min-height:100vh;margin:0;background:radial-gradient(ellipse at 28% 0%,#2a3d6e 0%,transparent 62%),linear-gradient(180deg,#1d2c55 0%,#172443 100%);color:#fff}
+.dg-gate{min-height:100vh;display:grid;place-items:center;padding:32px 18px}
+.dg-gate-card{width:min(440px,100%);background:linear-gradient(#fff,#fff) padding-box,linear-gradient(135deg,rgba(245,183,49,.9),rgba(18,174,245,.55)) border-box;border:1px solid transparent;border-radius:22px;padding:28px 26px 24px;color:#172443;box-shadow:0 28px 60px rgba(5,10,30,.45)}
+.dg-gate-card .eyebrow{color:#5a6a8c;margin:0 0 8px}
+.dg-gate-card h1{font-family:"Montserrat DS","Montserrat",Arial,Helvetica,sans-serif;font-weight:900;letter-spacing:-.03em;font-size:clamp(1.55rem,4vw,2rem);margin:0 0 10px;line-height:1.15;color:#172443}
+.dg-gate-lead{margin:0 0 18px;color:#3a4a6a;line-height:1.45}
+.dg-gate-error{margin:0 0 14px;padding:10px 12px;border-radius:10px;background:#fde8e8;color:#8b1e1e;font-weight:600}
+.dg-gate-form label{display:block;font-weight:700;margin:0 0 6px;color:#172443}
+.dg-gate-form input[type=password]{width:100%;box-sizing:border-box;padding:12px 14px;border-radius:12px;border:1.5px solid #c5d0e4;font-size:1rem;margin-bottom:14px}
+.dg-gate-form input[type=password]:focus{outline:2px solid #12aef5;outline-offset:2px;border-color:#12aef5}
+.dg-gate-form .btn{width:100%;justify-content:center}
+.dg-gate-note{margin:16px 0 0;font-size:.92rem;color:#5a6a8c}
+.dg-gate-note a{color:#0a84c9}
+.dg-gate-home{margin:14px 0 0;font-size:.92rem}
+.dg-gate-home a{color:#3a4a6a}
+
+.dg-page .page-hero.ds-hero{padding-bottom:48px}
+.dg-banner{display:flex;flex-wrap:wrap;gap:10px 16px;align-items:center;justify-content:space-between;margin:0 0 22px;padding:12px 16px;border-radius:14px;background:#fff7e0;border:1px solid rgba(245,183,49,.55);color:#5a3d00}
+.dg-banner strong{color:#172443}
+.dg-banner a{color:#0a84c9;font-weight:700}
+.dg-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:22px;margin:8px 0 40px}
+.dg-card{display:flex;flex-direction:column;border:1px solid transparent;border-radius:18px;overflow:hidden;background:linear-gradient(#fff,#fff) padding-box,linear-gradient(135deg,rgba(245,183,49,.9),rgba(18,174,245,.55)) border-box;box-shadow:0 16px 38px rgba(35,51,92,.08)}
+.dg-card__shot{display:block;aspect-ratio:16/10;background:#e8eef8;overflow:hidden}
+.dg-card__shot img{width:100%;height:100%;object-fit:cover;object-position:top center;display:block}
+.dg-card__body{padding:16px 16px 18px;display:flex;flex-direction:column;gap:8px;flex:1}
+.dg-card__label{display:inline-flex;align-self:flex-start;margin:0;padding:4px 10px;border-radius:999px;background:#172443;color:#f5b731;font-size:.72rem;font-weight:800;letter-spacing:.04em;text-transform:uppercase}
+.dg-card__body h2{margin:0;font-size:1.15rem;line-height:1.25;color:#172443}
+.dg-card__loc{margin:0;font-size:.88rem;color:#5a6a8c}
+.dg-card__blurb{margin:0;color:#3a4a6a;line-height:1.45;flex:1}
+.dg-card__body .btn{align-self:flex-start;margin-top:4px}
+.dg-empty{padding:28px;border-radius:16px;background:#f4f7fc;color:#3a4a6a;text-align:center}
+.dg-dev-flag{outline:2px dashed #e39b18;outline-offset:2px}
+.dg-dev-flag::after{content:"not enabled for live yet";display:block;font-size:.7rem;color:#a06700;margin-top:4px;font-weight:700;letter-spacing:.02em}
+@media (max-width:620px){
+  .dg-grid{grid-template-columns:1fr;gap:16px}
+}

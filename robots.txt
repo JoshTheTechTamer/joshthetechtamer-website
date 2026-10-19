@@ -2,3 +2,7 @@ User-agent: *
 Allow: /
 
 Sitemap: https://joshthetechtamer.com/sitemap.xml
+
+# Invite-only client website previews — keep out of search
+User-agent: *
+Disallow: /demos-gallery/
