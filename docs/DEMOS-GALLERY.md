@@ -1,32 +1,22 @@
 # Client website previews (password-protected)
 
-URL (live): `https://joshthetechtamer.com/demos-gallery/`
+URL: `https://joshthetechtamer.com/demos-gallery/`
 
-Visible label: **Client website previews**. Path: `/demos-gallery/`.
+Also gated (same login): `/demos/royalgrooming/`, `/demos/backinline/`
 
 ## Gate
 
-- Pages Function: `functions/demos-gallery/_middleware.js`
-- Secrets (Pages → Settings → Environment variables): `DEMOS_GALLERY_PASSWORD`, `DEMOS_GALLERY_COOKIE_SECRET`
-- Changing the password needs no rebuild
-- Never put the password in HTML, titles, errors, placeholders, git, or docs
+- Shared logic: `functions/_lib/client-previews-gate.js`
+- Middleware: `functions/demos-gallery/_middleware.js`, `functions/demos/_middleware.js`
+- Secrets: `DEMOS_GALLERY_PASSWORD`, `DEMOS_GALLERY_COOKIE_SECRET`
+- Cookie `tt_demos_auth` with **Path=/** (one login unlocks gallery + gated demos)
+- Auth POST: `/demos-gallery/auth` — `next` must be a safe same-site path under the gated prefixes
+- Never put the password in HTML, titles, errors, git, or docs
 
-## Enable a demo
+## Enable a demo card
 
-Edit `data/demos-gallery.json` → `"enabled": true` after Josh OKs, then:
-
-```bash
-python3 scripts/build_demos_gallery.py
-```
-
-## Local preview server
-
-```bash
-DEMOS_GALLERY_PASSWORD='…' node scripts/serve_demos_gallery.mjs
-```
-
-Password only in the start-command env (not in served pages).
+Edit `data/demos-gallery.json` → `"enabled": true`, then `python3 scripts/build_demos_gallery.py`
 
 ## noindex
 
-Meta + `X-Robots-Tag`, `robots.txt` Disallow `/demos-gallery/`, not in sitemap, never IndexNow.
+Meta + `X-Robots-Tag` on gated responses; `robots.txt` Disallow `/demos-gallery/`; not in sitemap.
