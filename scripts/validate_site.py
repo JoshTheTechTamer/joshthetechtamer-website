@@ -54,7 +54,7 @@ hdr=lambda n:re.sub(r' aria-current="page"|\?service=[^"]*','',re.search(r'<head
 for f in ROOT.glob('*.html'):assert hdr(f.name)==hdr('index.html'),('header differs',f.name)
 # Main menu order (desktop nav and mobile slide-out share this markup); current page marked on Website Package.
 nav=re.search(r'<nav class="navlinks".*?</nav>',(ROOT/'index.html').read_text(),re.S).group()
-assert re.findall(r'>([^<>]+)</a>',nav)==['Scam Help','Tech Help','For Business','Get a Website','Client website previews','Rates & FAQ','About Josh','Request a visit ↗'],nav
+assert re.findall(r'>([^<>]+)</a>',nav)==['Scam Help','Tech Help','For Business','Get a Website','Rates & FAQ','About Josh','Request a visit ↗'],nav
 assert '<a href="/website-package" aria-current="page">Get a Website</a>' in (ROOT/'website-package.html').read_text()
 
 # ---- Website Package showcase (Oct 2026): copy, timeline, slider, features, extras card, motion + weight ----
@@ -139,7 +139,7 @@ assert cfg.get('google_business_profile_url','')=='' or cfg['google_business_pro
 nf=(ROOT/'404.html').read_text();assert 'rel="canonical"' not in nf and 'noindex' in nf
 sm=(ROOT/'sitemap.xml').read_text();locs=re.findall(r'<url><loc>([^<]+)</loc><lastmod>(\d{4}-\d{2}-\d{2})</lastmod></url>',sm)
 assert sorted(l for l,_ in locs)==sorted(final(n) for n in pages) and sm.count('<url>')==len(pages),'sitemap: every page, final URLs, with lastmod'
-ROBOTS_EXPECTED='User-agent: *\nAllow: /\n\nSitemap: '+BASE+'/sitemap.xml\n\n# Invite-only client website previews — keep out of search\nUser-agent: *\nDisallow: /demos-gallery/\n'
+ROBOTS_EXPECTED='User-agent: *\nAllow: /\n\nSitemap: '+BASE+'/sitemap.xml\n'
 assert (ROOT/'robots.txt').read_text()==ROBOTS_EXPECTED
 for n in ['tech-help-muscatine.html','service-area.html','scam-help.html','tech-help-quad-cities.html']:assert n in pages and 'Built by' in (ROOT/n).read_text(),n
 idx=(ROOT/'index.html').read_text()

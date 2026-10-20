@@ -1,22 +1,22 @@
-# Client website previews (password-protected)
+# Website style samples gallery (public, link-invite only)
 
-URL: `https://joshthetechtamer.com/demos-gallery/`
+URL: `https://joshthetechtamer.com/demos-gallery/` (shared by direct link only)
 
-Also gated (same login): `/demos/royalgrooming/`, `/demos/backinline/`
+- No password since 2026-10-19 (approved by Josh). It lists 12 fictional style-sample templates on `tpl-*.joshthetechtamer.workers.dev`. Branded client originals are never listed.
+- **Not linked anywhere.** Keep it out of every nav, footer, page body, `sitemap.xml` and JSON-LD. `scripts/build_demos_gallery.py` strips any gallery link from the borrowed about.html chrome, and fails if one is left or if any relative link remains.
+- **noindex:** `<meta name="robots" content="noindex, nofollow, noarchive">` plus `X-Robots-Tag` (set by `functions/demos-gallery/_middleware.js`). `robots.txt` deliberately does **not** block it, so crawlers can read the noindex.
 
-## Gate
+## Still password-gated (unchanged)
 
-- Shared logic: `functions/_lib/client-previews-gate.js`
-- Middleware: `functions/demos-gallery/_middleware.js`, `functions/demos/_middleware.js`
-- Secrets: `DEMOS_GALLERY_PASSWORD`, `DEMOS_GALLERY_COOKIE_SECRET`
-- Cookie `tt_demos_auth` with **Path=/** (one login unlocks gallery + gated demos)
-- Auth POST: `/demos-gallery/auth` — `next` must be a safe same-site path under the gated prefixes
-- Never put the password in HTML, titles, errors, git, or docs
+`/demos/royalgrooming/` and `/demos/backinline/` use:
+- `functions/demos/_middleware.js` and `functions/_lib/client-previews-gate.js`
+- secrets `DEMOS_GALLERY_PASSWORD` and `DEMOS_GALLERY_COOKIE_SECRET`
+- the cookie `tt_demos_auth`
 
-## Enable a demo card
+The login form posts to `/demos-gallery/auth`, which the gallery middleware still routes to the gate handler (with `/demos-gallery/logout`). Never put the password in HTML, titles, errors, git or docs.
 
-Edit `data/demos-gallery.json` → `"enabled": true`, then `python3 scripts/build_demos_gallery.py`
+`scripts/serve_demos_gallery.mjs` is the old local gate preview and still gates the gallery locally. It is a dev tool only.
 
-## noindex
+## Edit cards
 
-Meta + `X-Robots-Tag` on gated responses; `robots.txt` Disallow `/demos-gallery/`; not in sitemap.
+Edit `data/demos-gallery.json`, then run `python3 scripts/build_demos_gallery.py` and `python3 scripts/validate_site.py`.

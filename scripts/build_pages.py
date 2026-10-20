@@ -89,7 +89,6 @@ def local_reviews():
  return '<section class="section reviews-section" aria-labelledby="local-reviews-heading"><div class="wrap"><div class="section-head"><div><div class="eyebrow">A little reassurance</div><h2 id="local-reviews-heading">What folks are saying.</h2></div><p>Feedback shared by customers on Google and Facebook.</p></div><div class="grid3 local-review-grid">'+cards+'</div>'+google_links()+'<p class="small review-note">Names are shortened for privacy. Stars appear only where a five-star Google rating was provided.</p></div></section>'
 SIGNOFF='<p>Muscatine · Nearby towns · Quad Cities</p>'  # Josh's sign-off: left exactly as on main (question pending with Josh)
 FOOTER_AREAS=SIGNOFF+'<p>Muscatine · Fruitland · Wilton · West Liberty · Durant · Quad Cities (IA &amp; IL)<br><a class="footer-areas" href="service-area.html">Areas I serve</a></p>'
-NAV_GALLERY='<a href="demos-gallery/">Client website previews</a>'
 NAV_SCAM='<a class="nav-scam" href="scam-help.html"><svg class="nav-scam__icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 3.2 2.3 20h19.4z" fill="#f2a516" stroke="#b45309" stroke-width="1.4" stroke-linejoin="round"/><path d="M12 9.5v5" stroke="#3b1d06" stroke-width="2.2" stroke-linecap="round"/><circle cx="12" cy="17.4" r="1.25" fill="#3b1d06"/></svg>Scam Help</a>'
 def footer(s):
  s=s.replace(SIGNOFF,FOOTER_AREAS,1)
@@ -104,14 +103,6 @@ def footer(s):
  hdr=re.search(r'<header\b.*?</header>',s,re.S)
  if hdr:
   h2=re.sub(r'(<a href="services\.html"(?: aria-current="page")?>Tech Help</a>)',lambda m:NAV_SCAM+m.group(1),hdr.group(),count=1);assert h2!=hdr.group(),'nav scam link'
-  if 'demos-gallery' not in h2:
-   h3=re.sub(r'(<a href="rates\.html"(?: aria-current="page")?>Rates &amp; FAQ</a>)',lambda m:NAV_GALLERY+m.group(1),h2,count=1)
-   if h3==h2:
-    h3=re.sub(r'(<a href="rates\.html"(?: aria-current="page")?>Rates & FAQ</a>)',lambda m:NAV_GALLERY+m.group(1),h2,count=1)
-   assert h3!=h2,'nav gallery link'
-   h2=h3
-  else:
-   h2=re.sub(r'<a href="(?:/)?demos-gallery/?"[^>]*>[^<]*</a>',NAV_GALLERY,h2,count=1)
   s=s[:hdr.start()]+h2+s[hdr.end():]
  # "Built by" badge on joshthetechtamer.com itself points to the Website Package.
  s=s.replace('<a class="ttb" href="contact.html?service=Website%20%26%20business%20tech">','<a class="ttb" href="website-package.html">',1)
@@ -408,7 +399,7 @@ for file in (ROOT/'templates').glob('*.html'):
  if 'static.cloudflareinsights.com/beacon.min.js' not in s:
   assert '</body>' in s,('missing body close',name);s=s.replace('</body>',CF_BEACON+'</body>',1)
  (ROOT/name).write_text(s)
-(ROOT/'robots.txt').write_text('User-agent: *\nAllow: /\n\nSitemap: '+BASE+'/sitemap.xml\n\n# Invite-only client website previews — keep out of search\nUser-agent: *\nDisallow: /demos-gallery/\n')
+(ROOT/'robots.txt').write_text('User-agent: *\nAllow: /\n\nSitemap: '+BASE+'/sitemap.xml\n')
 assert set(lastmod)==set(meta),('data/sitemap-lastmod.json must list every indexed page',set(meta)^set(lastmod))
 (ROOT/'sitemap.xml').write_text('<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n'+''.join('<url><loc>'+url(n)+'</loc><lastmod>'+lastmod[n]+'</lastmod></url>\n' for n in meta)+'</urlset>\n')
 print(f'Built {len(meta)} pages and 404; no publishing performed.')

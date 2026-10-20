@@ -14,8 +14,30 @@ ROOT = Path(__file__).resolve().parents[1]
 DATA = ROOT / "data" / "demos-gallery.json"
 CHROME = ROOT / "about.html"  # stable page with full header/footer
 
-NAV_LINK = '<a href="/demos-gallery/">Client website previews</a>'
-NAV_CURRENT = '<a href="/demos-gallery/" aria-current="page">Client website previews</a>'
+# Link-invite only (Josh, 2026-10-19): the gallery is public but not linked from any
+# page, nav, footer, sitemap or schema, and stays noindex. Shared by direct link only.
+GALLERY_LINK = re.compile(r'<a href="/?demos-gallery/?[^"]*"[^>]*>[^<]*</a>')
+
+_ABS_OK = re.compile(r'^(?:/|#|[a-z][a-z0-9+.-]*:)', re.I)
+
+
+def absolutize(fragment: str) -> str:
+    """Make every relative href/src in borrowed chrome root-absolute.
+
+    about.html lives at the site root, so its relative links (e.g. href="demos-gallery/")
+    break when reused at /demos-gallery/ (they resolve to /demos-gallery/demos-gallery/).
+    """
+    def fix(m):
+        attr, q, val = m.group(1), m.group(2), m.group(3)
+        if not val or _ABS_OK.match(val):
+            return m.group(0)
+        val = val[2:] if val.startswith("./") else val
+        return f'{attr}={q}/{val}{q}'
+    return re.sub(r'\b(href|src)=(["\'])([^"\']*)\2', fix, fragment)
+
+
+def strip_gallery_links(fragment: str) -> str:
+    return GALLERY_LINK.sub("", fragment)
 
 
 def esc(s: str) -> str:
@@ -33,33 +55,6 @@ def extract_chrome(src: str) -> tuple[str, str, str]:
     return m_head.group(2), m_top.group(1), m_foot.group(1)
 
 
-def inject_nav(header_html: str, current: bool) -> str:
-    # Drop aria-current from chrome page so only Demos is marked current
-    header_html = re.sub(r'\saria-current="page"', '', header_html)
-    link = NAV_CURRENT if current else NAV_LINK
-    # Insert before Rates & FAQ (or About) so it sits with main items
-    if "demos-gallery" in header_html:
-        header_html = re.sub(
-            r'<a href="/demos-gallery/"[^>]*>[^<]*</a>',
-            link,
-            header_html,
-            count=1,
-        )
-        return header_html
-    header_html = header_html.replace(
-        '<a href="/rates">Rates &amp; FAQ</a>',
-        f'{link}<a href="/rates">Rates &amp; FAQ</a>',
-        1,
-    )
-    if "demos-gallery" not in header_html:
-        header_html = header_html.replace(
-            '<a href="/rates">Rates & FAQ</a>',
-            f'{link}<a href="/rates">Rates & FAQ</a>',
-            1,
-        )
-    return header_html
-
-
 def card(d: dict, label: str, preview_flag: bool) -> str:
     cls = "dg-card" + (" dg-dev-flag" if preview_flag and not d.get("enabled") else "")
     thumb = esc(d.get("thumb") or "")
@@ -69,14 +64,15 @@ def card(d: dict, label: str, preview_flag: bool) -> str:
     url = esc(d["url"])
     return f'''<article class="{cls}">
   <a class="dg-card__shot" href="{url}" target="_blank" rel="noopener noreferrer">
-    <img src="{thumb}" alt="Screenshot of the {name} website preview" width="640" height="400" loading="lazy" decoding="async">
+    <img src="{thumb}" alt="Screenshot of the {name} website style sample" width="640" height="400" loading="lazy" decoding="async">
   </a>
   <div class="dg-card__body">
     <p class="dg-card__label">{esc(label)}</p>
     <h2>{name}</h2>
     <p class="dg-card__loc">{loc}</p>
     <p class="dg-card__blurb">{blurb}</p>
-    <a class="btn" href="{url}" target="_blank" rel="noopener noreferrer">Open preview<span aria-hidden="true">↗</span></a>
+    <p class="dg-card__note">Every client site is custom-built.</p>
+    <a class="btn" href="{url}" target="_blank" rel="noopener noreferrer">Open style sample<span aria-hidden="true">↗</span></a>
   </div>
 </article>'''
 
@@ -91,6 +87,7 @@ def build(preview: bool, out_dir: Path) -> Path:
         shown = [d for d in demos if d.get("enabled")]
 
     head_inner, body_top, foot = extract_chrome(CHROME.read_text())
+    body_top, foot = strip_gallery_links(absolutize(body_top)), strip_gallery_links(absolutize(foot))
     # Rewrite head meta
     head_inner = re.sub(r"<title>[\s\S]*?</title>", f"<title>{esc(catalog['page_title'])}</title>", head_inner, count=1)
     head_inner = re.sub(
@@ -117,7 +114,7 @@ def build(preview: bool, out_dir: Path) -> Path:
     if "demos-gallery/gallery.css" not in head_inner:
         head_inner += '\n<link rel="stylesheet" href="/assets/demos-gallery/gallery.css">'
 
-    body_top = inject_nav(body_top, current=True)
+    body_top = re.sub(r'\saria-current="page"', '', body_top)
 
     cards = "\n".join(card(d, label, preview) for d in shown) or (
         '<p class="dg-empty">No previews are listed yet. If Josh shared a link with you, '
@@ -132,22 +129,21 @@ def build(preview: bool, out_dir: Path) -> Path:
             f'<div class="dg-banner" role="status"><span><strong>Local preview build.</strong> '
             f"Showing all {n_all} cards ({n_on} enabled for live). "
             f"Dashed outline = not enabled yet.</span>"
-            f'<a href="/demos-gallery/logout">Log out</a></div>'
+            "</div>"
         )
     else:
         banner = (
-            '<div class="dg-banner"><span>Each card opens a free concept preview. '
-            "It is <strong>not</strong> that business’s live website.</span>"
-            '<a href="/demos-gallery/logout">Log out</a></div>'
+            '<div class="dg-banner"><span><strong>Style sample · fictional business · sample content.</strong> '
+            "These businesses are made up. Every client site is custom-built.</span></div>"
         )
 
     main = f'''<main id="main">
 <section class="page-hero ds-hero">
   <span class="ds-deco" aria-hidden="true"><span class="ds-dots ds-dots--tr"></span><span class="ds-stripe"></span></span>
   <div class="wrap">
-    <p class="breadcrumb"><a href="/">Home</a> <span>/</span> Client website previews</p>
-    <div class="eyebrow">Private gallery</div>
-    <h1>Client website <span class="ds-gold">previews<svg class="ds-swoosh" viewBox="0 0 200 18" preserveAspectRatio="none" aria-hidden="true" focusable="false"><path pathLength="1" d="M3 12.5C40 6.5 92 4.2 140 5.6c20 .6 38 2 55 4.4" fill="none" stroke="currentColor" stroke-width="5" stroke-linecap="round"/><path pathLength="1" d="M18 15.5c38-4.6 86-6 150-3.4" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" opacity=".55"/></svg></span></h1>
+    <p class="breadcrumb"><a href="/">Home</a> <span>/</span> Website style samples</p>
+    <div class="eyebrow">Style samples</div>
+    <h1>Website style <span class="ds-gold">samples<svg class="ds-swoosh" viewBox="0 0 200 18" preserveAspectRatio="none" aria-hidden="true" focusable="false"><path pathLength="1" d="M3 12.5C40 6.5 92 4.2 140 5.6c20 .6 38 2 55 4.4" fill="none" stroke="currentColor" stroke-width="5" stroke-linecap="round"/><path pathLength="1" d="M18 15.5c38-4.6 86-6 150-3.4" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" opacity=".55"/></svg></span></h1>
     <p class="lead">{esc(catalog["page_blurb"])}</p>
   </div>
 </section>
@@ -169,13 +165,11 @@ def build(preview: bool, out_dir: Path) -> Path:
         + main
         + foot
     )
-    # Ensure footer also has a demos link (optional, under Explore)
-    if 'href="/demos-gallery/"' not in foot.split("Explore", 1)[-1][:800]:
-        page = page.replace(
-            '<a href="/digital-kits">Digital kits</a>',
-            '<a href="/demos-gallery/">Client website previews</a><a href="/digital-kits">Digital kits</a>',
-            1,
-        )
+    bad = re.findall(r'(?:href|src)="(?![/#]|[a-zA-Z][a-zA-Z0-9+.-]*:)[^"]*"', page)
+    if bad:
+        raise SystemExit(f"Relative links left in page: {bad[:5]}")
+    if GALLERY_LINK.search(body_top + foot) or "/demos-gallery/logout" in page:
+        raise SystemExit("Gallery nav/footer link or logout link left in page chrome")
 
     dest = out_dir / "demos-gallery"
     dest.mkdir(parents=True, exist_ok=True)
