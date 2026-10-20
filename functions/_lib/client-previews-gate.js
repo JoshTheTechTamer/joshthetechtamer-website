@@ -1,15 +1,24 @@
 /**
- * Shared password gate for Client website previews.
- * Covers /demos-gallery/* and /demos/royalgrooming/* + /demos/backinline/*.
+ * Password gate for the client previews served on joshthetechtamer.com:
+ * /demos/royalgrooming/* and /demos/backinline/*.
  *
- * Env: DEMOS_GALLERY_PASSWORD, DEMOS_GALLERY_COOKIE_SECRET (Pages secrets)
- * Cookie: tt_demos_auth — Path=/ so one login unlocks gallery + gated demos.
- * Never put the password value in HTML, titles, errors, or client-facing comments.
+ * Env: DEMOS_GALLERY_PASSWORD, DEMOS_GALLERY_COOKIE_SECRET (Pages secrets).
+ * Each demo has its OWN cookie (tt_demo_<slug>, Path=/demos/<slug>) and the token is
+ * signed for that slug, so logging into one preview never unlocks another (Oct 20, 2026).
+ * The login form still posts to /demos-gallery/auth (routed here by functions/demos-gallery/_middleware.js).
+ * Visits are logged via ./visit-log.js. Never put the password value in HTML, errors, or comments.
  */
+import { gatePage } from './gate-page.js';
+import { logVisit, isDocRequest } from './visit-log.js';
 
-export const COOKIE = 'tt_demos_auth';
+export const DEMOS = {
+  royalgrooming: 'Royal Grooming Barber Lounge',
+  backinline: 'Back In Line Chiropractic & Massage',
+};
+const LEGACY_COOKIE = 'tt_demos_auth';
 const TTL_SEC = 60 * 60 * 24 * 30;
 const enc = new TextEncoder();
+const ERR = 'That password didn\u2019t match. Please check Josh\u2019s email and try again.';
 
 export const NOINDEX = {
   'X-Robots-Tag': 'noindex, nofollow, noarchive',
@@ -17,159 +26,69 @@ export const NOINDEX = {
   'Referrer-Policy': 'strict-origin-when-cross-origin',
 };
 
-export function isGatedDemoPath(pathname) {
-  const p = pathname || '';
-  return (
-    p === '/demos/royalgrooming' ||
-    p.startsWith('/demos/royalgrooming/') ||
-    p === '/demos/backinline' ||
-    p.startsWith('/demos/backinline/')
-  );
+export function slugOf(pathname) {
+  const m = /^\/demos\/([a-z0-9-]+)(\/|$)/.exec(pathname || '');
+  return m && Object.prototype.hasOwnProperty.call(DEMOS, m[1]) ? m[1] : null;
 }
-
-export function isGatedPath(pathname) {
-  const p = pathname || '';
-  return (
-    p === '/demos-gallery' ||
-    p.startsWith('/demos-gallery/') ||
-    isGatedDemoPath(p)
-  );
-}
+export function isGatedDemoPath(pathname) { return !!slugOf(pathname); }
+const cookieName = (slug) => `tt_demo_${slug}`;
 
 function b64url(buf) {
-  let s = btoa(String.fromCharCode(...new Uint8Array(buf)));
-  return s.replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
+  return btoa(String.fromCharCode(...new Uint8Array(buf))).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
 }
-
 async function hmac(secret, msg) {
-  const key = await crypto.subtle.importKey(
-    'raw',
-    enc.encode(secret),
-    { name: 'HMAC', hash: 'SHA-256' },
-    false,
-    ['sign']
-  );
+  const key = await crypto.subtle.importKey('raw', enc.encode(secret), { name: 'HMAC', hash: 'SHA-256' }, false, ['sign']);
   return crypto.subtle.sign('HMAC', key, enc.encode(msg));
 }
-
-async function makeToken(secret, now = Math.floor(Date.now() / 1000)) {
-  const exp = String(now + TTL_SEC);
-  const sig = b64url(await hmac(secret, exp));
-  return `${exp}.${sig}`;
+async function makeToken(secret, slug) {
+  const exp = String(Math.floor(Date.now() / 1000) + TTL_SEC);
+  return `${exp}.${b64url(await hmac(secret, `${exp}|${slug}`))}`;
 }
-
-async function tokenOk(secret, token) {
+function same(a, b) {
+  if (a.length !== b.length) return false;
+  let d = 0;
+  for (let i = 0; i < a.length; i++) d |= a.charCodeAt(i) ^ b.charCodeAt(i);
+  return d === 0;
+}
+async function tokenOk(secret, slug, token) {
   if (!token || !secret) return false;
   const [exp, sig] = String(token).split('.');
-  if (!exp || !sig || !/^\d+$/.test(exp)) return false;
-  if (Number(exp) < Math.floor(Date.now() / 1000)) return false;
-  const expect = b64url(await hmac(secret, exp));
-  if (expect.length !== sig.length) return false;
-  let diff = 0;
-  for (let i = 0; i < expect.length; i++) diff |= expect.charCodeAt(i) ^ sig.charCodeAt(i);
-  return diff === 0;
+  if (!exp || !sig || !/^\d+$/.test(exp) || Number(exp) < Math.floor(Date.now() / 1000)) return false;
+  return same(b64url(await hmac(secret, `${exp}|${slug}`)), sig);
 }
-
 function readCookie(req, name) {
-  const raw = req.headers.get('Cookie') || '';
-  for (const part of raw.split(';')) {
+  for (const part of (req.headers.get('Cookie') || '').split(';')) {
     const [k, ...rest] = part.trim().split('=');
     if (k === name) return decodeURIComponent(rest.join('='));
   }
   return null;
 }
+const setCookie = (slug, token) => `${cookieName(slug)}=${encodeURIComponent(token)}; Path=/demos/${slug}; Max-Age=${TTL_SEC}; HttpOnly; Secure; SameSite=Lax`;
+const clearCookie = (slug) => `${cookieName(slug)}=; Path=/demos/${slug}; Max-Age=0; HttpOnly; Secure; SameSite=Lax`;
+const clearLegacy = () => [
+  `${LEGACY_COOKIE}=; Path=/; Max-Age=0; HttpOnly; Secure; SameSite=Lax`,
+  `${LEGACY_COOKIE}=; Path=/demos-gallery; Max-Age=0; HttpOnly; Secure; SameSite=Lax`,
+];
 
-function setAuthCookie(token) {
-  // Path=/ covers /demos-gallery and /demos/...
-  return `${COOKIE}=${encodeURIComponent(token)}; Path=/; Max-Age=${TTL_SEC}; HttpOnly; Secure; SameSite=Lax`;
+/** Relative same-site demo paths only (no open redirects). */
+export function safeNext(raw) {
+  const n = String(raw == null ? '' : raw).trim();
+  if (!n.startsWith('/') || n.startsWith('//') || n.includes('\\') || n.includes('..')) return null;
+  return slugOf(n.split('?')[0].split('#')[0]) ? n : null;
 }
 
-function clearAuthCookieRoot() {
-  return `${COOKIE}=; Path=/; Max-Age=0; HttpOnly; Secure; SameSite=Lax`;
-}
-
-function clearAuthCookieLegacy() {
-  // Drop earlier Path=/demos-gallery cookies from the first gallery ship
-  return `${COOKIE}=; Path=/demos-gallery; Max-Age=0; HttpOnly; Secure; SameSite=Lax`;
-}
-
-function loginHtml({ error = '', next = '/' } = {}) {
-  const err = error ? `<p class="dg-gate-error" role="alert">${error}</p>` : '';
-  const nextAttr = String(next).replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;');
-  return `<!doctype html>
-<html lang="en">
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="robots" content="noindex,nofollow,noarchive">
-<title>Client website previews | The Tech Tamer</title>
-<link rel="icon" href="/favicon.ico">
-<link rel="stylesheet" href="/assets/site.css">
-<link rel="stylesheet" href="/assets/design.css">
-<link rel="stylesheet" href="/assets/demos-gallery/gallery.css">
-</head>
-<body class="dg-gate-body">
-<a class="skip" href="#gate">Skip to content</a>
-<main id="gate" class="dg-gate">
-  <div class="dg-gate-card">
-    <p class="eyebrow">Private</p>
-    <h1>Client website previews</h1>
-    <p class="dg-gate-lead">These are private website previews shared with specific businesses. Enter the password from your message or email to view.</p>
-    ${err}
-    <form class="dg-gate-form" method="post" action="/demos-gallery/auth">
-      <input type="hidden" name="next" value="${nextAttr}">
-      <label for="pw">Password</label>
-      <input id="pw" name="password" type="password" autocomplete="current-password" required autofocus>
-      <button class="btn" type="submit">Open preview</button>
-    </form>
-    <p class="dg-gate-note">Need help? Text or call Josh at <a href="tel:+15632610200">563-261-0200</a>.</p>
-    <p class="dg-gate-home"><a href="/">← Back to The Tech Tamer</a></p>
-  </div>
-</main>
-</body>
-</html>`;
-}
-
-function html(body, status = 200, extra = {}) {
-  return new Response(body, {
+function gate(slug, next, error, status) {
+  return new Response(gatePage({ name: DEMOS[slug], action: '/demos-gallery/auth', next, error }), {
     status,
-    headers: {
-      'Content-Type': 'text/html; charset=utf-8',
-      ...NOINDEX,
-      ...extra,
-    },
+    headers: { 'Content-Type': 'text/html; charset=utf-8', ...NOINDEX },
   });
 }
-
-/** Relative same-site paths only — no open redirects. */
-export function safeNext(raw) {
-  const fallback = '/';
-  let n = String(raw == null ? '' : raw).trim();
-  if (!n) return fallback;
-  if (/^[a-zA-Z][a-zA-Z0-9+.-]*:/.test(n) || n.startsWith('//') || n.includes('\\')) return fallback;
-  if (!n.startsWith('/')) return fallback;
-  if (n.includes('..')) return fallback;
-  const pathOnly = n.split('?')[0].split('#')[0];
-  const ok =
-    pathOnly === '/demos-gallery' ||
-    pathOnly.startsWith('/demos-gallery/') ||
-    pathOnly === '/demos/royalgrooming' ||
-    pathOnly.startsWith('/demos/royalgrooming/') ||
-    pathOnly === '/demos/backinline' ||
-    pathOnly.startsWith('/demos/backinline/');
-  return ok ? n : fallback;
-}
-
 function withNoindex(res) {
   const headers = new Headers(res.headers);
   for (const [k, v] of Object.entries(NOINDEX)) headers.set(k, v);
   return new Response(res.body, { status: res.status, statusText: res.statusText, headers });
 }
 
-/**
- * Full gate handler (auth + logout + cookie check + noindex).
- * Call only for gated paths (or always from demos-gallery middleware).
- */
 export async function handleClientPreviewsGate(context) {
   const { request, env, next } = context;
   const url = new URL(request.url);
@@ -178,56 +97,42 @@ export async function handleClientPreviewsGate(context) {
   const secret = env.DEMOS_GALLERY_COOKIE_SECRET || '';
 
   if (path === '/demos-gallery/auth' || path === '/demos-gallery/auth/') {
-    if (request.method !== 'POST') {
-      return html(loginHtml({ error: 'Please use the form below.' }), 405);
-    }
-    if (!password || !secret) {
-      return html(
-        loginHtml({ error: 'These previews are not available right now. Text Josh at 563-261-0200.' }),
-        503
-      );
-    }
+    if (request.method !== 'POST') return Response.redirect(url.origin + '/', 303);
     let form;
-    try {
-      form = await request.formData();
-    } catch {
-      return html(loginHtml({ error: 'Something went wrong. Try again.' }), 400);
-    }
-    const submitted = String(form.get('password') || '');
+    try { form = await request.formData(); } catch { form = new FormData(); }
     const nextPath = safeNext(form.get('next'));
-    const a = enc.encode(submitted.padEnd(password.length, '\0').slice(0, Math.max(password.length, submitted.length)));
-    const b = enc.encode(password.padEnd(Math.max(password.length, submitted.length), '\0'));
+    if (!nextPath) return Response.redirect(url.origin + '/', 303);
+    const slug = slugOf(nextPath);
+    if (!password || !secret) return gate(slug, nextPath, 'This preview isn\u2019t available right now. Please call or text Josh at 563-261-0200.', 503);
+    const submitted = String(form.get('password') || '');
+    const len = Math.max(password.length, submitted.length);
     let diff = submitted.length === password.length ? 0 : 1;
-    for (let i = 0; i < a.length; i++) diff |= a[i] ^ b[i];
+    for (let i = 0; i < len; i++) diff |= (submitted.charCodeAt(i) || 0) ^ (password.charCodeAt(i) || 0);
     if (diff !== 0) {
-      return html(loginHtml({ error: 'That didn’t work. Try again, or text Josh.', next: nextPath }), 401);
+      logVisit(env, context, request, slug, 'login_fail', nextPath);
+      return gate(slug, nextPath, ERR, 401);
     }
-    const token = await makeToken(secret);
+    logVisit(env, context, request, slug, 'login_ok', nextPath);
     const headers = new Headers({ Location: nextPath, ...NOINDEX });
-    headers.append('Set-Cookie', setAuthCookie(token));
-    headers.append('Set-Cookie', clearAuthCookieLegacy());
+    headers.append('Set-Cookie', setCookie(slug, await makeToken(secret, slug)));
+    for (const c of clearLegacy()) headers.append('Set-Cookie', c);
     return new Response(null, { status: 303, headers });
   }
 
   if (path === '/demos-gallery/logout' || path === '/demos-gallery/logout/') {
     const headers = new Headers({ Location: '/', ...NOINDEX });
-    headers.append('Set-Cookie', clearAuthCookieRoot());
-    headers.append('Set-Cookie', clearAuthCookieLegacy());
+    for (const s of Object.keys(DEMOS)) headers.append('Set-Cookie', clearCookie(s));
+    for (const c of clearLegacy()) headers.append('Set-Cookie', c);
     return new Response(null, { status: 303, headers });
   }
 
-  if (!password || !secret) {
-    return html(
-      loginHtml({ error: 'These previews are not available right now. Text Josh at 563-261-0200.' }),
-      503
-    );
+  const slug = slugOf(path);
+  if (!slug) return next();
+  if (!password || !secret) return gate(slug, path + url.search, 'This preview isn\u2019t available right now. Please call or text Josh at 563-261-0200.', 503);
+  if (!(await tokenOk(secret, slug, readCookie(request, cookieName(slug))))) {
+    if (request.method === 'GET') logVisit(env, context, request, slug, 'login_view', path);
+    return gate(slug, path + url.search, '', 401);
   }
-
-  const token = readCookie(request, COOKIE);
-  if (!(await tokenOk(secret, token))) {
-    return html(loginHtml({ next: path + url.search }), 401);
-  }
-
-  const res = await next();
-  return withNoindex(res);
+  if (isDocRequest(request, path)) logVisit(env, context, request, slug, 'view', path);
+  return withNoindex(await next());
 }
