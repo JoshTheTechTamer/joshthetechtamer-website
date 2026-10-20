@@ -9,7 +9,7 @@
 - D1 database `tt-preview-visits`, table `visits` (binding `VISITS` on the Pages project and every demo-* Worker).
 - Kinds: `login_view`, `login_ok`, `login_fail`, `view` (HTML pages after login). Fields: ts (UTC), slug, path, city/region/country, device, tag, asn, short UA, `iph` (12-char salted HMAC of the IP; no IPs stored).
 - Tags: `bot` (box IPs in `BOX_IPS`, link scanners/crawlers/scripts/headless by user agent, cloud and mail-security networks by ASN), `josh` (device carries the `tt_owner` cookie), else `prospect`.
-- Secrets: `OWNER_KEY`, `IP_SALT`, `BOX_IPS` (Pages production + each demo-* Worker). Never commit their values.
+- Secrets: `OWNER_KEY`, `IP_SALT`, `BOX_IPS` (Pages production + each demo-* Worker; entries are exact IPs or `prefix*@COLO`). Never commit their values.
 
 ## Josh's devices
 - Open the private `/me?k=…` link once per browser. It sets `tt_owner` on joshthetechtamer.com, then hops through each demo Worker's `/__preview/me` (sets the same cookie on that origin) and ends at `/me/done`.

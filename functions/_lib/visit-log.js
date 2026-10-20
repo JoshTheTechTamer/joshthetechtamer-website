@@ -21,7 +21,9 @@ export async function tagOf(env,req){
  const ip=req.headers.get('CF-Connecting-IP')||'';const ua=req.headers.get('User-Agent')||'';const asn=(req.cf&&req.cf.asn)||0;
  const box=String(env.BOX_IPS||'').split(',').map(s=>s.trim()).filter(Boolean);
  if(await isOwner(env,req))return 'josh';
- if(ip&&box.includes(ip))return 'bot';
+ const colo=(req.cf&&req.cf.colo)||'';
+ // BOX_IPS: exact IPs, or 'prefix*@COLO' (prefix match only when served from that Cloudflare colo, so other WARP/Private Relay users are not caught).
+ if(ip&&box.some(e=>{const[pat,c]=e.split('@');if(c&&c!==colo)return false;return pat.endsWith('*')?ip.toLowerCase().startsWith(pat.slice(0,-1).toLowerCase()):ip===pat;}))return 'bot';
  if(!ua||BOT_UA.test(ua)||BOT_ASN.has(asn))return 'bot';
  return 'prospect';}
 export function isDocRequest(req,path){if(req.method!=='GET')return false;const dest=req.headers.get('Sec-Fetch-Dest');if(dest&&dest!=='document')return false;if(/\.[a-z0-9]{1,5}$/i.test(path)&&!/\.html?$/i.test(path))return false;const acc=req.headers.get('Accept')||'';return !dest?(acc.includes('text/html')||acc===''||acc==='*/*'):true;}
