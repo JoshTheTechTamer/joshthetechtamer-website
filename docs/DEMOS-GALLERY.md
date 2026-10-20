@@ -2,7 +2,7 @@
 
 Josh retired the public gallery on 2026-10-20 (it made the offer look off-the-rack).
 
-- `https://joshthetechtamer.com/demos-gallery/` and `/demos-gallery` now **301 to `/`** (`functions/demos-gallery/_middleware.js`).
+- `https://joshthetechtamer.com/demos-gallery/` and `/demos-gallery` now **301 to `/website-package#examples`** (real work: The Tech Tamer + MVP Logistics) (`functions/demos-gallery/_middleware.js`).
 - The old page and its thumbnails are archived in `previews/demos-gallery-retired-2026-10-20/` (not deployed; `cf_build.sh` skips `previews/`). Full history is in git (last live commit `fe9e33e`).
 - The 12 `tpl-*.joshthetechtamer.workers.dev` template Workers still exist but their workers.dev URL is **turned off** (Cloudflare: Workers > tpl-* > Settings > Domains & Routes > workers.dev). Turn it back on to restore.
 - Never link the gallery anywhere.

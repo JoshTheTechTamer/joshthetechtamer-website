@@ -2,7 +2,8 @@ import { handleClientPreviewsGate } from '../_lib/client-previews-gate.js';
 
 /**
  * /demos-gallery/ was retired on 2026-10-20 (Josh's call): every gallery URL
- * now 301s to the homepage. The old page lives in
+ * now 301s to the Examples section of the website package page
+ * (/website-package#examples: The Tech Tamer + MVP Logistics). The old page lives in
  * previews/demos-gallery-retired-2026-10-20/ (not deployed) and in git history.
  *
  * /demos-gallery/auth and /demos-gallery/logout stay on the shared gate handler:
@@ -22,7 +23,7 @@ export async function onRequest(context) {
   return new Response(null, {
     status: 301,
     headers: {
-      Location: url.origin + '/',
+      Location: 'https://joshthetechtamer.com/website-package#examples',
       'Cache-Control': 'public, max-age=3600',
       'X-Robots-Tag': 'noindex, nofollow, noarchive',
     },
