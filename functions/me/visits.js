@@ -1,14 +1,17 @@
 /**
- * Preview visit report (Josh only): /me/visits on a device marked via /me, or /me/visits?k=<OWNER_KEY>.
- * ?days=30 (default 30), ?tag=prospect|josh|bot|all (default prospect).
+ * Visit report (Josh only): /me/visits on a device marked via /me, or /me/visits?k=<OWNER_KEY>.
+ * Two sections: "My website" (site=tt) and "Previews" (site=preview).
+ * A preview "prospect" counts only on a correct password or a page viewed after login; plain login-page views are "opened the link".
+ * ?days=30 (default), ?tag=real|josh|qa|bot|all (default real = prospect/visitor).
  */
 import { isOwner, ownerKeyOk } from '../_lib/visit-log.js';
 const NO = { 'X-Robots-Tag': 'noindex, nofollow, noarchive', 'Cache-Control': 'no-store', 'Referrer-Policy': 'no-referrer' };
 const NAMES = { bamamama: 'Bama Mama Concierge Services', coffeebelt: 'The Coffee Belt', decades: 'Decades Barbershop', elolmito: 'El Olmito', hawknest: 'Hawk Nest Concierge', lemon: 'Lemon Landscaping', megsvintage: 'Meg’s Vintage Collective', osaka: 'Osaka Japanese Steakhouse & Sushi Bar', packnship: 'Pack-N-Ship', riotsrebelles: 'Riots & Rebelles Salon', sellsauto: 'Sell’s Auto Repair', shafferauto: 'Shaffer Automotive', sunsetview: 'Sunset View Pet Hospital', tresses: 'Tresses N’ Tones Hair Studio', royalgrooming: 'Royal Grooming Barber Lounge', backinline: 'Back In Line Chiropractic & Massage' };
 const h = (s) => String(s == null ? '' : s).replace(/&/g, '&amp;').replace(/</g, '&lt;');
-// Day buckets in Josh's time zone (America/Chicago).
 const ctDay = (iso) => new Date(iso).toLocaleDateString('en-CA', { timeZone: 'America/Chicago' });
 const ctTime = (iso) => new Date(iso).toLocaleString('en-US', { timeZone: 'America/Chicago', month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit' }) + ' CT';
+const table = (head, rows, empty) => `<div class="wrap"><table><tr>${head.map((x) => `<th>${x}</th>`).join('')}</tr>${rows.length ? rows.join('') : `<tr><td colspan="${head.length}">${empty}</td></tr>`}</table></div>`;
+const td = (...c) => `<tr>${c.map((x) => `<td>${h(x)}</td>`).join('')}</tr>`;
 
 export async function onRequestGet({ request, env }) {
   const url = new URL(request.url);
@@ -17,24 +20,34 @@ export async function onRequestGet({ request, env }) {
   }
   if (!env.VISITS) return new Response('Visit log not connected', { status: 503, headers: NO });
   const days = Math.min(365, Math.max(1, parseInt(url.searchParams.get('days') || '30', 10) || 30));
-  const tag = ['prospect', 'josh', 'bot', 'all'].includes(url.searchParams.get('tag')) ? url.searchParams.get('tag') : 'prospect';
+  const tagSel = ['real', 'josh', 'qa', 'bot', 'all'].includes(url.searchParams.get('tag')) ? url.searchParams.get('tag') : 'real';
   const since = new Date(Date.now() - days * 864e5).toISOString();
-  const where = tag === 'all' ? 'ts >= ?1' : 'ts >= ?1 AND tag = ?2';
-  const { results } = await env.VISITS.prepare(`SELECT ts,slug,kind,path,city,region,country,device,tag,iph FROM visits WHERE ${where} ORDER BY ts DESC LIMIT 2000`).bind(...(tag === 'all' ? [since] : [since, tag])).all();
-  if (url.searchParams.get('format') === 'json') return Response.json({ days, tag, visits: results }, { headers: NO });
-  const groups = new Map();
-  for (const r of results) {
-    const key = `${r.slug}|${ctDay(r.ts)}`;
-    const g = groups.get(key) || { slug: r.slug, day: ctDay(r.ts), login_view: 0, login_ok: 0, login_fail: 0, view: 0, people: new Set(), where: new Set(), devices: new Set(), last: r.ts };
-    g[r.kind] = (g[r.kind] || 0) + 1; if (r.iph) g.people.add(r.iph);
-    if (r.city || r.region) g.where.add([r.city, r.region].filter(Boolean).join(', '));
-    if (r.device) g.devices.add(r.device);
-    groups.set(key, g);
-  }
-  const rows = [...groups.values()].sort((a, b) => (a.day < b.day ? 1 : a.day > b.day ? -1 : a.slug.localeCompare(b.slug)))
-    .map((g) => `<tr><td>${h(g.day)}</td><td>${h(NAMES[g.slug] || g.slug)}</td><td>${g.login_view}</td><td>${g.login_ok}</td><td>${g.login_fail}</td><td>${g.view}</td><td>${g.people.size}</td><td>${h([...g.where].join('; '))}</td><td>${h([...g.devices].join(', '))}</td><td>${h(ctTime(g.last))}</td></tr>`).join('');
-  const recent = results.slice(0, 50).map((r) => `<tr><td>${h(ctTime(r.ts))}</td><td>${h(NAMES[r.slug] || r.slug)}</td><td>${h(r.kind)}</td><td>${h(r.path)}</td><td>${h([r.city, r.region].filter(Boolean).join(', '))}</td><td>${h(r.device)}</td><td>${h(r.tag)}</td></tr>`).join('');
-  const tabs = ['prospect', 'josh', 'bot', 'all'].map((t) => `<a${t === tag ? ' class="on"' : ''} href="?tag=${t}&days=${days}">${t}</a>`).join(' ');
-  const body = `<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex,nofollow"><title>Preview visits | The Tech Tamer</title><style>body{font:15px/1.5 Arial,Helvetica,sans-serif;color:#202d4b;background:#f3f5f9;margin:0;padding:24px 14px}main{max-width:1100px;margin:auto}h1{color:#23335c;font-size:1.5rem;margin:0 0 6px}h2{color:#23335c;font-size:1.1rem;margin:26px 0 8px}table{width:100%;border-collapse:collapse;background:#fff;border:1px solid #dce2ed}th,td{padding:7px 9px;border-bottom:1px solid #e6ebf3;text-align:left;vertical-align:top}th{background:#23335c;color:#fff;font-weight:700}.tabs a{display:inline-block;padding:4px 10px;margin-right:4px;border:1px solid #c8d1e0;border-radius:4px;color:#23335c;text-decoration:none;background:#fff}.tabs a.on{background:#23335c;color:#fff}.wrap{overflow-x:auto}p{color:#56617a}</style></head><body><main><h1>Preview visits</h1><p>Last ${days} days, Central Time. “Login page” = someone opened the link; “Got in” = correct password; “Pages” = pages viewed after logging in; “People” = distinct devices/networks (hashed, no IPs stored).</p><p class="tabs">${tabs}</p><h2>By business and day</h2><div class="wrap"><table><tr><th>Day</th><th>Business</th><th>Login page</th><th>Got in</th><th>Wrong pw</th><th>Pages</th><th>People</th><th>Where</th><th>Device</th><th>Last visit</th></tr>${rows || '<tr><td colspan="10">No visits yet.</td></tr>'}</table></div><h2>Latest 50</h2><div class="wrap"><table><tr><th>When</th><th>Business</th><th>What</th><th>Path</th><th>Where</th><th>Device</th><th>Tag</th></tr>${recent || '<tr><td colspan="7">None.</td></tr>'}</table></div></main></body></html>`;
+  const { results } = await env.VISITS.prepare('SELECT ts,site,slug,kind,path,city,region,device,tag,iph,referrer,utm FROM visits WHERE ts >= ?1 ORDER BY ts DESC LIMIT 5000').bind(since).all();
+  const keep = (r) => tagSel === 'all' || (tagSel === 'real' ? r.tag === 'prospect' || r.tag === 'visitor' : r.tag === tagSel);
+  const rows = results.filter(keep);
+  const site = rows.filter((r) => r.site === 'tt');
+  const prev = rows.filter((r) => (r.site || 'preview') === 'preview');
+
+  // My website: views by page and day; top referrers.
+  const pd = new Map();
+  for (const r of site) { const k = `${ctDay(r.ts)}|${r.path}`; const g = pd.get(k) || { day: ctDay(r.ts), path: r.path, n: 0, ppl: new Set() }; g.n++; if (r.iph) g.ppl.add(r.iph); pd.set(k, g); }
+  const pageRows = [...pd.values()].sort((a, b) => (a.day < b.day ? 1 : a.day > b.day ? -1 : b.n - a.n)).map((g) => td(g.day, g.path, g.n, g.ppl.size));
+  const rf = new Map();
+  for (const r of site) { const k = r.utm ? `utm: ${r.utm}` : r.referrer && !/joshthetechtamer\.com$/.test(r.referrer) ? r.referrer : null; if (k) rf.set(k, (rf.get(k) || 0) + 1); }
+  const refRows = [...rf.entries()].sort((a, b) => b[1] - a[1]).slice(0, 20).map(([k, n]) => td(k, n));
+
+  // Previews: opened the link vs entered the password, by business and day.
+  const bd = new Map();
+  for (const r of prev) { const k = `${ctDay(r.ts)}|${r.slug}`; const g = bd.get(k) || { day: ctDay(r.ts), slug: r.slug, opened: 0, ok: 0, fail: 0, views: 0, where: new Set(), dev: new Set() };
+    if (r.kind === 'login_view') g.opened++; else if (r.kind === 'login_ok') g.ok++; else if (r.kind === 'login_fail') g.fail++; else if (r.kind === 'view') g.views++;
+    if (r.city || r.region) g.where.add([r.city, r.region].filter(Boolean).join(', ')); if (r.device) g.dev.add(r.device); bd.set(k, g); }
+  const all = [...bd.values()].sort((a, b) => (a.day < b.day ? 1 : a.day > b.day ? -1 : a.slug.localeCompare(b.slug)));
+  const inRows = all.filter((g) => g.ok || g.views).map((g) => td(g.day, NAMES[g.slug] || g.slug, g.ok, g.views, g.fail, [...g.where].join('; '), [...g.dev].join(', ')));
+  const openRows = all.filter((g) => !(g.ok || g.views) && (g.opened || g.fail)).map((g) => td(g.day, NAMES[g.slug] || g.slug, g.opened, g.fail, [...g.where].join('; '), [...g.dev].join(', ')));
+  const tabs = [['real', 'Real people'], ['josh', 'Josh'], ['qa', 'QA tests'], ['bot', 'Bots'], ['all', 'All']].map(([t, l]) => `<a${t === tagSel ? ' class="on"' : ''} href="?tag=${t}&days=${days}">${l}</a>`).join(' ');
+  const body = `<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex,nofollow"><title>Visits | The Tech Tamer</title><style>body{font:15px/1.5 Arial,Helvetica,sans-serif;color:#202d4b;background:#f3f5f9;margin:0;padding:24px 14px}main{max-width:1100px;margin:auto}h1{color:#23335c;font-size:1.5rem;margin:0 0 6px}h2{color:#23335c;font-size:1.25rem;margin:30px 0 4px;border-bottom:2px solid #23335c;padding-bottom:4px}h3{color:#23335c;font-size:1.02rem;margin:18px 0 6px}table{width:100%;border-collapse:collapse;background:#fff;border:1px solid #dce2ed}th,td{padding:7px 9px;border-bottom:1px solid #e6ebf3;text-align:left;vertical-align:top}th{background:#23335c;color:#fff}.tabs a{display:inline-block;padding:4px 10px;margin:0 4px 4px 0;border:1px solid #c8d1e0;border-radius:4px;color:#23335c;text-decoration:none;background:#fff}.tabs a.on{background:#23335c;color:#fff}.wrap{overflow-x:auto}p{color:#56617a;margin:4px 0 10px}</style></head><body><main><h1>Visits</h1><p>Last ${days} day${days === 1 ? '' : 's'}, Central Time. Bots, link scanners and our own tests are filtered out unless you pick them. No IP addresses are stored.</p><p class="tabs">${tabs}</p>
+<h2>My website</h2><h3>Views by page and day</h3>${table(['Day', 'Page', 'Views', 'People'], pageRows, 'No views yet.')}<h3>Top referrers</h3>${table(['From', 'Views'], refRows, 'No outside referrers yet.')}
+<h2>Previews</h2><h3>Entered the password</h3><p>Someone typed the correct password (or viewed pages after logging in). These are the real prospects.</p>${table(['Day', 'Business', 'Logged in', 'Pages viewed', 'Wrong password', 'Where', 'Device'], inRows, 'Nobody has logged in yet.')}<h3>Opened the link only</h3><p>Saw the password page but didn’t get in. Can include link checkers that slipped past the filters.</p>${table(['Day', 'Business', 'Opened', 'Wrong password', 'Where', 'Device'], openRows, 'None.')}
+</main></body></html>`;
   return new Response(body, { headers: { 'Content-Type': 'text/html; charset=utf-8', ...NO } });
 }

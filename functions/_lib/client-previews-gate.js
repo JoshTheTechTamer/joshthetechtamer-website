@@ -130,7 +130,11 @@ export async function handleClientPreviewsGate(context) {
   if (!slug) return next();
   if (!password || !secret) return gate(slug, path + url.search, 'This preview isn\u2019t available right now. Please call or text Josh at 563-261-0200.', 503);
   if (!(await tokenOk(secret, slug, readCookie(request, cookieName(slug))))) {
-    if (request.method === 'GET') logVisit(env, context, request, slug, 'login_view', path);
+    if (request.method === 'GET') {
+      let realPath = true;
+      try { if (env.ASSETS) realPath = (await env.ASSETS.fetch(new Request(url.origin + path))).status < 400; } catch {}
+      logVisit(env, context, request, slug, 'login_view', path, { realPath });
+    }
     return gate(slug, path + url.search, '', 401);
   }
   if (isDocRequest(request, path)) logVisit(env, context, request, slug, 'view', path);
