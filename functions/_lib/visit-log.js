@@ -20,8 +20,8 @@ export function deviceOf(ua){if(/iPad|Tablet|Kindle|Silk|PlayBook/i.test(ua)||(/
 export async function tagOf(env,req){
  const ip=req.headers.get('CF-Connecting-IP')||'';const ua=req.headers.get('User-Agent')||'';const asn=(req.cf&&req.cf.asn)||0;
  const box=String(env.BOX_IPS||'').split(',').map(s=>s.trim()).filter(Boolean);
- if(ip&&box.includes(ip))return 'bot';
  if(await isOwner(env,req))return 'josh';
+ if(ip&&box.includes(ip))return 'bot';
  if(!ua||BOT_UA.test(ua)||BOT_ASN.has(asn))return 'bot';
  return 'prospect';}
 export function isDocRequest(req,path){if(req.method!=='GET')return false;const dest=req.headers.get('Sec-Fetch-Dest');if(dest&&dest!=='document')return false;if(/\.[a-z0-9]{1,5}$/i.test(path)&&!/\.html?$/i.test(path))return false;const acc=req.headers.get('Accept')||'';return !dest?(acc.includes('text/html')||acc===''||acc==='*/*'):true;}
