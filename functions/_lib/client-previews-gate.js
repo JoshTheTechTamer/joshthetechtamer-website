@@ -93,7 +93,7 @@ function clearAuthCookieLegacy() {
   return `${COOKIE}=; Path=/demos-gallery; Max-Age=0; HttpOnly; Secure; SameSite=Lax`;
 }
 
-function loginHtml({ error = '', next = '/demos-gallery/' } = {}) {
+function loginHtml({ error = '', next = '/' } = {}) {
   const err = error ? `<p class="dg-gate-error" role="alert">${error}</p>` : '';
   const nextAttr = String(next).replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;');
   return `<!doctype html>
@@ -120,7 +120,7 @@ function loginHtml({ error = '', next = '/demos-gallery/' } = {}) {
       <input type="hidden" name="next" value="${nextAttr}">
       <label for="pw">Password</label>
       <input id="pw" name="password" type="password" autocomplete="current-password" required autofocus>
-      <button class="btn" type="submit">Open gallery</button>
+      <button class="btn" type="submit">Open preview</button>
     </form>
     <p class="dg-gate-note">Need help? Text or call Josh at <a href="tel:+15632610200">563-261-0200</a>.</p>
     <p class="dg-gate-home"><a href="/">← Back to The Tech Tamer</a></p>
@@ -143,7 +143,7 @@ function html(body, status = 200, extra = {}) {
 
 /** Relative same-site paths only — no open redirects. */
 export function safeNext(raw) {
-  const fallback = '/demos-gallery/';
+  const fallback = '/';
   let n = String(raw == null ? '' : raw).trim();
   if (!n) return fallback;
   if (/^[a-zA-Z][a-zA-Z0-9+.-]*:/.test(n) || n.startsWith('//') || n.includes('\\')) return fallback;
@@ -183,7 +183,7 @@ export async function handleClientPreviewsGate(context) {
     }
     if (!password || !secret) {
       return html(
-        loginHtml({ error: 'This gallery is not available right now. Text Josh at 563-261-0200.' }),
+        loginHtml({ error: 'These previews are not available right now. Text Josh at 563-261-0200.' }),
         503
       );
     }
@@ -210,7 +210,7 @@ export async function handleClientPreviewsGate(context) {
   }
 
   if (path === '/demos-gallery/logout' || path === '/demos-gallery/logout/') {
-    const headers = new Headers({ Location: '/demos-gallery/', ...NOINDEX });
+    const headers = new Headers({ Location: '/', ...NOINDEX });
     headers.append('Set-Cookie', clearAuthCookieRoot());
     headers.append('Set-Cookie', clearAuthCookieLegacy());
     return new Response(null, { status: 303, headers });
@@ -218,7 +218,7 @@ export async function handleClientPreviewsGate(context) {
 
   if (!password || !secret) {
     return html(
-      loginHtml({ error: 'This gallery is not available right now. Text Josh at 563-261-0200.' }),
+      loginHtml({ error: 'These previews are not available right now. Text Josh at 563-261-0200.' }),
       503
     );
   }

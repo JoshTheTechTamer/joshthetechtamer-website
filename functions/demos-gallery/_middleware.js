@@ -1,22 +1,30 @@
-import { handleClientPreviewsGate, NOINDEX } from '../_lib/client-previews-gate.js';
+import { handleClientPreviewsGate } from '../_lib/client-previews-gate.js';
 
 /**
- * /demos-gallery/ is public (no password) but link-invite only and noindex.
+ * /demos-gallery/ was retired on 2026-10-20 (Josh's call): every gallery URL
+ * now 301s to the homepage. The old page lives in
+ * previews/demos-gallery-retired-2026-10-20/ (not deployed) and in git history.
+ *
  * /demos-gallery/auth and /demos-gallery/logout stay on the shared gate handler:
  * the login form for the private previews (/demos/royalgrooming/, /demos/backinline/)
- * posts to /demos-gallery/auth, and those paths stay gated by functions/demos/_middleware.js.
+ * posts to /demos-gallery/auth. /assets/demos-gallery/gallery.css stays because
+ * that login page uses it.
  */
 export async function onRequest(context) {
-  const path = new URL(context.request.url).pathname;
+  const url = new URL(context.request.url);
+  const path = url.pathname;
   if (
     path === '/demos-gallery/auth' || path === '/demos-gallery/auth/' ||
     path === '/demos-gallery/logout' || path === '/demos-gallery/logout/'
   ) {
     return handleClientPreviewsGate(context);
   }
-  const res = await context.next();
-  const headers = new Headers(res.headers);
-  for (const [k, v] of Object.entries(NOINDEX)) headers.set(k, v);
-  headers.set('Cache-Control', 'public, max-age=300');
-  return new Response(res.body, { status: res.status, statusText: res.statusText, headers });
+  return new Response(null, {
+    status: 301,
+    headers: {
+      Location: url.origin + '/',
+      'Cache-Control': 'public, max-age=3600',
+      'X-Robots-Tag': 'noindex, nofollow, noarchive',
+    },
+  });
 }

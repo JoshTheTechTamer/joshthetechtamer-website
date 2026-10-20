@@ -1,10 +1,16 @@
-# Website style samples gallery (public, link-invite only)
+# Website style samples gallery: RETIRED 2026-10-20
 
-URL: `https://joshthetechtamer.com/demos-gallery/` (shared by direct link only)
+Josh retired the public gallery on 2026-10-20 (it made the offer look off-the-rack).
 
-- No password since 2026-10-19 (approved by Josh). It lists 12 fictional style-sample templates on `tpl-*.joshthetechtamer.workers.dev`. Branded client originals are never listed.
-- **Not linked anywhere.** Keep it out of every nav, footer, page body, `sitemap.xml` and JSON-LD. `scripts/build_demos_gallery.py` strips any gallery link from the borrowed about.html chrome, and fails if one is left or if any relative link remains.
-- **noindex:** `<meta name="robots" content="noindex, nofollow, noarchive">` plus `X-Robots-Tag` (set by `functions/demos-gallery/_middleware.js`). `robots.txt` deliberately does **not** block it, so crawlers can read the noindex.
+- `https://joshthetechtamer.com/demos-gallery/` and `/demos-gallery` now **301 to `/`** (`functions/demos-gallery/_middleware.js`).
+- The old page and its thumbnails are archived in `previews/demos-gallery-retired-2026-10-20/` (not deployed; `cf_build.sh` skips `previews/`). Full history is in git (last live commit `fe9e33e`).
+- The 12 `tpl-*.joshthetechtamer.workers.dev` template Workers still exist but their workers.dev URL is **turned off** (Cloudflare: Workers > tpl-* > Settings > Domains & Routes > workers.dev). Turn it back on to restore.
+- Never link the gallery anywhere.
+
+## To restore
+1. `git mv previews/demos-gallery-retired-2026-10-20/demos-gallery demos-gallery` and the thumbs back to `assets/demos-gallery/thumbs`.
+2. Restore the old middleware from commit `fe9e33e`.
+3. Re-enable workers.dev on the tpl-* Workers.
 
 ## Still password-gated (unchanged)
 
@@ -13,10 +19,4 @@ URL: `https://joshthetechtamer.com/demos-gallery/` (shared by direct link only)
 - secrets `DEMOS_GALLERY_PASSWORD` and `DEMOS_GALLERY_COOKIE_SECRET`
 - the cookie `tt_demos_auth`
 
-The login form posts to `/demos-gallery/auth`, which the gallery middleware still routes to the gate handler (with `/demos-gallery/logout`). Never put the password in HTML, titles, errors, git or docs.
-
-`scripts/serve_demos_gallery.mjs` is the old local gate preview and still gates the gallery locally. It is a dev tool only.
-
-## Edit cards
-
-Edit `data/demos-gallery.json`, then run `python3 scripts/build_demos_gallery.py` and `python3 scripts/validate_site.py`.
+The login form posts to `/demos-gallery/auth`, which the gallery middleware still routes to the gate handler (with `/demos-gallery/logout`). `/assets/demos-gallery/gallery.css` stays because the login page uses it. Never put the password in HTML, titles, errors, git or docs.
