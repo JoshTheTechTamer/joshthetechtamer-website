@@ -1,10 +1,10 @@
 /**
  * Josh's device-marking link: /me?k=<OWNER_KEY>. Sets the long-lived tt_owner cookie on
- * joshthetechtamer.com, then hops through each demo-* Worker's /__preview/me so the same
+ * joshthetechtamer.com (Domain=joshthetechtamer.com, so <slug>.joshthetechtamer.com previews see it), then hops through each demo-* Worker's /__preview/me so the same
  * cookie lands on every workers.dev preview origin, ending at /me/done.
  * Visits carrying tt_owner are tagged "josh" in the visit log.
  */
-import { ownerKeyOk, ownerValue, ownerCookie, DEMO_SLUGS } from '../_lib/visit-log.js';
+import { ownerKeyOk, ownerValue, ownerCookie, ownerCookieSiteWide, DEMO_SLUGS } from '../_lib/visit-log.js';
 
 const NO = { 'X-Robots-Tag': 'noindex, nofollow, noarchive', 'Cache-Control': 'no-store', 'Referrer-Policy': 'no-referrer' };
 
@@ -15,6 +15,9 @@ export async function onRequestGet({ request, env }) {
   const [first, ...rest] = DEMO_SLUGS;
   const loc = `https://demo-${first}.joshthetechtamer.workers.dev/__preview/me?k=${encodeURIComponent(k)}&chain=${rest.join(',')}`;
   const headers = new Headers({ Location: loc, ...NO });
-  headers.append('Set-Cookie', ownerCookie(await ownerValue(env)));
+  const v = await ownerValue(env);
+  // Clear the old host-only copy, then set it for joshthetechtamer.com and every <slug>.joshthetechtamer.com.
+  headers.append('Set-Cookie', 'tt_owner=; Path=/; Max-Age=0; HttpOnly; Secure; SameSite=Lax');
+  headers.append('Set-Cookie', ownerCookieSiteWide(v));
   return new Response(null, { status: 302, headers });
 }

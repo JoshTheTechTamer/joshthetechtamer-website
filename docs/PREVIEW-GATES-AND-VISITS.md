@@ -17,3 +17,9 @@
 
 ## Report
 - `/me/visits` on a marked device (or `/me/visits?k=…`). `?tag=prospect|josh|bot|all`, `?days=N`, `?format=json`.
+
+## Short addresses (Oct 20, 2026)
+- Each demo-* Worker also answers on `https://<slug>.joshthetechtamer.com/` (Workers custom domain). workers.dev links still work.
+- `/p/<slug>` on this site 302s to that subdomain; `/p/royalgrooming` and `/p/backinline` go to `/demos/<slug>/`.
+- Worker session cookies are host-only and the token is signed for the demo's slug, so one demo's cookie never unlocks another.
+- `/me` sets `tt_owner` with `Domain=joshthetechtamer.com` (covers every subdomain) and still hops through the workers.dev hosts.

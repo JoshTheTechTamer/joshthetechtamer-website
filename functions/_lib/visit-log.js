@@ -13,6 +13,8 @@ export async function ownerValue(env){return env.OWNER_KEY?vmac(env.OWNER_KEY,'t
 export async function isOwner(env,req){const want=await ownerValue(env);const got=readCookieValue(req,OWNER_COOKIE);return !!(want&&got&&veq(want,got));}
 export function ownerKeyOk(env,k){return !!(env.OWNER_KEY&&k&&veq(k,env.OWNER_KEY));}
 export function ownerCookie(v){return `${OWNER_COOKIE}=${encodeURIComponent(v)}; Path=/; Max-Age=${OWNER_MAX_AGE}; HttpOnly; Secure; SameSite=Lax`;}
+// On joshthetechtamer.com the owner cookie is set for the whole domain so <slug>.joshthetechtamer.com previews see it too.
+export function ownerCookieSiteWide(v){return `${OWNER_COOKIE}=${encodeURIComponent(v)}; Domain=joshthetechtamer.com; Path=/; Max-Age=${OWNER_MAX_AGE}; HttpOnly; Secure; SameSite=Lax`;}
 const BOT_UA=/bot\b|bot\/|bot;|crawl|spider|slurp|GoogleImageProxy|Google-Safety|Google-Read-Aloud|googleweblight|FeedFetcher|Google-InspectionTool|curl|wget|python|httpx|aiohttp|go-http-client|java\/|okhttp|node-fetch|node\.js|axios|undici|libwww|scrapy|HeadlessChrome|Headless|PhantomJS|Puppeteer|Playwright|Lighthouse|PageSpeed|facebookexternalhit|facebookcatalog|Slackbot|Twitterbot|LinkedInBot|Discordbot|WhatsApp|TelegramBot|SkypeUriPreview|BingPreview|YahooMailProxy|Barracuda|Proofpoint|Mimecast|urlscan|scanner|validator|uptime|monitor|preview/i;
 // Cloud / mail-security networks that fetch links on behalf of mail systems (not 13335: real people use WARP/Private Relay).
 const BOT_ASN=new Set([15169,396982,19527,8075,16509,14618,14061,24940,16276,63949,20473,31898,26211,22843,30031,15324,45102,132203,51167,12876,9009,60068,212238,36352]);
