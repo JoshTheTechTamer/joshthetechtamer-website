@@ -337,3 +337,8 @@
 
 /* Audit fixes (Oct 12): scope disclaimer sits at the bottom of "What costs extra". */
 .wp-mini-note+.wp-extra-disclaimer{margin-top:14px;padding-top:14px;border-top:1px solid rgba(35,51,92,.12);font-size:13px;line-height:1.6;opacity:.9}
+
+/* Anchor fix (Oct 20): site.css defers off-screen sections (content-visibility:auto, 900px placeholder). On this page the
+   sections above #examples are far taller than 900px on phones, so /website-package#examples landed on the Care Plan.
+   Render every section up front here so in-page links land where they should. */
+html main>section:not(:first-child):not(.reviews-section){content-visibility:visible;contain-intrinsic-size:none}
