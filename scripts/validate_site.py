@@ -4,6 +4,21 @@ from urllib.parse import urlparse,unquote
 import json,re,sys
 from html import unescape,escape
 ROOT=Path(__file__).resolve().parents[1]
+# Hyphenated words are wrapped in nowrap spans at build time (Josh's rule: they never break across lines).
+# Text checks below read the built pages with those spans removed, so they compare words, not wrappers.
+NOWRAP=re.compile(r'<span style="white-space:nowrap">([^<]*)</span>')
+_read_text=Path.read_text
+def _read_unwrapped(self,*a,**k):
+ t=_read_text(self,*a,**k)
+ return NOWRAP.sub(r'\1',t) if self.suffix=='.html' and self.parent==ROOT else t
+Path.read_text=_read_unwrapped
+for f in sorted(ROOT.glob('*.html')):
+ body=_read_text(f).split('</head>',1)[1]
+ body=re.sub(r'<(script|style|svg|title|option|textarea)\b.*?</\1>','',body,flags=re.S)
+ body=NOWRAP.sub(' ',body)
+ for seg in re.split(r'<[^>]+>',body):
+  m=re.search(r'(?<![\w\-])\w[\w’\']*(?:-\w[\w’\']*)+',seg)
+  assert not m,('hyphenated word can break across lines',f.name,m and m.group())
 class Page(HTMLParser):
  def __init__(self,s):super().__init__();self.tags=[];self.stack=[];self.feed(s);assert not self.stack,self.stack
  def handle_starttag(self,t,a):
@@ -38,7 +53,7 @@ assert [r['rating'] for r in json.loads((ROOT/'data/reviews.json').read_text())]
 assert 'backups' in (ROOT/'_config.yml').read_text()
 # Website Package page: linked from Rates and For Business; unapproved example sites stay hidden.
 pkg=(ROOT/'website-package.html').read_text();cfg=json.loads((ROOT/'data/site-config.json').read_text())
-for needed in ['$800','$400 deposit','$25','First month free, cancel anytime','billed monthly to your card through Stripe','$120/year','sms:+15632610200','tel:+15632610200','Built by']:assert needed in pkg,needed
+for needed in ['$800','$400 deposit','$25','First month free, cancel anytime','billed monthly to your card through Stripe','good for 30 days from the date','sms:+15632610200','tel:+15632610200','Built by']:assert needed in pkg,needed
 assert ('mvp563.com' in pkg)==bool(cfg.get('show_mvp563_example')),'mvp563 example flag'
 assert '<!--EXAMPLE:' not in pkg
 h1=re.search(r'<h1[^>]*>(.*?)</h1>',pkg,re.S).group(1)
@@ -83,8 +98,13 @@ assert feat==['Looks great on phones and computers','One-tap call &amp; booking 
 assert not re.search(r'guarantee|fast[- ]loading|\d+% |#1 ',re.sub(r'<[^>]+>',' ',pkg.split('</head>')[1]),re.I),'no guarantees or invented stats'
 # polished "What costs extra" (wording kept) vs. plain "Without the Care Plan"
 ex=re.search(r'<article class="wp-mini wp-mini--extra".*?</article>',pkg,re.S).group()
-for t in ['Requested changes: $50/hour, with or without the Care Plan. This means new content, new pages, design changes, new services or prices, and new photos.','Website audits: $50/hour','Hosting and domain after year one without the Care Plan: $120/year (included with the Care Plan)']:assert t in ex,t
-assert ex.count('<svg')==4 and 'border-box' in css
+for t in ['Requested changes: $50/hour, with or without the Care Plan. This means new content, new pages, design changes, new services or prices, and new photos.','Website audits: $50/hour']:assert t in ex,t
+assert 'omain renewal' not in ex and 'billed to your account' not in pkg and 'pay it directly' not in pkg,'domain renewal lives on the Care Plan card only'
+assert '<li>After the first year, I handle your yearly domain renewal</li>' in pkg and pkg.count('included in the $800 for the first year')==2 and '<li>Your domain stays yours, registered in your name</li>' in pkg
+for page in ['website-package.html','rates.html','index.html']:assert not __import__('re').search(r'optional[^<]{0,12}(?:\$25|plan)|Optional ·',(ROOT/page).read_text(),__import__('re').I),('Care Plan is standard, not optional',page)
+# Oct 21, 2026 terms: no $120/year option, no promised hosting/Cloudflare/GitHub accounts or logins on the page
+for gone in ['$120','/year','GitHub','Cloudflare account','transferred to you']:assert gone not in re.sub(r'<script.*?</script>|<!--.*?-->','',pkg,flags=re.S),gone
+assert ex.count('<svg')==3 and 'border-box' in css
 plain=re.search(r'<article class="wp-mini wp-mini--plain".*?</article>',pkg,re.S).group();assert '<svg' not in plain and 'Without the Care Plan' in plain
 # motion: content is never hidden without JS; reduced motion shows everything still; tilt is mouse-only
 for sel,body in re.findall(r'([^{}]*)\{([^{}]*opacity:0[^{}]*)\}',css):

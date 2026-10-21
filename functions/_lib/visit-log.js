@@ -23,6 +23,7 @@ const BOT_ASN=new Set([15169,396982,19527,8075,16509,14618,14061,24940,16276,639
 const SCANNER_ASN=new Set([46261,963,47007,18779]);
 // Probe paths no preview ever serves.
 const PROBE_PATH=/\.(env|php\d?|asp|aspx|jsp|cgi|sql|bak|old|ini|log|ya?ml|git|svn|DS_Store)(\b|$)|\/\.|wp-|xmlrpc|cgi-bin|\/api\/|\/admin|phpmyadmin|actuator|\/vendor\/|\/config|\/server-status|\/\//i;
+function v4InRange(ip,net,bits){const p=s=>{const a=String(s).split('.');if(a.length!==4||a.some(x=>!/^\d{1,3}$/.test(x)||+x>255))return null;return a.reduce((n,x)=>n*256+ +x,0);};const a=p(ip),b=p(net);if(a===null||b===null)return false;const m=2**(32-bits);return Math.floor(a/m)===Math.floor(b/m);}
 function v6InRange(ip,prefix,bits){ // simple hex-prefix check for 2a09:bac0::/29 style ranges
  const ex=s=>{const [h,t]=s.split('::');const a=h?h.split(':'):[];const b=t!==undefined?(t?t.split(':'):[]):[];const z=Array(8-a.length-b.length).fill('0');return [...a,...z,...b].map(x=>parseInt(x||'0',16));};
  if(!ip.includes(':'))return false;const A=ex(ip.toLowerCase()),P=ex(prefix);let left=bits;for(let i=0;i<8&&left>0;i++){const take=Math.min(16,left);const mask=(0xffff<<(16-take))&0xffff;if((A[i]&mask)!==(P[i]&mask))return false;left-=take;}return true;}
@@ -40,10 +41,12 @@ export async function tagOf(env,req,opts={}){
  if(opts.realPath===false||PROBE_PATH.test(path))return{tag:'bot',rule:'bad-path'};
  if(!ua.trim())return{tag:'bot',rule:'empty-ua'};
  if(BOT_UA.test(ua))return{tag:'bot',rule:'bot-ua'};
- // Box egress: Cloudflare WARP from the box's Ashburn exit, geolocated to Fort Worth. Requires AS13335 + IAD colo + (box range or Fort Worth geo),
- // so ordinary WARP / iCloud Private Relay users (who exit near home) are not caught.
+ // Box egress (updated Oct 21, 2026): Cloudflare WARP from the box's Ashburn (IAD) exit. Its geolocation drifts (Fort Worth TX before,
+ // Muscatine/Davenport IA since Oct 20), so geography is NEVER a box signal by itself: Rudy and real prospects are in Iowa too.
+ // Box = AS13335 + IAD colo + (box address: 104.28.192.0/20, 2a09:bac0::/29 or a BOX_IPS entry), or legacy Fort Worth geo on AS13335+IAD.
+ // An Iowa visitor on a normal ISP (Mediacom, ImOn, Verizon, T-Mobile...) fails the ASN test; an Iowa WARP/Private Relay user exits near home (ORD/OMA/MSP), not IAD.
  const box=String(env.BOX_IPS||'').split(',').map(s=>s.trim()).filter(Boolean);
- const boxRange=ip.startsWith('104.28.197.')||v6InRange(ip,'2a09:bac0::',29)||box.some(e=>{const[pat,c]=e.split('@');if(c&&c!==colo)return false;return pat.endsWith('*')?ip.toLowerCase().startsWith(pat.slice(0,-1).toLowerCase()):ip===pat;});
+ const boxRange=v4InRange(ip,'104.28.192.0',20)||v6InRange(ip,'2a09:bac0::',29)||box.some(e=>{const[pat,c]=e.split('@');if(c&&c!==colo)return false;return pat.endsWith('*')?ip.toLowerCase().startsWith(pat.slice(0,-1).toLowerCase()):ip===pat;});
  const fortWorth=cf.city==='Fort Worth'&&cf.region==='Texas';
  if(asn===13335&&colo==='IAD'&&(boxRange||fortWorth))return{tag:'bot',rule:'box-egress'};
  if(box.includes(ip))return{tag:'bot',rule:'box-ip'};

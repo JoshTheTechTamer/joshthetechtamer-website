@@ -28,7 +28,7 @@
 
 - **Columns added:** `colo`, `asn` (already), `rule` (which tag rule fired), `site` (`preview` or `tt`), `referrer` (host only), `utm` (utm_source).
 - **Tags:** `josh` (real owner cookie), `qa` (box test clients: `X-TT-QA` header or `tt_qa` cookie matching the `QA_KEY` secret, or the fake test owner cookie), `bot`, and `prospect` (previews) / `visitor` (main site).
-- **Bot rules, in order:** probe path or a path that is not a real page; empty UA; bot/tool UA; box egress (AS13335 + IAD + Fort Worth or the 104.28.197.x / 2a09:bac0::/29 ranges); Chrome/119 Windows on AS13335; scanner ASNs (46261, 963, 47007, 18779; 3356 when non-US); cloud ASNs; no Accept-Language. Ordinary WARP / iCloud Private Relay users elsewhere stay real.
+- **Bot rules, in order:** probe path or a path that is not a real page; empty UA; bot/tool UA; box egress (AS13335 + IAD + a box address: 104.28.192.0/20, 2a09:bac0::/29 or a BOX_IPS entry; or the legacy Fort Worth geo). Since Oct 21, 2026 the box exit geolocates to Muscatine/Davenport, IA, so Iowa geography is never a box signal by itself; Chrome/119 Windows on AS13335; scanner ASNs (46261, 963, 47007, 18779; 3356 when non-US); cloud ASNs; no Accept-Language. Ordinary WARP / iCloud Private Relay users elsewhere stay real.
 - **Main site:** `functions/_middleware.js` logs HTML page views (not assets, previews, /me, /p) with site="tt", via waitUntil.
 - **Report:** `/me/visits` has "My website" and "Previews" sections. A preview prospect counts only after the password (login_ok or a page view). Plain gate views are listed as "opened the link".
 - **Export:** `/me/visits.json?since=ISO&until=ISO&token=...` (or `Authorization: Bearer`). The token is the `VISITS_TOKEN` Pages secret. No raw IPs, only the salted hash `iph`.

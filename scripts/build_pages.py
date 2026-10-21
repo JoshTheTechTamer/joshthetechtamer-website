@@ -13,7 +13,7 @@ meta={
 'rates.html':('Tech Help Rates in Muscatine: $50/hr, Free Consult | Tech Tamer','Simple pricing for in-home tech help in Muscatine and Eastern Iowa: $50/hour, free consultation, estimates for bigger projects.','rates'),
 'about.html':('Josh Sargent: Your Local Muscatine Tech Guy | The Tech Tamer','Meet Josh Sargent, your local Tech Tamer in Muscatine, IA. Patient, personal home and office tech help, with electronics and network engineering training.','about'),
 'contact.html':('Book Tech Help in Muscatine, IA | Call/Text 563-261-0200','Request an in-home tech help visit in Muscatine & nearby towns. Text or call 563-261-0200, evenings and weekends available.','contact'),
-'website-package.html':('Small-Business Websites in Muscatine, IA: $800 | Tech Tamer','A simple, phone-friendly website for your Muscatine or Quad Cities business: free preview first, then $800 to build and launch. Optional $25/month Care Plan.','website'),
+'website-package.html':('Small-Business Websites in Muscatine, IA: $800 | Tech Tamer','A simple, phone-friendly website for your Muscatine or Quad Cities business: free preview first, then $800 to build and launch. Standard $25/month Care Plan.','website'),
 # Local SEO pages (Oct 2026 audit, section B4).
 'tech-help-muscatine.html':('Tech Help in Muscatine, IA: I Come to You | The Tech Tamer','Computer, printer, Wi-Fi and phone help at your home in Muscatine, IA. Evenings & weekends, $50/hr, free consultation. Call or text 563-261-0200.','muscatine'),
 'service-area.html':('Service Area: Tech Help Near Muscatine, IA | The Tech Tamer','House-call tech help about 30 miles around Muscatine: Fruitland, Wilton, West Liberty, Durant, Columbus Junction, Letts, Nichols & the Quad Cities.','areas'),
@@ -270,6 +270,20 @@ def redesign(s,name):
  # 4) Three-step rows become a gold-filling timeline.
  s=re.sub(r'<div class="grid3">(?=<(?:article|div) class="step">)','<div class="grid3 ds-steps" data-ds-steps>',s)
  return s
+# Josh's standing rule: hyphenated words (one-hour, pop-ups, 563-261-0200...) never break across lines.
+# Wraps each one in visible body text in a nowrap span; tags, attributes, scripts, styles, SVG, <title>, <option> and <textarea> are left alone. Words don't change.
+NOWRAP_OPEN='<span style="white-space:nowrap">'
+def keep_hyphens(s):
+ head,body=s.split('</head>',1)
+ parts=re.split(r'(<(script|style|svg|title|option|textarea)\b.*?</\2>|<[^>]+>)',body,flags=re.S)
+ out=[];i=0
+ while i<len(parts):
+  seg=parts[i]
+  if i%3==0:  # text between tags
+   out.append(re.sub(r'(?<![\w\-])\w[\w’\']*(?:-\w[\w’\']*)+',lambda m:NOWRAP_OPEN+m.group()+'</span>',seg) if not (out and out[-1]==NOWRAP_OPEN) else seg)
+  elif i%3==1:out.append(seg)
+  i+=1 if i%3!=1 else 2
+ return head+'</head>'+''.join(out)
 HEADER_STAGE=(ROOT/'source-art/header/stage.html').read_text().strip()
 HEADER_V='20261012-ha13'
 # Cloudflare Web Analytics: Pages custom domains do not get auto JS injection reliably,
@@ -372,8 +386,8 @@ for file in (ROOT/'templates').glob('*.html'):
   # Website Package: "no subscription" is tech help only; state the on-site minimum; point to the package.
   s=s.replace('<p>Personal help with your technology or business project. No subscription required.</p><ul class="checklist"><li>Free initial consultation</li>','<p>Personal help with your technology or business project. Tech help never needs a subscription.</p><ul class="checklist"><li>Free initial consultation</li><li>On-site visits have a one-hour minimum ($50)</li>')
   s=s.replace('Ask Josh to confirm any travel charges, minimum billing, and payment arrangements before your visit.','On-site visits have a one-hour minimum at $50/hour. Ask Josh to confirm any travel charges and payment arrangements before your visit.')
-  s=s.replace('<summary>Do you offer a monthly subscription?</summary><p>No subscription is needed. Book the help you need at $50/hour, or ask for an estimate for a larger project.</p>','<summary>Do you offer a monthly subscription?</summary><p>Not for tech help. Book the help you need at $50/hour, or ask for an estimate for a larger project. The only monthly plan is the optional $25/month Care Plan for websites I build. See the <a href="/website-package.html#care-plan">Website Package</a>.</p>')
-  s=s.replace('</article></div></div></section><section class="section tint">','</article></div><div class="notice"><strong>Need a website for your business?</strong> Tech help is billed by the hour with no subscription. Websites are a separate package: a free preview first, then $800 to build and launch, with an optional $25/month Care Plan.<br><a class="textlink" href="website-package.html" style="margin-top:14px">See the Website Package</a></div></div></section><section class="section tint">',1)
+  s=s.replace('<summary>Do you offer a monthly subscription?</summary><p>No subscription is needed. Book the help you need at $50/hour, or ask for an estimate for a larger project.</p>','<summary>Do you offer a monthly subscription?</summary><p>Not for tech help. Book the help you need at $50/hour, or ask for an estimate for a larger project. The only monthly plan is the standard $25/month Care Plan for websites I build. See the <a href="/website-package.html#care-plan">Website Package</a>.</p>')
+  s=s.replace('</article></div></div></section><section class="section tint">','</article></div><div class="notice"><strong>Need a website for your business?</strong> Tech help is billed by the hour with no subscription. Websites are a separate package: a free preview first, then $800 to build and launch, with the standard $25/month Care Plan.<br><a class="textlink" href="website-package.html" style="margin-top:14px">See the Website Package</a></div></div></section><section class="section tint">',1)
  if name in meta:
   title,desc,key=meta[name];s=re.sub(r'<title>.*?</title>','<title>'+escape(title)+'</title>',s)
   for prop,value in [('name="description"',desc),('property="og:title"',title),('property="og:description"',desc),('property="og:image"',BASE+'/assets/optimized/share-'+share_key.get(key,key)+'.jpg')]:
@@ -398,6 +412,7 @@ for file in (ROOT/'templates').glob('*.html'):
  s=redesign(s,name)
  if 'static.cloudflareinsights.com/beacon.min.js' not in s:
   assert '</body>' in s,('missing body close',name);s=s.replace('</body>',CF_BEACON+'</body>',1)
+ s=keep_hyphens(s)
  (ROOT/name).write_text(s)
 (ROOT/'robots.txt').write_text('User-agent: *\nAllow: /\n\nSitemap: '+BASE+'/sitemap.xml\n')
 assert set(lastmod)==set(meta),('data/sitemap-lastmod.json must list every indexed page',set(meta)^set(lastmod))
