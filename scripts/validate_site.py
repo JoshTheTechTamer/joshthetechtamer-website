@@ -201,7 +201,7 @@ assert '<svg class="area-svg"' in (ROOT/'service-area.html').read_text() and 'Se
 # Review carousel: every entry in data/reviews.json renders verbatim; stars only for the two Google 5-star reviews; Facebook items carry no rating.
 revs=json.loads((ROOT/'data/reviews.json').read_text())
 assert idx.count('class="review-card"')==len(revs) and idx.count('class="review-stars"')==5 and f'1 / {len(revs)}' in idx
-assert len(revs)==17 and '1 / 17' in idx,'17 carousel cards (Diane O. Google + LeAnn T. Facebook added Oct 19)'
+assert len(revs)==18 and '1 / 18' in idx,'18 carousel cards (Francis K. Facebook comment added Oct 26)'
 assert revs[2]=={'name':'Barb','source':'Google review','quote':'Josh is very knowledgeable and friendly. He helped me 2 times in home and a few times on line. Rates are very reasonable. If you need help contact him.','rating':5},'Barb Google card is card 3'
 assert [x['name'] for x in revs].count('Barbara M.')==3,'her Facebook cards stay Barbara M.'
 assert {'name':'Barbara M.','source':'Facebook comment','quote':'JOSH is very helpful explains things so you understand.','rating':None} in revs
