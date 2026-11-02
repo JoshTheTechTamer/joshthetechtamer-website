@@ -106,5 +106,17 @@
     "source": "Facebook comment",
     "quote": "And he's REAL GOOD at what he does. Text him and get his phone number and then post it on your fridge.",
     "rating": null
+  },
+  {
+    "name": "Jerry B.",
+    "source": "Google review",
+    "quote": "Josh came to my house and fixed a problem on my computer i've had for 2 months. he does excellent work at a reasonable price. i would highly recommend him",
+    "rating": 5
+  },
+  {
+    "name": "Barbara M.",
+    "source": "Facebook comment",
+    "quote": "Again Josh came to my rescue. Very helped and did not make me feel like I was dumb. (I did that all on my own.)",
+    "rating": null
   }
 ]

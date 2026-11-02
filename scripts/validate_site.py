@@ -49,7 +49,7 @@ kit=(ROOT/'digital-kits.html').read_text();base=(ROOT/'templates/digital-kits.ht
 assert kit.count('class="product"')==6
 assert re.findall(r'https://joshthetechtamer.gumroad.com/l/[^" ]+',kit)==re.findall(r'https://joshthetechtamer.gumroad.com/l/[^" ]+',base)
 assert 'class="review-carousel"' in (ROOT/'index.html').read_text()
-assert [r['rating'] for r in json.loads((ROOT/'data/reviews.json').read_text())].count(5)==5
+assert [r['rating'] for r in json.loads((ROOT/'data/reviews.json').read_text())].count(5)==6  # Jerry B. Google 5★ added Nov 2
 assert 'backups' in (ROOT/'_config.yml').read_text()
 # Website Package page: linked from Rates and For Business; unapproved example sites stay hidden.
 pkg=(ROOT/'website-package.html').read_text();cfg=json.loads((ROOT/'data/site-config.json').read_text())
@@ -200,11 +200,13 @@ for n in ['services.html','business.html']:assert 'residential' in (ROOT/n).read
 assert '<svg class="area-svg"' in (ROOT/'service-area.html').read_text() and 'See me on Google Maps' in (ROOT/'service-area.html').read_text()
 # Review carousel: every entry in data/reviews.json renders verbatim; stars only for the two Google 5-star reviews; Facebook items carry no rating.
 revs=json.loads((ROOT/'data/reviews.json').read_text())
-assert idx.count('class="review-card"')==len(revs) and idx.count('class="review-stars"')==5 and f'1 / {len(revs)}' in idx
-assert len(revs)==18 and '1 / 18' in idx,'18 carousel cards (Francis K. Facebook comment added Oct 26)'
+assert idx.count('class="review-card"')==len(revs) and idx.count('class="review-stars"')==6 and f'1 / {len(revs)}' in idx
+assert len(revs)==20 and '1 / 20' in idx,'20 carousel cards (Jerry B. + Barbara M. #18 added Nov 2)'
 assert revs[2]=={'name':'Barb','source':'Google review','quote':'Josh is very knowledgeable and friendly. He helped me 2 times in home and a few times on line. Rates are very reasonable. If you need help contact him.','rating':5},'Barb Google card is card 3'
-assert [x['name'] for x in revs].count('Barbara M.')==3,'her Facebook cards stay Barbara M.'
+assert [x['name'] for x in revs].count('Barbara M.')==4,'her Facebook cards stay Barbara M. (4th card Nov 2)'
 assert {'name':'Barbara M.','source':'Facebook comment','quote':'JOSH is very helpful explains things so you understand.','rating':None} in revs
+assert {'name':'Jerry B.','source':'Google review','quote':"Josh came to my house and fixed a problem on my computer i've had for 2 months. he does excellent work at a reasonable price. i would highly recommend him",'rating':5} in revs
+assert {'name':'Barbara M.','source':'Facebook comment','quote':'Again Josh came to my rescue. Very helped and did not make me feel like I was dumb. (I did that all on my own.)','rating':None} in revs
 for r in revs:
  assert escape(r['quote'],quote=True) in idx,('review not verbatim',r['name'])
  assert (r['rating'] is None) if r['source'].startswith('Facebook') else (r['rating'] in (5,None)),r  # Google cards: stars only when a 5-star rating is confirmed (Brandie confirmed 5 stars Oct 12)
