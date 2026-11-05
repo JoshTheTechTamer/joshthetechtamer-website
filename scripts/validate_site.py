@@ -55,6 +55,8 @@ assert 'backups' in (ROOT/'_config.yml').read_text()
 pkg=(ROOT/'website-package.html').read_text();cfg=json.loads((ROOT/'data/site-config.json').read_text())
 for needed in ['$800','$400 deposit','$25','First month free, cancel anytime','billed monthly to your card through Stripe','good for 30 days from the date','sms:+15632610200','tel:+15632610200','Built by']:assert needed in pkg,needed
 assert ('mvp563.com' in pkg)==bool(cfg.get('show_mvp563_example')),'mvp563 example flag'
+assert ('hawknestmama.com' in pkg)==bool(cfg.get('show_hawknestmama_example')),'hawknestmama example flag'
+assert ('Hawk Nest Mama' in pkg)==bool(cfg.get('show_hawknestmama_example')),'hawknestmama example title'
 assert '<!--EXAMPLE:' not in pkg
 h1=re.search(r'<h1[^>]*>(.*?)</h1>',pkg,re.S).group(1)
 assert re.sub(r'<svg.*?</svg>|<[^>]+>','',h1,flags=re.S).split()==['See','your','website','built','before','you','spend','a','dime.'],h1
@@ -184,6 +186,9 @@ FINAL=['Muscatine, IA','Fruitland, IA','Wilton, IA','West Liberty, IA','Durant, 
 assert served==FINAL,('areaServed must be exactly Josh’s list, in his order',served)
 for n in pages+['404.html']:
  t=(ROOT/n).read_text().replace('Muscatine · Nearby towns · Quad Cities','')  # Josh's sign-off is the only allowed mention
+ # Approved Hawk Nest Mama client example may name Iowa City; service-area claims still cannot.
+ if n=='website-package.html':
+  t=re.sub(r'<article class="wp-example"[^>]*>.*?hawknestmama\.com.*?</article>','',t,flags=re.S)
  assert 'Iowa City' not in t and 'Coralville' not in t,('Iowa City/Coralville dropped',n)
  assert (ROOT/n).read_text().count('Muscatine · Nearby towns · Quad Cities')==1,('sign-off unchanged',n)
 sa=(ROOT/'service-area.html').read_text()
