@@ -120,7 +120,7 @@ assert re.search(r'\.wp-phone-screen \.wp-phone-tall\{[^}]*aspect-ratio:auto',cs
 main_html=pkg[pkg.index('<main'):]
 after_hero=main_html[main_html.index('</section>'):]
 assert all('loading="lazy"' in t for t in re.findall(r'<img [^>]*>',after_hero)),'below-the-fold images lazy'
-eager=[re.search(r'src="([^"]+)"',t).group(1) for t in re.findall(r'<img [^>]*>',pkg) if 'loading="lazy"' not in t]
+eager=[re.search(r'src="([^"]+)"',t).group(1) for t in re.findall(r'<img [^>]*>',pkg) if 'loading="lazy"' not in t and 'https://www.facebook.com/tr?' not in t]  # Meta Pixel noscript beacon is not a page image
 size=lambda u:(ROOT/u.lstrip('/').split('?')[0]).stat().st_size
 eager_bytes=sum(size(u) for u in eager)+len(css)+len(wpjs)
 assert eager_bytes<300_000,('website-package eager weight',eager_bytes)

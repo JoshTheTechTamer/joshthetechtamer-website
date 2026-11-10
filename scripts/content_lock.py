@@ -11,6 +11,7 @@ def text(h):
  h=re.sub(r'</?(?:span|em|strong|b|i|small|a)\b[^>]*>','',h)  # inline tags don't split words
  return ' '.join(unescape(re.sub(r'<[^>]+>',' ',h)).split())
 def lock(s):
+ s=re.sub(r'<!-- Meta Pixel Code -->.*?<!-- End Meta Pixel Code -->','',s,flags=re.S)  # tracking tag (Nov 10, 2026), not visitor content
  s=re.sub(r'<span style="white-space:nowrap">([^<]*)</span>',r'\1',s)  # build-time nowrap wrappers around hyphenated words carry no content
  head=s[:s.index('</head>')];body=s[s.index('</head>'):]
  main=body[body.index('<main'):body.index('</main>')]
