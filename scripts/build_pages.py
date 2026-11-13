@@ -197,7 +197,7 @@ def scam_guide():
    ('shield','IdentityTheft.gov','<p>If someone used your name, Social Security number or opened accounts as you, this FTC site gives you a step-by-step plan. <a href="https://www.identitytheft.gov/" target="_blank" rel="noopener noreferrer">IdentityTheft.gov ↗</a></p>'),
    ('laptop','FBI Internet Crime Complaint Center','<p>For scams that happened online, especially if money was lost. <a href="https://www.ic3.gov/" target="_blank" rel="noopener noreferrer">ic3.gov ↗</a></p>')],'grid2 report-grid'))
  return steps+spot+hacked+lock+fam+report
-HERO_PICTURE='<picture style="display:contents"><source type="image/webp" srcset="/assets/optimized/hero-logo-400.webp 400w, /assets/optimized/hero-logo-800.webp 800w, /assets/optimized/hero-logo-1200.webp 1200w" sizes="(max-width: 620px) 290px, (max-width: 1100px) 380px, 490px"><img src="/assets/optimized/hero-logo-800.png" alt="The Tech Tamer: Josh’s top-hatted technology tamer mascot and wordmark" width="800" height="687" fetchpriority="high" decoding="async"></picture>'
+HERO_PICTURE='<picture style="display:contents"><source type="image/webp" srcset="/assets/optimized/hero-logo-400.webp?v=20261113-logov2 400w, /assets/optimized/hero-logo-800.webp?v=20261113-logov2 800w, /assets/optimized/hero-logo-1200.webp?v=20261113-logov2 1200w" sizes="(max-width: 620px) 290px, (max-width: 1100px) 380px, 490px"><img src="/assets/optimized/hero-logo-800.png?v=20261113-logov2" alt="The Tech Tamer: Josh’s top-hatted technology tamer mascot and wordmark" width="800" height="687" fetchpriority="high" decoding="async"></picture>'
 def normalize_urls(s,name):
  """Canonical, og:url and every internal link use the final extensionless URL (no redirect hops)."""
  s=s.replace('"areaServed": ["Muscatine", "Iowa City", "Quad Cities"]','"areaServed": '+json.dumps([a.split(",")[0] for a in AREAS]+["Muscatine County"]))  # 404 keeps its own small JSON-LD
@@ -285,7 +285,7 @@ def keep_hyphens(s):
   i+=1 if i%3!=1 else 2
  return head+'</head>'+''.join(out)
 HEADER_STAGE=(ROOT/'source-art/header/stage.html').read_text().strip()
-HEADER_V='20261012-ha13'
+HEADER_V='20261113-logov2'
 # Cloudflare Web Analytics: Pages custom domains do not get auto JS injection reliably,
 # so every page ships the deferred beacon (token from account Web Analytics site).
 CF_BEACON="<!-- Cloudflare Web Analytics --><script defer src=\"https://static.cloudflareinsights.com/beacon.min.js\" data-cf-beacon='{\"token\": \"a5008ae940f94281862ffbab9ef72546\"}'></script><!-- End Cloudflare Web Analytics -->"
@@ -299,6 +299,7 @@ for file in (ROOT/'templates').glob('*.html'):
  # animated layers (assets/header/*.png) are fetched by header-animation.js only after page load.
  a='<canvas width="1400" height="400" aria-hidden="true"><img src="/assets/hero-logo.png" alt="The Tech Tamer" width="128" height="110"></canvas>'
  assert a in s,('header canvas markup',file.name);s=s.replace(a,HEADER_STAGE,1)
+ s=s.replace('/assets/header/still.png"','/assets/header/still.png?v='+HEADER_V+'"')
  s=re.sub(r'/assets/header-animation\.js\?v=[^"]+','/assets/header-animation.js?v='+HEADER_V,s)
  s=re.sub(r'assets/site\.css\?v=[^"]+','assets/site.css?v=20261013-port3',s)
  if name=='index.html':

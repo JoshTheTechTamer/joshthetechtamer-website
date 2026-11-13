@@ -333,7 +333,7 @@ for f in sorted(ROOT.glob('*.html')):
  t=f.read_text();hd=re.search(r'<header\b.*?</header>',t,re.S).group()
  assert '<canvas' not in t,('old canvas header',f.name)
  assert hd.count('<a href="/" class="brand brand-lockup header-animation" aria-label="The Tech Tamer home — House calls. Office visits. Tech tamed.">'+STAGE+'</a>')==1,('header stage',f.name)
- assert t.count('/assets/header-animation.js?v=20261012-ha13" defer')==1,('header script',f.name)
+ assert t.count('/assets/header-animation.js?v=20261113-logov2" defer')==1,('header script',f.name)
  assert 'assets/site.css?v=20261013-port3' in t,f.name
 # the slogan is real text, hidden from screen readers (the link's aria-label reads it once); printer is decorative
 assert '<span class="ha-slogan" aria-hidden="true">' in STAGE and '<span class="ha-printer is-grumpy" aria-hidden="true">' in STAGE and 'alt="The Tech Tamer"' in STAGE

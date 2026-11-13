@@ -7,7 +7,7 @@ const ha=document.querySelector('.header-animation .ha');if(!ha)return;
 const RM=matchMedia('(prefers-reduced-motion: reduce)');if(RM.matches)return;
 const SMALL=matchMedia('(max-width:620px)'),slogan=ha.querySelector('.ha-slogan'),printer=ha.querySelector('.ha-printer'),
  pr=printer.querySelector('.ha-pr'),page=printer.querySelector('.ha-page'),thumb=printer.querySelector('.ha-thumb'),led=printer.querySelector('.ha-led'),swoosh=[...slogan.querySelectorAll('.ha-swoosh path')],gold=slogan.querySelector('.ha-gold'),stars=[...slogan.querySelectorAll('.ha-twinkle svg')];
-const V='?v=20261012-ha13',NS='http://www.w3.org/2000/svg',PI=Math.PI;
+const V='?v=20261113-logov2',NS='http://www.w3.org/2000/svg',PI=Math.PI;
 const clamp=x=>x<0?0:x>1?1:x,ease=x=>(x=clamp(x),x*x*(3-2*x)),mix=(a,b,t)=>a+(b-a)*t,seg=(t,a,b)=>ease((t-a)/(b-a));
 const back=x=>{x=clamp(x);const s=1.9;return 1+(s+1)*Math.pow(x-1,3)+s*Math.pow(x-1,2)};   // ease-out with overshoot
 const trk=(k,t)=>{if(t<=k[0][0])return k[0][1];for(let i=1;i<k.length;i++)if(t<=k[i][0])return mix(k[i-1][1],k[i][1],ease((t-k[i-1][0])/(k[i][0]-k[i-1][0])));return k[k.length-1][1]};
