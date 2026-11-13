@@ -2,6 +2,11 @@ const menu=document.querySelector('.menu'),nav=document.querySelector('.navlinks
 if(menu&&nav){menu.addEventListener('click',()=>{const open=menu.getAttribute('aria-expanded')!=='true';menu.setAttribute('aria-expanded',String(open));nav.classList.toggle('open',open);menu.textContent=open?'Close ✕':'Menu ☰'});document.addEventListener('keydown',e=>{if(e.key==='Escape'&&nav.classList.contains('open')){nav.classList.remove('open');menu.setAttribute('aria-expanded','false');menu.textContent='Menu ☰';menu.focus()}})}
 const preview=window.TECH_TAMER_PREVIEW===true;
 function track(event,params={}){if(!preview&&typeof window.gtag==='function')window.gtag('event',event,params)}
+/* Meta Pixel events (Nov 13, 2026, MARA-META-PIXEL-PLAN-20261113). Uses the existing pixel 2603109980130782 from the page head.
+   No-op if fbq is missing (ad blockers). Events carry only a label, never form values. */
+function ttTrack(ev,params){if(typeof window.fbq==='function'){window.fbq('track',ev,params||{})}}
+document.addEventListener('click',e=>{const a=e.target&&e.target.closest?e.target.closest('a[href]'):null;if(!a)return;const h=(a.getAttribute('href')||'').trim().toLowerCase();if(h.startsWith('tel:'))ttTrack('Contact',{method:'phone'});else if(h.startsWith('sms:'))ttTrack('Contact',{method:'text'})},true);
+if(/^\/website-package(?:\.html)?\/?$/.test(location.pathname))ttTrack('ViewContent',{content_name:'website-package'});
 const form=document.querySelector('#request-form');
 if(form){
  const reply=form.querySelector('#reply'),contact=form.querySelector('#contact'),service=form.querySelector('#service'),status=form.querySelector('#form-status'),button=form.querySelector('[type="submit"]');
@@ -25,6 +30,7 @@ if(form){
    const res=await fetch(form.getAttribute('action')||'/api/lead',{method:'POST',body:data,headers:{Accept:'application/json'}});
    const out=await res.json().catch(()=>({}));
    if(!res.ok||out.ok!==true)throw new Error(out.error||'send_failed');
+   ttTrack('Lead',{content_name:'request-form'});
    const first=value('name').split(/\s+/)[0];
    form.querySelectorAll('input,select,textarea,button').forEach(el=>{if(el!==button)el.disabled=true});
    if(holder)holder.hidden=true;
