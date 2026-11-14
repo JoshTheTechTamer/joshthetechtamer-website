@@ -289,9 +289,9 @@ HEADER_V='20261113-logov2'
 # Cloudflare Web Analytics: Pages custom domains do not get auto JS injection reliably,
 # so every page ships the deferred beacon (token from account Web Analytics site).
 CF_BEACON="<!-- Cloudflare Web Analytics --><script defer src=\"https://static.cloudflareinsights.com/beacon.min.js\" data-cf-beacon='{\"token\": \"a5008ae940f94281862ffbab9ef72546\"}'></script><!-- End Cloudflare Web Analytics -->"
-# Meta Pixel "Tech Tamer Website" (existing pixel 2603109980130782), base code + PageView only.
+# Meta Pixel "Tech Tamer Website" (existing pixel 2593358904460834), base code + PageView only.
 # Josh approved the install Nov 10, 2026 (card t2804s11385). Official Meta base snippet, in <head> of every page.
-META_PIXEL='<!-- Meta Pixel Code -->\n<script>\n!function(f,b,e,v,n,t,s)\n{if(f.fbq)return;n=f.fbq=function(){n.callMethod?\nn.callMethod.apply(n,arguments):n.queue.push(arguments)};\nif(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version=\'2.0\';\nn.queue=[];t=b.createElement(e);t.async=!0;\nt.src=v;s=b.getElementsByTagName(e)[0];\ns.parentNode.insertBefore(t,s)}(window, document,\'script\',\n\'https://connect.facebook.net/en_US/fbevents.js\');\nfbq(\'init\', \'2603109980130782\');\nfbq(\'track\', \'PageView\');\n</script>\n<noscript><img height="1" width="1" style="display:none"\nsrc="https://www.facebook.com/tr?id=2603109980130782&ev=PageView&noscript=1"\n></noscript>\n<!-- End Meta Pixel Code -->'
+META_PIXEL='<!-- Meta Pixel Code -->\n<script>\n!function(f,b,e,v,n,t,s)\n{if(f.fbq)return;n=f.fbq=function(){n.callMethod?\nn.callMethod.apply(n,arguments):n.queue.push(arguments)};\nif(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version=\'2.0\';\nn.queue=[];t=b.createElement(e);t.async=!0;\nt.src=v;s=b.getElementsByTagName(e)[0];\ns.parentNode.insertBefore(t,s)}(window, document,\'script\',\n\'https://connect.facebook.net/en_US/fbevents.js\');\nfbq(\'init\', \'2593358904460834\');\nfbq(\'track\', \'PageView\');\n</script>\n<noscript><img height="1" width="1" style="display:none"\nsrc="https://www.facebook.com/tr?id=2593358904460834&ev=PageView&noscript=1"\n></noscript>\n<!-- End Meta Pixel Code -->'
 for file in (ROOT/'templates').glob('*.html'):
  s=apply_header_logo(file.read_text());name=file.name
  s=footer(s)
