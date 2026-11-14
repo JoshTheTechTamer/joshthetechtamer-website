@@ -6,7 +6,7 @@
   },
   {
    "q": "What does it cost?",
-   "a": "Tech help is $50 an hour, and the first conversation is free. On-site visits have a one-hour minimum. Bigger projects get an estimate before any work starts. If you’re a bit farther out, there may be a small added gas charge on your invoice, and I’ll let you know before we book. Details are on <a href=\"rates.html\">Rates &amp; FAQ</a>."
+   "a": "Tech help is $50 an hour. A consult by text is free. On-site visits have a one-hour minimum. Bigger projects get an estimate before any work starts. If you’re a bit farther out, there may be a small added gas charge on your invoice, and I’ll let you know before we book. Details are on <a href=\"rates.html\">Rates &amp; FAQ</a>."
   },
   {
    "q": "Can you come in the evening or on a weekend?",
@@ -26,15 +26,15 @@
   },
   {
    "q": "How much does computer help cost in Muscatine?",
-   "a": "With me, it’s $50 an hour. On-site visits have a one-hour minimum, and the first consultation is free. Bigger projects get an estimate before any work starts. If you’re a bit farther out, there may be a small added gas charge on your invoice, and I’ll let you know before we book."
+   "a": "With me, it’s $50 an hour. On-site visits have a one-hour minimum. A consult by text is free. Bigger projects get an estimate before any work starts. If you’re a bit farther out, there may be a small added gas charge on your invoice, and I’ll let you know before we book."
   },
   {
    "q": "How can I find someone to help me with my computer?",
    "a": "Look for someone local who will come to you and explain what they’re doing. In Muscatine and nearby towns, that can be me. I come to your home, so there’s nothing to haul anywhere. Text or call 563-261-0200, tell me what’s happening, and we’ll set up a time."
   },
   {
-   "q": "Do you look at computers for free?",
-   "a": "The first consultation is free. Call or text, tell me what’s happening, and I’ll help you figure out the next step. Hands-on work at your home is $50 an hour with a one-hour minimum, so you’ll know the cost before I come out."
+   "q": "Do you charge to look at my computer?",
+   "a": "Looking at a computer at your home is $50 an hour with a one-hour minimum, so you’ll know the cost before I come out. A consult by text is free. Call or text, tell me what’s happening, and I’ll help you figure out the next step."
   }
  ],
  "scam-help.html": [
@@ -52,7 +52,7 @@
   },
   {
    "q": "What does scam help cost?",
-   "a": "The same as any tech help: $50 an hour, and the first conversation is free. On-site visits have a one-hour minimum. I’ll never ask you for gift cards."
+   "a": "The same as any tech help: $50 an hour. A consult by text is free. On-site visits have a one-hour minimum. I’ll never ask you for gift cards."
   },
   {
    "q": "How do I keep this from happening again?",
