@@ -36,7 +36,7 @@ if(st){
  var btn=st.querySelector('.stage__replay');if(btn)btn.addEventListener('click',play);
  var started=false,go=function(){if(started)return;started=true;play()};
  if(reduce||!('IntersectionObserver' in window)){go()}
- else{var sio=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting&&e.intersectionRatio>=.45){sio.disconnect();if(d.readyState==='complete')setTimeout(go,150);else addEventListener('load',function(){setTimeout(go,150)})}})},{threshold:[0,.45,1]});sio.observe(st)}
+ else{var sio=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting&&e.intersectionRatio>=.6){sio.disconnect();if(d.readyState==='complete')setTimeout(go,150);else addEventListener('load',function(){setTimeout(go,150)})}})},{threshold:[0,.6,1]});var obs=function(){sio.observe(st)};(d.fonts&&d.fonts.ready?d.fonts.ready.then(obs):obs())}
 }
 
 /* "What's going on?" picker */
