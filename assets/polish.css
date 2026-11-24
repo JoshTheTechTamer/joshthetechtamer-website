@@ -11,8 +11,8 @@ p{text-wrap:pretty}
 a:hover{color:var(--link)}
 
 /* Links: buttons look like buttons, prose links get one quiet underline, text links get a small arrow */
-main p a:not(.btn):not(.textlink):not(.hero-speech),main li a:not(.btn):not(.textlink),.home-local a,.hero-local a,.faq details p a{color:var(--link)!important;font-weight:600!important;text-decoration:underline!important;text-decoration-thickness:1px!important;text-underline-offset:4px!important;text-decoration-color:rgba(11,106,158,.35)!important;transition:text-decoration-color .15s}
-main p a:not(.btn):not(.textlink):hover,.home-local a:hover{text-decoration-color:currentColor!important}
+main p a:not([class]),main li a:not([class]),.home-local a,.hero-local a,.faq details p a{color:var(--link)!important;font-weight:600!important;text-decoration:underline!important;text-decoration-thickness:1px!important;text-underline-offset:4px!important;text-decoration-color:rgba(11,106,158,.35)!important;transition:text-decoration-color .15s}
+main p a:not([class]):hover,.home-local a:hover{text-decoration-color:currentColor!important}
 .textlink{position:relative;font-family:var(--body);font-size:16px;font-weight:700;color:var(--link)!important;background:none!important;padding:6px 0!important;min-height:44px;gap:8px!important;clip-path:none!important;box-shadow:none!important;border:0!important}
 .textlink::before{display:none!important}
 .textlink::after{content:"→"!important;font-size:17px!important;color:currentColor!important;transition:transform .18s cubic-bezier(.23,1,.32,1)}
@@ -151,3 +151,6 @@ main .section.tint,.section.tint{background:var(--paper)!important}
 .home-local a{font-weight:600!important}
 .mobile-contact .btn+.btn{border:2px solid rgba(255,255,255,.4)!important}
 .ttb{--ttb-cta:#0b5f8e!important}
+.product-grid .btn,.product-content .btn{background:#fff!important;border:2px solid rgba(35,51,92,.22)!important;color:var(--navy)!important}
+.scam-hero .actions{display:flex!important;flex-wrap:wrap;gap:10px 16px!important;align-items:center}
+.scam-hero .actions .btn{width:auto!important;padding-left:22px!important;padding-right:22px!important}
