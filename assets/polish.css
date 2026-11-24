@@ -1,0 +1,152 @@
+/* Polish layer (Nov 24, 2026). Loaded after site.css on every page.
+   Goal: calmer, sleeker, one warm accent for the main action. Keeps every animation.
+   Palette: deep navy + calm off-white; amber-gold only on primary buttons; one link blue. */
+@font-face{font-family:"Instrument Sans";font-style:normal;font-weight:400 700;font-stretch:100%;font-display:swap;src:url(/assets/fonts/instrument-sans-var-latin.woff2) format("woff2")}
+:root{--ink:#1b2644;--navy:#23335c;--slate:#3d4a74;--muted:#55607a;--paper:#f5f6f9;--paper-2:#eceff5;--line:#e1e5ee;--gold:#f5b731;--gold-hi:#ffc94d;--link:#0b6a9e;--r:16px;--r-sm:10px;--body:"Instrument Sans",system-ui,-apple-system,"Segoe UI",sans-serif;--display:"Montserrat",var(--body)}
+body{font-family:var(--body);font-size:17.5px;line-height:1.65;color:var(--ink);-webkit-font-smoothing:antialiased}
+h1,h2{font-family:var(--display);font-weight:900;letter-spacing:-.02em;line-height:1.08;text-wrap:balance}
+h3,h4{font-family:var(--body);font-weight:700;letter-spacing:-.01em;line-height:1.25;text-wrap:balance}
+p{text-wrap:pretty}
+.lead{color:var(--muted)}
+a:hover{color:var(--link)}
+
+/* Links: buttons look like buttons, prose links get one quiet underline, text links get a small arrow */
+main p a:not(.btn):not(.textlink):not(.hero-speech),main li a:not(.btn):not(.textlink),.home-local a,.hero-local a,.faq details p a{color:var(--link)!important;font-weight:600!important;text-decoration:underline!important;text-decoration-thickness:1px!important;text-underline-offset:4px!important;text-decoration-color:rgba(11,106,158,.35)!important;transition:text-decoration-color .15s}
+main p a:not(.btn):not(.textlink):hover,.home-local a:hover{text-decoration-color:currentColor!important}
+.textlink{position:relative;font-family:var(--body);font-size:16px;font-weight:700;color:var(--link)!important;background:none!important;padding:6px 0!important;min-height:44px;gap:8px!important;clip-path:none!important;box-shadow:none!important;border:0!important}
+.textlink::before{display:none!important}
+.textlink::after{content:"→"!important;font-size:17px!important;color:currentColor!important;transition:transform .18s cubic-bezier(.23,1,.32,1)}
+@media (hover:hover){.textlink:hover::after{transform:translateX(4px)}}
+.textlink[target="_blank"]::after{content:"↗"!important}
+
+/* Buttons: one primary look (gold), one quiet secondary look. No ribbon cut corners. */
+.btn,.navlinks .nav-contact{position:relative;isolation:isolate;font-family:var(--body);font-weight:700;font-size:16px;letter-spacing:0;border-radius:12px!important;clip-path:none!important;background:var(--gold)!important;color:var(--navy)!important;border:2px solid var(--gold)!important;box-shadow:0 1px 0 rgba(27,38,68,.12);transition:background .15s ease,transform .15s ease,border-color .15s ease!important}
+.btn::before,.navlinks .nav-contact::before,.menu::before{display:none!important}
+.btn::after,.navlinks .nav-contact::after{display:none!important}
+@media (hover:hover){.btn:hover,.navlinks .nav-contact:hover{background:var(--gold-hi)!important;border-color:var(--gold-hi)!important;color:var(--navy)!important;transform:translateY(-1px)}}
+.btn:active{transform:translateY(1px) scale(.99)}
+.btn:not([target="_blank"])>span[aria-hidden="true"]{display:none}
+.btn.secondary,.btn.outline-light,.actions .btn+.btn,.btn.btn-quiet{background:transparent!important;border:2px solid rgba(35,51,92,.28)!important;color:var(--navy)!important;box-shadow:none}
+@media (hover:hover){.btn.secondary:hover,.actions .btn+.btn:hover,.btn.btn-quiet:hover{background:rgba(35,51,92,.06)!important;border-color:var(--navy)!important}}
+.cta .btn.outline-light,.cta .actions .btn+.btn,.ds-hero .actions .btn+.btn,.ds-hero .btn.secondary{border-color:rgba(255,255,255,.45)!important;color:#fff!important}
+@media (hover:hover){.cta .actions .btn+.btn:hover,.ds-hero .actions .btn+.btn:hover{background:rgba(255,255,255,.1)!important;border-color:#fff!important}}
+.btn.light{background:var(--gold)!important;color:var(--navy)!important}
+.phone-line{display:inline-flex;align-items:center;gap:8px;font-weight:600;color:inherit;min-height:44px}
+.phone-line a{font-weight:700;color:inherit!important;text-decoration:underline;text-decoration-thickness:1px;text-underline-offset:4px;text-decoration-color:rgba(127,127,127,.5);white-space:nowrap}
+
+/* Header and nav: fewer links, no underline bars, one gold action */
+.topline{font-size:13.5px;letter-spacing:0;background:var(--ink)}
+.site-header{border-bottom:1px solid var(--line);box-shadow:none}
+.navlinks{gap:6px}
+.navlinks a{font-family:var(--body);font-size:15.5px;font-weight:600;padding:10px 12px;border:0!important;border-radius:var(--r-sm);color:var(--ink)}
+.navlinks a:hover{background:var(--paper);color:var(--navy)}
+.navlinks a[aria-current=page]{color:var(--navy);background:var(--paper-2)}
+.navlinks .nav-contact{margin-left:10px;padding:11px 18px!important}
+.menu{border:1.5px solid var(--line)!important;border-radius:var(--r-sm)!important;background:#fff!important;color:var(--ink)!important;font-weight:600}
+.header-animation-toggle,.ha-toggle,[data-ha-toggle]{font-family:var(--body);border-radius:8px!important}
+
+/* Remove decoration that made pages busy */
+.ds-deco,.ds-dots,.ds-stripe,.wp-dots{display:none!important}
+.hero-art:before,.dots:after,.page-hero.dots::after,.hero::before,.hero::after,.page-hero::before,.cta::before,.ribbon::before,.help-photo::before,.home-paths-photo:before,.review-card::after,.path-card::before,.service-card::before{display:none!important}
+.eyebrow{text-transform:none!important;letter-spacing:0!important;font-family:var(--body);font-size:15px!important;font-weight:600!important;color:var(--muted)!important;gap:0!important;margin-bottom:14px!important}
+.eyebrow::before,.eyebrow:before{display:none!important}
+.ds-hero .eyebrow{color:#c9d4ea!important}
+.eyebrow-h1{font-family:var(--body)!important;font-weight:600!important;text-transform:none!important;letter-spacing:0!important;font-size:16px!important;color:var(--muted)!important}
+
+/* Hero: clean stage for the mascot, white headline, gold only on the swoosh word */
+.hero h1 span:not(.ds-gold):not(.ds-gold-dot):not(.eyebrow-h1),.local-hero h1 span:not(.eyebrow-h1):not(.ds-gold){color:inherit}
+.hero .lead{max-width:34em}
+.hero-facts{gap:28px;flex-wrap:wrap}
+.hero-facts>div{border:0!important;padding:0!important}
+.hero-facts>div::before{display:none!important}
+.hero-logo-stack{border-radius:28px!important;border:0!important;box-shadow:0 24px 60px rgba(8,16,40,.28)!important}
+.hero-art .art-label,.hero-logo-stack .art-label{clip-path:none!important;border-radius:14px!important;letter-spacing:.04em!important;font-family:var(--display)!important;font-weight:900!important}
+.hero-speech{font-family:var(--body)!important;border-radius:16px!important}
+
+/* Surfaces: tone steps instead of borders, cut corners and stripes */
+.section.tint{background:var(--paper)}
+.section-head>p,.scam-steps-section .section-head>p{background:none!important;border:0!important;box-shadow:none!important;padding:0!important;border-radius:0!important;color:var(--muted)!important;font-size:17px!important}
+.notice{background:var(--paper)!important;border:0!important;border-radius:var(--r)!important;padding:22px 26px!important}
+.section.tint .notice{background:#fff!important}
+.path-card,.service-card{border:0!important;border-radius:20px!important;background:var(--paper)!important;box-shadow:none!important}
+.section.tint .service-card,.section.tint .path-card{background:#fff!important}
+.icon,.path-card .icon,.service-card .icon{clip-path:none!important;border-radius:12px!important;background:var(--paper-2)!important;color:var(--navy)!important}
+.section.tint .service-card .icon{background:var(--paper)!important}
+.portrait,.business-panel,.home-paths-frame,.home-paths-frame img{clip-path:none!important;border-radius:24px!important;overflow:hidden}
+.portrait{padding:0!important;background:none!important}
+.home-paths-frame{padding:0!important;background:none!important}
+.help-photo img{border:0!important;border-radius:24px!important;box-shadow:0 18px 44px rgba(8,16,40,.18)!important}
+.credentials{border-top:0!important;gap:10px 22px!important;font-weight:600!important}
+.checklist li::before{filter:saturate(.8)}
+.breadcrumb{font-size:14px}
+
+/* Steps: plain 1 2 3, keep the gold timeline animation */
+.step .number{font-family:var(--display);font-size:15px}
+
+/* Three doors (homepage service rows, keeps the rope animation) */
+.svc4-body{background:#fff!important;border:1px solid var(--line)!important;border-left:1px solid var(--line)!important;border-radius:24px!important;box-shadow:0 1px 2px rgba(27,38,68,.04)!important}
+@media (hover:hover){.svc4-body:hover{transform:translateY(-3px)!important;box-shadow:0 18px 40px rgba(27,38,68,.10)!important}}
+.svc4-kicker{text-transform:none!important;letter-spacing:0!important;font-size:15px!important;font-weight:600!important;color:var(--muted)!important}
+.svc4-knot span{font-size:0!important;width:26px!important;height:26px!important;border-width:4px!important;background:var(--navy)!important;border-color:var(--gold)!important}
+.svc4-frame{border:0!important;border-radius:18px!important;box-shadow:0 12px 30px rgba(27,38,68,.12)!important}
+.svc4-frame::after{display:none!important}
+.svc4-head .icon svg,.svc4-iconpanel .icon svg{stroke:var(--navy)!important}
+.svc4-list li::before{filter:saturate(.8)}
+.svc4 .textlink{margin-top:4px}
+.svc4-row{--a:var(--gold)!important;--a-soft:rgba(245,183,49,.14)!important}
+
+/* Work showcase on home */
+.work{padding:86px 0;background:var(--paper)}
+.work-head{display:flex;justify-content:space-between;align-items:flex-end;gap:24px;margin-bottom:32px;flex-wrap:wrap}
+.work-head h2{margin:0}
+.work-head p{margin:6px 0 0;color:var(--muted);max-width:36em}
+.work-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:24px}
+.work-card{display:block;background:#fff;border-radius:22px;overflow:hidden;color:var(--ink);transition:transform .25s cubic-bezier(.23,1,.32,1),box-shadow .25s cubic-bezier(.23,1,.32,1)}
+.work-card img{display:block;width:100%;height:auto;aspect-ratio:8/5;object-fit:cover;object-position:top}
+.work-card .work-body{padding:18px 20px 20px}
+.work-card h3{margin:0 0 4px;font-size:19px}
+.work-card p{margin:0;font-size:15.5px;color:var(--muted);line-height:1.5}
+.work-card .work-url{display:block;margin-top:10px;font-weight:700;font-size:15px;color:var(--link)}
+@media (hover:hover){.work-card:hover{transform:translateY(-4px);box-shadow:0 20px 44px rgba(27,38,68,.12);color:var(--ink)}}
+@media (max-width:900px){.work-grid{grid-template-columns:1fr;gap:18px}.work-card{display:grid;grid-template-columns:42% 1fr;align-items:center}.work-card img{height:100%}}
+@media (max-width:520px){.work-card{display:block}.work{padding:60px 0}}
+
+/* Reviews */
+.review-card{border:0!important;border-radius:28px!important;background:var(--paper)!important;box-shadow:none!important}
+.review-controls button,.review-controls .btn{border-radius:10px!important;border:1.5px solid var(--line)!important;background:#fff!important;color:var(--ink)!important;font-family:var(--body)!important;font-weight:600!important;min-height:44px}
+.review-link-stars{color:var(--gold)}
+
+/* Closing call to action */
+.cta{background:var(--navy)!important}
+.cta h2{font-size:clamp(28px,3vw,40px)}
+.cta .phone-line{color:#dbe3f3;margin-top:4px}
+.funnel-steps{margin-top:36px}
+
+/* Footer: calmer */
+.footer{background:var(--paper)!important}
+.footer h3{font-family:var(--body);font-size:15px;font-weight:700;color:var(--ink)}
+.footer a{color:var(--muted)}
+.footer a:hover{color:var(--link)}
+.footer-bottom{border-top:1px solid var(--line)!important}
+
+/* Phone bar: gold Text, navy Call */
+.mobile-contact .btn{border-radius:12px!important}
+.mobile-contact .btn.secondary,.mobile-contact .btn+.btn{background:var(--navy)!important;border-color:var(--navy)!important;color:#fff!important}
+
+/* Scam page badge in services: quieter */
+.scam-badge{border-radius:12px!important;clip-path:none!important}
+.nav-scam{background:none!important;border:0!important;box-shadow:none!important}
+.nav-scam__icon{display:none!important}
+
+@media (prefers-reduced-motion:reduce){.work-card,.btn,.textlink::after{transition:none!important}}
+
+/* Round 2 fixes */
+:root{--ds-dots:none;--ds-dots-w:none}
+main .section.tint,.section.tint{background:var(--paper)!important}
+.cta::after{display:none!important}
+.svc4-head .icon{background:var(--paper-2)!important;color:var(--navy)!important}
+.svc4-head .icon svg{color:var(--navy)}
+.review-links .btn,.wp-example .btn,.review-links--card .btn{background:#fff!important;border:2px solid rgba(35,51,92,.22)!important;color:var(--navy)!important}
+@media (hover:hover){.review-links .btn:hover,.wp-example .btn:hover{border-color:var(--navy)!important;background:#fff!important}}
+.home-local a{font-weight:600!important}
+.mobile-contact .btn+.btn{border:2px solid rgba(255,255,255,.4)!important}
