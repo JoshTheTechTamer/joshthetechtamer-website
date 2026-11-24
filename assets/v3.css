@@ -46,10 +46,10 @@ p{margin:0 0 1em}
 .site-header .nav-row{max-width:1260px;margin:0 auto;padding:6px 28px;display:flex;align-items:center;gap:24px}
 .site-header .brand{text-decoration:none}
 .navlinks{display:flex;align-items:center;gap:2px;margin-left:auto}
-.navlinks a{color:var(--ink);text-decoration:none;font:700 1.05rem/1 "Red Hat Text",sans-serif;padding:12px 13px;border-radius:10px;position:relative}
+.navlinks a{color:var(--ink);text-decoration:none;font:700 1.05rem/1 "Red Hat Text",sans-serif;padding:12px 13px;border-radius:10px;position:relative;min-height:46px;display:inline-flex;align-items:center}
 .navlinks a::after{content:"";position:absolute;left:13px;right:13px;bottom:5px;height:3px;border-radius:3px;background:var(--gold);transform:scaleX(0);transform-origin:left;transition:transform .3s var(--ease)}
 .navlinks a:hover::after,.navlinks a[aria-current=page]::after{transform:scaleX(1)}
-.navlinks .nav-phone{margin-left:10px;color:var(--cyan-d);font-variant-numeric:tabular-nums;white-space:nowrap}
+.navlinks .nav-phone{margin-left:10px;color:var(--cyan-d);font-variant-numeric:tabular-nums;white-space:nowrap;flex-direction:column;align-items:flex-start;justify-content:center}
 .navlinks .nav-phone small{display:block;font-size:.72rem;color:var(--muted);letter-spacing:.06em;text-transform:uppercase;margin-bottom:3px}
 .menu{display:none;border:1.5px solid var(--navy3);background:#fff;color:var(--navy3);border-radius:999px;padding:10px 16px;font:700 1rem "Red Hat Text",sans-serif;min-height:46px;cursor:pointer}
 @media(max-width:1180px){.site-header .nav-row{gap:12px}.navlinks a{padding:12px 9px;font-size:1rem}.navlinks a::after{left:9px;right:9px}}
@@ -153,8 +153,8 @@ h1 .fix path{fill:none;stroke:url(#hgold);stroke-width:7;stroke-linecap:round;st
 .pr-page,.pr-thumb,.pr-smoke path,.pr-anger{transform-box:fill-box;transform-origin:50% 50%}
 .pr-page{transform-origin:50% 0}
 /* timeline classes */
-.stage.s0 .st-josh{opacity:0;transform:translateY(30px) scale(.92)}
-.stage.s1 .st-josh{opacity:1;transform:none;transition:opacity .8s var(--ease),transform 1.1s var(--pop)}
+.stage.s0 .st-josh{transform:translateY(18px) scale(.93)}
+.stage.s1 .st-josh{transform:none;transition:transform 1.1s var(--pop)}
 .stage.s0 .st-pr{animation:grump 1s ease-in-out infinite}
 .stage.s0 .pr-smoke path{animation:puff 1.5s ease-out infinite}
 .stage.s0 .pr-smoke path:nth-child(2){animation-delay:.5s}.stage.s0 .pr-smoke path:nth-child(3){animation-delay:1s}
