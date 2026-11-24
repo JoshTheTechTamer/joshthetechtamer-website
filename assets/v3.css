@@ -133,9 +133,9 @@ h1 .fix path{fill:none;stroke:url(#hgold);stroke-width:7;stroke-linecap:round;st
 .st-rope .k{stroke:#071426;stroke-width:9}
 .st-rope .g{stroke:url(#rgold);stroke-width:5.5}
 .st-rope .h{stroke:#fff3c4;stroke-width:1.4;opacity:.8}
-.st-whirl{left:43%;top:20.5%;width:30%;aspect-ratio:2.4;opacity:0}
+.st-whirl{left:43%;top:5%;width:30%;aspect-ratio:1;opacity:0;transform:scaleY(.36)}
 .st-whirl svg{width:100%;height:100%;overflow:visible}
-.st-whirl ellipse{fill:none;stroke:url(#rgold);stroke-width:5;stroke-dasharray:40 14}
+.st-whirl circle{fill:none;stroke:url(#rgold);stroke-width:6;stroke-dasharray:56 12}
 .st-bubble{right:0;top:44%;background:#fff;color:var(--ink);border-radius:18px;padding:10px 16px;font:900 1.15rem/1 "Montserrat DS",sans-serif;box-shadow:0 12px 26px rgba(0,0,0,.35);transform-origin:30% 100%}
 .st-bubble::after{content:"";position:absolute;left:24px;bottom:-9px;border:10px solid transparent;border-top-color:#fff;border-bottom:0}
 .st-bubble .b2{display:none}
