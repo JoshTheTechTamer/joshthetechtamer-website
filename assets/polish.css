@@ -150,3 +150,4 @@ main .section.tint,.section.tint{background:var(--paper)!important}
 @media (hover:hover){.review-links .btn:hover,.wp-example .btn:hover{border-color:var(--navy)!important;background:#fff!important}}
 .home-local a{font-weight:600!important}
 .mobile-contact .btn+.btn{border:2px solid rgba(255,255,255,.4)!important}
+.ttb{--ttb-cta:#0b5f8e!important}
