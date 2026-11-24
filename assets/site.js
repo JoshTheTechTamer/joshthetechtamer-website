@@ -79,13 +79,15 @@ if(!preview&&(location.hostname==='joshthetechtamer.com'||location.hostname==='w
 }
 
 /* Header animation pause control (audit fixes r2). Hidden for reduced motion, where the header is still. */
-(()=>{const h=document.querySelector(".site-header");if(!h||!document.querySelector(".header-animation .ha")||matchMedia("(prefers-reduced-motion: reduce)").matches)return;
+(()=>{const row=document.querySelector(".site-header .nav-row");if(!row||!document.querySelector(".header-animation .ha")||matchMedia("(prefers-reduced-motion: reduce)").matches)return;
  let p=false;try{p=localStorage.getItem("tt-header-paused")==="true"}catch(_){}window.__haPaused=p;
- const w=document.createElement("div");w.className="header-motion";const b=document.createElement("button");b.type="button";b.className="motion-toggle";
- const L=()=>{b.textContent=window.__haPaused?"Play animation":"Pause animation";b.setAttribute("aria-pressed",String(window.__haPaused))};L();
+ const b=document.createElement("button");b.type="button";b.className="motion-toggle";
+ const PAUSE='<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><rect x="6" y="5" width="4" height="14" rx="1.2" fill="currentColor"/><rect x="14" y="5" width="4" height="14" rx="1.2" fill="currentColor"/></svg>';
+ const PLAY='<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M8 5.5v13l11-6.5z" fill="currentColor"/></svg>';
+ const L=()=>{const lbl=window.__haPaused?"Play header animation":"Pause header animation";b.innerHTML=window.__haPaused?PLAY:PAUSE;b.setAttribute("aria-label",lbl);b.title=lbl;b.setAttribute("aria-pressed",String(window.__haPaused))};L();
  b.addEventListener("click",()=>{window.__haPaused=!window.__haPaused;try{localStorage.setItem("tt-header-paused",String(window.__haPaused))}catch(_){}
   const c=window.__haCtl;if(c)window.__haPaused?c.p():c.f();L()});
- w.append(b);h.append(w)})();
+ const m=row.querySelector(".menu");m?row.insertBefore(b,m):row.append(b)})();
 /* Services-four: reveal rows as they scroll in and fill the gold rope (transform only, passive scroll, rAF). */
 (()=>{const w=document.querySelector('[data-svc4-wrap]');if(!w||matchMedia('(prefers-reduced-motion: reduce)').matches||!('IntersectionObserver' in window))return;
  w.classList.add('svc4-anim');const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('is-in');io.unobserve(e.target)}}),{rootMargin:'0px 0px -12% 0px'});

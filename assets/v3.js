@@ -15,23 +15,26 @@ $$('[data-closer]').forEach(c=>{const o=IO(es=>es.forEach(e=>{if(e.isIntersectin
 /* hero copy + stage story */
 const hero=$('[data-hero]'), st=$('[data-stage]');
 const go=()=>{hero&&hero.classList.add('is-go');$$('.phero').forEach(p=>p.classList.add('is-go'))};
-if(RM){go()}else{(document.fonts&&document.fonts.ready||Promise.resolve()).then(()=>requestAnimationFrame(go))}
+if(RM){go()}else{requestAnimationFrame(go)}
 if(st){
  const T=[];const clr=()=>{T.forEach(clearTimeout);T.length=0};
  const set=(...c)=>{st.className='stage '+c.join(' ')};
- const play=()=>{clr();set('s0');void st.offsetWidth;
+ const hold=v=>{window.__haHold=v;if(window.__haCtl&&window.__haCtl.h)window.__haCtl.h(v)};
+ const play=()=>{clr();if(!RM)hold(true);set('s0');void st.offsetWidth;
   T.push(setTimeout(()=>set('s0','s1'),250));
   T.push(setTimeout(()=>set('s0','s1','s2'),1500));
   T.push(setTimeout(()=>set('s1','s3'),2900));
   T.push(setTimeout(()=>set('s1','s3','s4'),3900));
-  T.push(setTimeout(()=>set('s1','s4','is-done'),5600));};
- const end=()=>{clr();set('is-end','is-done')};
- if(RM){end()}else{
+  T.push(setTimeout(()=>{set('s1','s4','is-done');hold(false)},5600));};
+ const end=()=>{clr();hold(false);set('is-end','is-done')};
+ const b=$('.st-replay',st);
+ if(RM){end();if(b)b.hidden=true;}else{
+  hold(true);
   set('s0');
   const start=()=>{const o=IO(es=>es.forEach(e=>{if(e.isIntersecting){play();o.disconnect()}}),{threshold:.5});o?o.observe(st):play()};
   (document.fonts&&document.fonts.ready||Promise.resolve()).then(start);
  }
- const b=$('.st-replay',st);b&&b.addEventListener('click',()=>RM?end():play());
+ b&&b.addEventListener('click',()=>RM?end():play());
  if(FINE&&!RM){let raf=0;const box=st.closest('.hero')||st;
   box.addEventListener('pointermove',e=>{if(raf)return;raf=requestAnimationFrame(()=>{raf=0;const r=box.getBoundingClientRect();st.style.setProperty('--px',((e.clientX-r.left)/r.width-.5).toFixed(3));st.style.setProperty('--py',((e.clientY-r.top)/r.height-.5).toFixed(3))})},{passive:true});
   box.addEventListener('pointerleave',()=>{st.style.setProperty('--px',0);st.style.setProperty('--py',0)});}
