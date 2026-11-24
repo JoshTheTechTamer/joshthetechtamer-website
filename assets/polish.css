@@ -154,3 +154,6 @@ main .section.tint,.section.tint{background:var(--paper)!important}
 .product-grid .btn,.product-content .btn{background:#fff!important;border:2px solid rgba(35,51,92,.22)!important;color:var(--navy)!important}
 .scam-hero .actions{display:flex!important;flex-wrap:wrap;gap:10px 16px!important;align-items:center}
 .scam-hero .actions .btn{width:auto!important;padding-left:22px!important;padding-right:22px!important}
+.biz-grid{margin-top:44px}
+.business-panel::before,.business-panel::after{display:none!important}
+#business .notice{margin-top:28px}
